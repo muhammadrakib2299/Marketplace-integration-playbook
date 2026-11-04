@@ -1,0 +1,11 @@
+# One record per distinct API/integration surface.
+# Add candidates only after recording a source; keep research separate from documented/tested.
+schema_version: 1
+marketplaces: []
+
+# Suggested category values: marketplace, storefront, marketplace-operator,
+# social-commerce, aggregator, carrier, accounting, warehouse, other.
+# Suggested access_model values: public, seller-account, approval-required,
+# partner-only, private, unknown.
+# Suggested status values: research, documented, tested, deprecated, blocked.
+# Suggested evidence values: official, tested, mixed, unverified.
