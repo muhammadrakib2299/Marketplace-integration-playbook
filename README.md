@@ -6,6 +6,8 @@
 
 A community-maintained, source-linked handbook for understanding and building integrations with e-commerce marketplaces and sales channels.
 
+Browse the [searchable documentation site](https://marketplace-integration-playbook.vercel.app/) or use this repository as the source for guides and contributions.
+
 This repository organizes public API references, integration design guidance, workflow notes, and implementation checklists in a repeatable format. Marketplace rules and APIs change; every entry should identify its sources, access requirements, region, and last verification date.
 
 > **Independent resource:** This repository is not affiliated with, endorsed by, or an official guide for any marketplace, platform, employer, or integration vendor unless explicitly stated and authorized. Product names belong to their respective owners.
