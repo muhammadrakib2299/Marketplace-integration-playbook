@@ -24,6 +24,9 @@ Only submit content you are authorized to publish. Do not contribute employer or
 - [ ] Official API, auth, changelog/version, and access-policy links are included where available.
 - [ ] Setup, permission scopes, credentials handling, and onboarding prerequisites are described without secrets.
 - [ ] Core resources and data direction are clear; important field mappings and state transitions are documented.
+- [ ] Relevant API groups and operation counts are sourced, scoped, and distinguished from the provider's full portfolio; unknown totals are labeled instead of estimated.
+- [ ] Cross-API dependencies, ordered operation calls, workflow conditions, provider timelines, and limits are mapped to official references.
+- [ ] Minimal synthetic payload examples and Python/NestJS walkthroughs are included where useful, clearly marked as illustrative and without secrets or real personal data.
 - [ ] Order/listing/inventory/fulfilment/returns workflows are included when applicable.
 - [ ] Pagination, rate limits, retries, idempotency, webhooks/polling, and reconciliation are addressed or marked unknown/not applicable.
 - [ ] Testing and release instructions explain sandbox availability and what was actually tested.

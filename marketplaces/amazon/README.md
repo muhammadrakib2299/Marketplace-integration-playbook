@@ -36,6 +36,7 @@ Choose the host for the target Amazon store and provide its `marketplaceId`; do 
 
 ## Guides and workflows
 
+- [Initial API catalog and cross-API map](apis/) — five scoped API families; provider-wide and operation totals are not yet inventoried.
 - [SP-API development guide](guides/development-guide.md)
 - [Order synchronization workflow](workflows/order-lifecycle.md)
 - [Merchant-fulfilled listing and inventory workflow](workflows/inventory-and-listings.md)

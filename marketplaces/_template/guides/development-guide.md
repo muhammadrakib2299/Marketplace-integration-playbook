@@ -25,7 +25,9 @@ Link `authentication.md`. Explain token acquisition, signing, scopes, expiration
 
 ## 5. API surface and core resources
 
-List the relevant API groups and resource IDs; explain which calls are read, create, update, acknowledge, or delete operations. Note API versions, regional base URLs, required headers, content types, and versioning/deprecation policies. Link the provider's reference rather than reproducing it.
+Link the marketplace's [`apis/README.md`](../apis/README.md) inventory and a focused dossier for each relevant API group. Report separately the provider's total API-group count, groups in this integration's scope, operations published in the scoped versioned references, and operations actually used by documented workflows. Cite the official catalog or machine-readable model and state the counting method; if the source does not permit an exact count, say `not inventoried` or `partial` rather than estimating.
+
+For each API group, list the relevant operation IDs and describe purpose, feature coverage, conditions/permissions, direction, regional host/version, request/response fields, pagination, limits, errors, and deprecated behavior. Explain cross-API dependencies and identifier hand-offs. Link provider references; do not reproduce the complete API catalog or schemas.
 
 ## 6. Data model and mapping
 
@@ -33,7 +35,7 @@ Link `data-mapping.md`. Cover identifiers and uniqueness, SKU/variant relationsh
 
 ## 7. Operational workflows
 
-Link the detailed workflow documents. For each workflow specify trigger, preconditions, API calls, state transitions, side effects, success criteria, duplicate handling, and recovery/reconciliation path. Cover the applicable flows:
+Link the detailed workflow documents. For each workflow specify trigger and timing, preconditions, exact API group and operation IDs in call order, data passed between calls, state transitions, side effects, success criteria, duplicate handling, and recovery/reconciliation path. Separate provider deadlines/processing windows from an application's recommended polling schedule. Cite every provider limit and leave unknown values explicitly unknown. Cover the applicable flows:
 
 - Catalog, product, variant, offer/listing creation and updates.
 - Inventory publication, reservations, location/warehouse allocation, and stock reconciliation.
@@ -42,6 +44,8 @@ Link the detailed workflow documents. For each workflow specify trigger, precond
 - Cancellation, partial shipments, refunds, returns, exchanges, and disputes where supported.
 
 Do not imply the provider supports a workflow unless official documentation or authorized testing confirms it.
+
+For each API dossier, include small sanitized request/response examples tied to official operation schemas and concise Python and NestJS walkthroughs where useful. Explain configuration, validation, client/authentication boundary, timeout, pagination, throttling, retries, and idempotency around the snippet. Mark examples as illustrative when they omit provider-specific auth/signing; do not publish credentials, real personal data, copied large schemas, or unverified assumptions.
 
 ## 8. Events, polling, and ordering
 

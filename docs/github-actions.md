@@ -1,6 +1,6 @@
 # GitHub Actions for documentation checks
 
-The [GitHub Actions workflow](https://github.com/muhammadrakib2299/Marketplace-integration-playbook/blob/main/.github/workflows/docs-quality.yml) builds the VitePress site, lints Markdown, and checks external and local links. It runs for pull requests targeting `main`, pushes to `main`, manual dispatch, and once a week. The scheduled run helps catch links that go stale after a pull request has merged.
+The [GitHub Actions workflow](https://github.com/muhammadrakib2299/Marketplace-integration-playbook/blob/main/.github/workflows/docs-quality.yml) validates OpenAPI/Swagger definitions, builds the VitePress site, lints Markdown, and checks external and local links. It runs for pull requests targeting `main`, pushes to `main`, manual dispatch, and once a week. The scheduled run helps catch links that go stale after a pull request has merged.
 
 ## Checks performed
 

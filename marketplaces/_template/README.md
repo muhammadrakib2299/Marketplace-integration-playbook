@@ -88,6 +88,12 @@ Record current versions and deprecation/removal dates. Mark older APIs as deprec
 
 Only include capabilities supported by official documentation or authorized tests. Use `unknown` when the evidence is missing.
 
+## API catalog and operation counts
+
+Maintain a dedicated [`apis/README.md`](apis/README.md) inventory and a focused dossier for each API group that matters to this integration. Report separately the number of groups in the provider's complete catalog, groups in this documented scope, operations in the scoped API versions, and operations actually used by the described workflows. Cite the official catalog or versioned machine-readable model and explain how counts were produced. Never estimate counts or present a scoped subset as the provider's total API portfolio.
+
+For each API group, document its purpose and features, version and region, supported operations and conditions, how it connects to other API groups, workflows and timing, official limits, errors, pagination, minimal synthetic request/response examples, and implementation notes for Python and NestJS when relevant. Record unknowns as `unknown`/`not inventoried` and provide the source/date needed to resolve them.
+
 ## Architecture and data ownership
 
 Describe the systems that participate and name the source of truth for product, offer/listing, available inventory, order, shipment, tracking, cancellation, return, and refund data. Explain identifier mapping and whether updates are one-way or bidirectional. Include a small sequence or architecture diagram if it clarifies the flow.

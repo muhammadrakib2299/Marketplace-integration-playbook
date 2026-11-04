@@ -37,6 +37,7 @@ export default defineConfig({
           text: 'Amazon SP-API',
           items: [
             { text: 'Overview', link: '/marketplaces/amazon/' },
+            { text: 'API catalog', link: '/marketplaces/amazon/apis/' },
             {
               text: 'Development guide',
               link: '/marketplaces/amazon/guides/development-guide',
@@ -60,6 +61,7 @@ export default defineConfig({
             { text: 'Lifecycle and status', link: '/docs/lifecycle-and-status' },
             { text: 'Glossary', link: '/docs/glossary' },
             { text: 'Documentation checks', link: '/docs/github-actions' },
+            { text: 'API schema validation', link: '/docs/api-schema-validation' },
             { text: 'Vercel deployment', link: '/docs/site-deployment' },
           ],
         },
