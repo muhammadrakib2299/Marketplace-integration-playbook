@@ -1,0 +1,5 @@
+blank_issues_enabled: true
+contact_links:
+  - name: Sensitive or security-related report
+    url: https://github.com/muhammadrakib2299
+    about: Do not post credentials, personal data, or confidential details publicly. Contact the owner privately using their profile contact options.

@@ -1,0 +1,52 @@
+name: Marketplace guide request
+description: Suggest a marketplace or API surface to research or document.
+title: "[Marketplace]: "
+labels: ["marketplace-request"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        A marketplace request is a research suggestion, not a claim that an integration exists. Do not include private portal material, credentials, customer data, or employer-confidential details.
+  - type: input
+    id: name
+    attributes:
+      label: Marketplace or API surface
+      placeholder: Example Marketplace Seller API
+    validations:
+      required: true
+  - type: input
+    id: official_docs
+    attributes:
+      label: Official developer documentation URL
+      placeholder: https://...
+    validations:
+      required: false
+  - type: input
+    id: region
+    attributes:
+      label: Region or seller program
+      placeholder: UK, EU, US, global, or unknown
+  - type: dropdown
+    id: access
+    attributes:
+      label: Known API access model
+      options:
+        - Unknown / not checked
+        - Public documentation
+        - Seller account required
+        - Approval required
+        - Partner-only
+  - type: textarea
+    id: reason
+    attributes:
+      label: Why would this guide be useful?
+      description: Keep claims sourced and distinguish confirmed facts from assumptions.
+    validations:
+      required: true
+  - type: checkboxes
+    id: safety
+    attributes:
+      label: Publication safety
+      options:
+        - label: I have not included secrets, personal data, private API material, or confidential information.
+          required: true

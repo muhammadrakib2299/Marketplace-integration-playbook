@@ -1,0 +1,37 @@
+name: Documentation correction
+description: Report an outdated, unclear, or unsupported statement.
+title: "[Correction]: "
+labels: ["documentation", "needs-triage"]
+body:
+  - type: input
+    id: file
+    attributes:
+      label: Page or file
+      placeholder: marketplaces/example-marketplace/guides/development-guide.md
+    validations:
+      required: true
+  - type: textarea
+    id: issue
+    attributes:
+      label: What needs correction?
+    validations:
+      required: true
+  - type: input
+    id: source
+    attributes:
+      label: Official source or changelog URL
+      placeholder: https://...
+    validations:
+      required: false
+  - type: input
+    id: scope
+    attributes:
+      label: API version, region, and date checked
+      placeholder: v2, UK, YYYY-MM-DD
+  - type: checkboxes
+    id: safety
+    attributes:
+      label: Safety check
+      options:
+        - label: I have not included credentials, customer data, private portal content, or confidential information.
+          required: true

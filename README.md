@@ -92,7 +92,7 @@ Evidence labels used in guides:
 
 A good guide helps another developer answer: Can I access this API? What permissions and regional rules apply? What data moves in each direction? How do I handle duplicates, delays, partial failures, rate limits, and API changes? How can I test safely? Where did each claim come from, and when was it last checked?
 
-See [`CONTRIBUTING.md`](CONTRIBUTING.md), [`docs/integration-principles.md`](docs/integration-principles.md), and the [marketplace folder template](marketplaces/_template/README.md) before contributing.
+See [`CONTRIBUTING.md`](CONTRIBUTING.md), [`CODE_OF_CONDUCT.md`](CODE_OF_CONDUCT.md), [`SECURITY.md`](SECURITY.md), [`docs/integration-principles.md`](docs/integration-principles.md), and the [marketplace folder template](marketplaces/_template/README.md) before contributing. Use the GitHub issue forms for guide requests or corrections.
 
 ## License and reuse
 
