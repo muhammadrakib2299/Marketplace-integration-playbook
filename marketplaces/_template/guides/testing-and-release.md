@@ -1,6 +1,6 @@
-# Testing and release: <marketplace>
+# Testing and release: [marketplace]
 
-> **Last checked:** YYYY-MM-DD · **API/version:** <version> · **Environment:** <sandbox/test account/other>
+> **Last checked:** YYYY-MM-DD · **API/version:** [version] · **Environment:** [sandbox/test account/other]
 
 ## Environment and access
 
@@ -10,17 +10,17 @@ Document official sandbox availability, test-account prerequisites, regional cov
 
 | Area | Scenario | Expected result / source | Tested? | Notes |
 |---|---|---|---|---|
-| Authentication | valid, expired, revoked token | <expected> | No | |
-| Authorization | missing/insufficient scope | <expected> | No | |
-| Pagination | multiple pages, empty page, cursor boundary | <expected> | No | |
-| Throttling | quota response and recovery | <expected> | No | |
-| Idempotency | duplicate create/update/event | <expected> | No | |
-| Ordering | delayed or out-of-order notification | <expected> | No | |
-| Partial failure | mixed success in batch | <expected> | No | |
-| Reconciliation | missed event / resync | <expected> | No | |
-| Data mapping | nulls, unknown enum, locale/currency | <expected> | No | |
-| Business flow | order through dispatch/tracking | <expected> | No | |
-| Privacy | log redaction and data minimization | <expected> | No | |
+| Authentication | valid, expired, revoked token | [expected] | No | |
+| Authorization | missing/insufficient scope | [expected] | No | |
+| Pagination | multiple pages, empty page, cursor boundary | [expected] | No | |
+| Throttling | quota response and recovery | [expected] | No | |
+| Idempotency | duplicate create/update/event | [expected] | No | |
+| Ordering | delayed or out-of-order notification | [expected] | No | |
+| Partial failure | mixed success in batch | [expected] | No | |
+| Reconciliation | missed event / resync | [expected] | No | |
+| Data mapping | nulls, unknown enum, locale/currency | [expected] | No | |
+| Business flow | order through dispatch/tracking | [expected] | No | |
+| Privacy | log redaction and data minimization | [expected] | No | |
 
 Replace generic cases with provider-specific scenarios. “Not tested” is a valid result. Avoid making tests against live customer accounts or production data without explicit authorization.
 

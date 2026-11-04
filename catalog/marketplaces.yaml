@@ -1,11 +1,42 @@
 # One record per distinct API/integration surface.
 # Add candidates only after recording a source; keep research separate from documented/tested.
 schema_version: 1
-marketplaces: []
+marketplaces:
+  - id: amazon-sp-api
+    name: Amazon Selling Partner API (SP-API)
+    category: marketplace
+    regions:
+      - North America
+      - Europe
+      - Far East
+    api_surfaces:
+      - name: Orders API
+        version: 2026-01-01
+        docs_url: https://developer-docs.amazon/sp-api/docs/orders-api
+      - name: Listings Items API
+        version: 2021-08-01
+        docs_url: https://developer-docs.amazon/sp-api/docs/listings-items-api
+      - name: Product Type Definitions API
+        version: 2020-09-01
+        docs_url: https://developer-docs.amazon/sp-api/docs/product-type-definitions-api
+      - name: Notifications API
+        version: v1
+        docs_url: https://developer-docs.amazon/sp-api/docs/notifications-api-v1-use-case-guide
+    access_model: mixed
+    status: documented
+    evidence: official
+    source_urls:
+      - https://developer-docs.amazon/sp-api/docs/onboarding-overview
+      - https://developer-docs.amazon/sp-api/docs/connecting-to-the-selling-partner-api
+      - https://developer-docs.amazon/sp-api/docs/orders-api-migration-guide
+      - https://developer-docs.amazon/sp-api/docs/sp-api-deprecations
+    last_verified: "2026-11-04"
+    guide: ../marketplaces/amazon/README.md
+    notes: "Official docs reviewed; not tested. Orders API v0 is deprecated and scheduled for removal on 2027-03-27; this guide targets v2026-01-01."
 
 # Suggested category values: marketplace, storefront, marketplace-operator,
 # social-commerce, aggregator, carrier, accounting, warehouse, other.
 # Suggested access_model values: public, seller-account, approval-required,
-# partner-only, private, unknown.
+# partner-only, mixed, private, unknown.
 # Suggested status values: research, documented, tested, deprecated, blocked.
 # Suggested evidence values: official, tested, mixed, unverified.

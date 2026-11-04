@@ -1,12 +1,12 @@
 # Workflow: fulfilment, tracking, and returns
 
-> **API/version:** <version> · **Region:** <scope> · **Last checked:** YYYY-MM-DD
+> **API/version:** [version] · **Region:** [scope] · **Last checked:** YYYY-MM-DD
 
 ## Sources and evidence
 
-- **Official:** [<provider fulfilment guide>](<url>) — checked YYYY-MM-DD.
-- **Tested:** <authorized test and date, if any>.
-- **Unverified:** <open questions>.
+- **Official:** [[provider fulfilment guide]]([url]) — checked YYYY-MM-DD.
+- **Tested:** [authorized test and date, if any].
+- **Unverified:** [open questions].
 
 ## Shipment creation and dispatch
 
@@ -28,6 +28,6 @@ Cover label failure, missing/invalid tracking, rejected shipment, lost event, sp
 
 | Local field/state | Provider field/state | Direction | Transform | Evidence/source |
 |---|---|---|---|---|
-| <field/state> | <field/state> | <direction> | <rule> | <link and label> |
+| [field/state] | [field/state] | [direction] | [rule] | [link and label] |
 
 Protect personal information and never include real recipient addresses, order details, labels, tracking data, tokens, or private account IDs in this repository.

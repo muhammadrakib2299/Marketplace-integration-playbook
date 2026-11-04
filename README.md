@@ -1,5 +1,7 @@
 # Marketplace Integration Playbook
 
+[![Documentation quality](https://github.com/muhammadrakib2299/Marketplace-integration-playbook/actions/workflows/docs-quality.yml/badge.svg)](https://github.com/muhammadrakib2299/Marketplace-integration-playbook/actions/workflows/docs-quality.yml)
+
 A community-maintained, source-linked handbook for understanding and building integrations with e-commerce marketplaces and sales channels.
 
 This repository organizes public API references, integration design guidance, workflow notes, and implementation checklists in a repeatable format. Marketplace rules and APIs change; every entry should identify its sources, access requirements, region, and last verification date.
@@ -26,17 +28,18 @@ Do not upload confidential or employer-owned material, private source code, cust
 │   └── categories.yaml         # shared taxonomy, if needed
 ├── docs/
 │   ├── glossary.md
+│   ├── github-actions.md
 │   ├── integration-principles.md
 │   └── lifecycle-and-status.md
 ├── templates/
-│   ├── marketplace.yaml        # structured catalog entry
-│   └── marketplace-readme.md   # copy to create a marketplace folder
+│   └── marketplace.yaml        # structured catalog entry
 ├── marketplaces/
 │   ├── _template/              # canonical folder template; not a real integration
 │   │   ├── README.md
 │   │   ├── guides/
 │   │   ├── workflows/
 │   │   └── examples/
+│   ├── amazon/                 # initial, source-linked SP-API guide
 │   └── <marketplace-slug>/
 │       ├── README.md           # overview, scope, status, source index
 │       ├── guides/
@@ -50,14 +53,18 @@ Do not upload confidential or employer-owned material, private source code, cust
 │       │   └── fulfilment-and-returns.md
 │       ├── examples/            # only sanitized, clearly labeled examples
 │       └── changelog.md         # optional: changes to this repo's notes
-└── .github/                     # optional issue and pull-request templates
+└── .github/
+    ├── workflows/docs-quality.yml # Markdown and link validation
+    └── dependabot.yml             # weekly GitHub Actions updates
 ```
 
 Create one folder per **distinct API/integration surface**, not one per country, product category, or sales campaign. If regional variants share the same API, document them in one folder with explicit region sections. If authentication, endpoints, or lifecycle behavior materially differ, split into subfolders (for example `marketplaces/example/uk/` and `marketplaces/example/eu/`) and link them from a parent overview. For multiple marketplace brands sharing a platform (such as a marketplace operator), document the shared platform once and add brand-specific notes only where behavior differs.
 
 ## Find an integration
 
-See [`catalog/marketplaces.yaml`](catalog/marketplaces.yaml) for the machine-readable index and its status definitions. Browse [`marketplaces/`](marketplaces/) for the full guides. Use the official provider documentation linked in each entry as the source of truth.
+See [`catalog/marketplaces.yaml`](catalog/marketplaces.yaml) for the machine-readable index and its status definitions. Browse [`marketplaces/`](marketplaces/) for the full guides, including the initial [Amazon SP-API guide](marketplaces/amazon/README.md). Use the official provider documentation linked in each entry as the source of truth.
+
+The automated Markdown and link checks are described in [`docs/github-actions.md`](docs/github-actions.md).
 
 ## Add a marketplace
 

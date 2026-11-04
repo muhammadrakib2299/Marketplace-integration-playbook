@@ -1,12 +1,12 @@
 # Workflow: order lifecycle
 
-> **API/version:** <version> · **Region:** <scope> · **Last checked:** YYYY-MM-DD
+> **API/version:** [version] · **Region:** [scope] · **Last checked:** YYYY-MM-DD
 
 ## Evidence and sources
 
-- **Official:** [<provider order guide>](<url>) — checked YYYY-MM-DD.
-- **Tested:** <scenario/environment/date, if applicable>.
-- **Unverified:** <unknown behavior or edge cases>.
+- **Official:** [[provider order guide]]([url]) — checked YYYY-MM-DD.
+- **Tested:** [scenario/environment/date, if applicable].
+- **Unverified:** [unknown behavior or edge cases].
 
 ## Scope and ownership
 
@@ -27,7 +27,7 @@ Identify which system is authoritative for order creation, edits, cancellation, 
 
 | From | Trigger/action | To | Source / evidence | Recovery if it fails |
 |---|---|---|---|---|
-| <state> | <event/API action> | <state> | <link or test> | <safe recovery> |
+| [state] | [event/API action] | [state] | [link or test] | [safe recovery] |
 
 Do not infer provider statuses from similarly named states in another channel. Preserve unknown statuses and document mapping choices.
 

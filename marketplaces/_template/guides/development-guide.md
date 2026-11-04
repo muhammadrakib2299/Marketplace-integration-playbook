@@ -1,7 +1,11 @@
-# Development guide: <marketplace>
+# Development guide: [marketplace]
 
-> **Evidence labels:** Official = provider documentation; Tested = directly observed in an authorized environment; Unverified = not confirmed.  
-> **API/version:** <version> · **Region:** <scope> · **Last checked:** YYYY-MM-DD
+| Field | Value |
+|---|---|
+| Evidence labels | Official = provider documentation; Tested = directly observed in an authorized environment; Unverified = not confirmed. |
+| API/version | [version] |
+| Region | [scope] |
+| Last checked | YYYY-MM-DD |
 
 ## 1. Integration scope and constraints
 
@@ -71,9 +75,9 @@ Describe feature flags, staged rollout, canary/limited seller rollout, backfill 
 
 | Question or claim | Evidence label | Source or test | Region/version | Checked |
 |---|---|---|---|---|
-| <item> | Official / Tested / Unverified | <link or test note> | <scope> | YYYY-MM-DD |
+| [item] | Official / Tested / Unverified | Source URL or test note | [scope] | YYYY-MM-DD |
 
 ## References
 
-- [Official API reference](<url>) — <version/scope>, checked YYYY-MM-DD.
-- [Official changelog](<url>) — checked YYYY-MM-DD.
+- Official API reference URL — [version/scope], checked YYYY-MM-DD.
+- Official changelog URL — checked YYYY-MM-DD.

@@ -1,14 +1,14 @@
 # Copy this example to catalog/marketplaces.yaml and replace every placeholder.
 - id: marketplace-slug
   name: Marketplace name
-  category: marketplace # marketplace | storefront | marketplace-operator | social-commerce | aggregator | carrier | accounting | other
+  category: marketplace # marketplace | storefront | marketplace-operator | social-commerce | aggregator | carrier | accounting | warehouse | other
   regions:
     - country-or-region
   api_surfaces:
     - name: Official API name
       version: unknown
       docs_url: https://example.com/developers
-  access_model: unknown # public | seller-account | approval-required | partner-only | private | unknown
+  access_model: unknown # public | seller-account | approval-required | partner-only | mixed | private | unknown
   status: research # research | documented | tested | deprecated | blocked
   evidence: unverified # official | tested | mixed | unverified
   source_urls:

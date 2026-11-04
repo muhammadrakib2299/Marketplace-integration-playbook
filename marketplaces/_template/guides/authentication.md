@@ -1,11 +1,11 @@
-# Authentication: <marketplace>
+# Authentication: [marketplace]
 
-> **API/version:** <version> · **Region:** <scope> · **Last checked:** YYYY-MM-DD
+> **API/version:** [version] · **Region:** [scope] · **Last checked:** YYYY-MM-DD
 
 ## Official sources
 
-- [Authentication reference](<url>) — <version/region>, checked YYYY-MM-DD.
-- [Application/access policy](<url>) — checked YYYY-MM-DD.
+- Authentication reference URL — [version/region], checked YYYY-MM-DD.
+- Application/access policy URL — checked YYYY-MM-DD.
 
 ## Access prerequisites
 
@@ -35,4 +35,4 @@ Explain access-token lifetime, refresh behavior, refresh-token rotation, reautho
 
 | Claim | Evidence label | Source or authorized test | Checked |
 |---|---|---|---|
-| <claim> | Official / Tested / Unverified | <link or test summary> | YYYY-MM-DD |
+| [claim] | Official / Tested / Unverified | [link or test summary] | YYYY-MM-DD |

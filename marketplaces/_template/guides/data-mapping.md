@@ -1,6 +1,6 @@
-# Data mapping: <marketplace>
+# Data mapping: [marketplace]
 
-> **API/version:** <version> · **Region:** <scope> · **Last checked:** YYYY-MM-DD
+> **API/version:** [version] · **Region:** [scope] · **Last checked:** YYYY-MM-DD
 
 ## Mapping principles
 
@@ -14,7 +14,7 @@ Describe how seller SKU, product, variant, offer/listing, location, order, order
 
 | Local field | Provider field | Direction | Type/format | Transform/default | Required/conditional | Evidence/source |
 |---|---|---|---|---|---|---|
-| <field> | <field> | Inbound / outbound / both | <type> | <rule> | <rule> | <link; label> |
+| [field] | [field] | Inbound / outbound / both | [type] | [rule] | [rule] | [link; label] |
 
 Include meaningful product attributes, variant/SKU/barcode, quantity, price, currency, tax, address, shipment, status, timestamps, and locale fields relevant to this API. Link provider schemas instead of reproducing them.
 
@@ -22,7 +22,7 @@ Include meaningful product attributes, variant/SKU/barcode, quantity, price, cur
 
 | Local state | Provider state/event | Allowed transition | Direction | Handling of unknown/invalid value | Source |
 |---|---|---|---|---|---|
-| <state> | <state> | <transition> | <direction> | <safe behavior> | <link> |
+| [state] | [state] | [transition] | [direction] | [safe behavior] | [link] |
 
 Document terminal states, partial states, cancellations, refunds, returns, and shipment states separately when their semantics differ. Preserve provider semantics and cite official definitions.
 

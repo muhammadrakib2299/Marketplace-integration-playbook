@@ -1,12 +1,12 @@
 # Workflow: inventory and listings
 
-> **API/version:** <version> · **Region:** <scope> · **Last checked:** YYYY-MM-DD
+> **API/version:** [version] · **Region:** [scope] · **Last checked:** YYYY-MM-DD
 
 ## Sources and evidence
 
-- **Official:** [<provider listing/inventory guide>](<url>) — checked YYYY-MM-DD.
-- **Tested:** <authorized test and date, if any>.
-- **Unverified:** <open questions>.
+- **Official:** [[provider listing/inventory guide]]([url]) — checked YYYY-MM-DD.
+- **Tested:** [authorized test and date, if any].
+- **Unverified:** [open questions].
 
 ## Product identity and setup
 
@@ -24,7 +24,7 @@ Describe stock source of truth, available-to-sell calculation, safety buffer, re
 
 | Local field | Provider field | Direction | Transform/default | Required? | Source / confidence |
 |---|---|---|---|---|---|
-| <field> | <field> | <to/from/both> | <rule> | <yes/no/unknown> | <link/label> |
+| [field] | [field] | [to/from/both] | [rule] | [yes/no/unknown] | [link/label] |
 
 ## Failure and recovery
 

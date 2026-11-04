@@ -1,4 +1,4 @@
-## What changed?
+# What changed?
 
 <!-- Summarize the guide, catalog, or workflow change. -->
 
