@@ -1,9 +1,10 @@
 # Amazon SP-API catalog (initial scope)
 
-This is a **curated five-family scope** for the workflows currently summarized in this repository—not a count of every API in Amazon SP-API. The number of API groups in Amazon's full catalog, the total operations in these versioned models, and the operations used across all workflows have **not yet been inventoried**. Do not infer those totals from this page. Count them only from Amazon's current official catalog/model files and record model version, region, inclusion rules, and review date.
+This is a **curated six-family scope** for the workflows currently summarized in this repository—not a count of every API in Amazon SP-API. The number of API groups in Amazon's full catalog and operation totals for the other versioned models have **not yet been inventoried**. Catalog Items v2022-04-01 has its own dossier and model-verified count of two operations. Do not infer provider-wide totals from this page. Count them only from Amazon's current official catalog/model files and record model version, region, inclusion rules, and review date.
 
 | API family | Version / region | Primary purpose and features | Workflow connection | Timing and limit source | Operation count status |
 |---|---|---|---|---|---|
+| Catalog Items API | v2022-04-01; NA, EU, FE | Read/search catalog item data by identifiers, keywords, or ASIN; summaries, attributes, identifiers, images, and related datasets. | Product matching and catalog enrichment; does not write seller listings. | [Operation reference](https://developer-docs.amazon/sp-api/docs/catalog-items-api-v2022-04-01-reference) and [usage plans](https://developer-docs.amazon/sp-api/docs/usage-plans-and-rate-limits). | 2 operations; [complete dossier](catalog-items.md) |
 | Orders API | v2026-01-01 target; regional SP-API endpoints | Discover and retrieve seller orders; current field availability and permissions depend on version, role, and requested data. | Order discovery workflow; downstream internal order ingestion and reconciliation. Shipment-confirmation/write-back APIs are not covered here. | [Usage plans and rate limits](https://developer-docs.amazon/sp-api/docs/usage-plans-and-rate-limits); [Orders API guide](https://developer-docs.amazon/sp-api/docs/orders-api). Do not assume a fixed polling cadence. | Not inventoried from the current model |
 | Listings Items API | v2021-08-01 | Read or update an individual seller listing; listing fields and update requirements depend on product type and marketplace. | Merchant-fulfilled listing/inventory workflow. | [Usage plans and rate limits](https://developer-docs.amazon/sp-api/docs/usage-plans-and-rate-limits); [Listings Items API](https://developer-docs.amazon/sp-api/docs/listings-items-api). | Not inventoried from the current model |
 | Product Type Definitions API | v2020-09-01 | Obtain marketplace/product-type-specific requirements used to construct or validate listing data. It is a schema/definition source, not itself the listing-write workflow. | Upstream of Listings Items or a supported listings-feed submission when product definitions are needed. | [Usage plans and rate limits](https://developer-docs.amazon/sp-api/docs/usage-plans-and-rate-limits); [Product Type Definitions API](https://developer-docs.amazon/sp-api/docs/product-type-definitions-api). | Not inventoried from the current model |
@@ -16,6 +17,8 @@ This is a **curated five-family scope** for the workflows currently summarized i
 flowchart LR
   Seller[Seller authorization and roles] --> Orders[Orders API]
   Orders -->|order records| WMS[WMS / order system]
+  WMS -->|identifier or keyword lookup| Catalog[Catalog Items API]
+  Catalog -->|ASIN and selected catalog data| WMS
   Events[Notifications API] -->|event cue; verify supported type| WMS
   WMS -->|request product-type definition| PTD[Product Type Definitions API]
   PTD -->|requirements for listing data| WMS
@@ -36,4 +39,4 @@ Before publishing exact totals:
 
 ## Current documentation status
 
-The repository has high-level source-linked overviews and workflow notes for orders and merchant-fulfilled listings/inventory. Detailed operation-by-operation counts, per-operation payloads, complete cross-API operation sequencing, and sourced timing/limit values remain **to be researched and verified**. Until then, treat count fields as unverified—not zero. Add one API dossier per group using the reusable `marketplaces/_template/apis/api-template.md` template.
+The Catalog Items dossier documents both operations in the current v2022-04-01 model and includes source-linked constraints, payloads, and implementation examples. For the other families, detailed operation counts, per-operation payloads, complete cross-API sequencing, and exact sourced timing/limit values remain **to be researched and verified**. The provider-wide API-group total also remains uninventoried. Until then, treat those count fields as unverified—not zero. Add one dossier per remaining API group using the reusable `marketplaces/_template/apis/api-template.md` template.

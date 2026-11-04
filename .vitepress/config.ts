@@ -38,6 +38,7 @@ export default defineConfig({
           items: [
             { text: 'Overview', link: '/marketplaces/amazon/' },
             { text: 'API catalog', link: '/marketplaces/amazon/apis/' },
+            { text: 'Catalog Items API', link: '/marketplaces/amazon/apis/catalog-items' },
             {
               text: 'Development guide',
               link: '/marketplaces/amazon/guides/development-guide',

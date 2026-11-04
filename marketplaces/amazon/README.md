@@ -6,7 +6,7 @@
 | Integration claim | documentation only; no connection is claimed or tested by this repository |
 | Channel type | marketplace |
 | Regions / seller programs | North America, Europe, and Far East endpoint groups; this guide focuses on seller-side order and listing flows |
-| API surfaces | Orders API v2026-01-01; Listings Items API v2021-08-01; Product Type Definitions API v2020-09-01; Notifications API v1 |
+| API surfaces | Catalog Items API v2022-04-01; Orders API v2026-01-01; Listings Items API v2021-08-01; Product Type Definitions API v2020-09-01; Notifications API v1 |
 | Access model | mixed (private/self-authorized and public/OAuth-based paths; role and app approval requirements apply) |
 | Evidence | official documentation reviewed; not tested |
 | Last verified | 2026-11-04 |
@@ -36,7 +36,8 @@ Choose the host for the target Amazon store and provide its `marketplaceId`; do 
 
 ## Guides and workflows
 
-- [Initial API catalog and cross-API map](apis/) — five scoped API families; provider-wide and operation totals are not yet inventoried.
+- [Initial API catalog and cross-API map](apis/) — six scoped API families; provider-wide counts remain separate from this curated scope.
+- [Catalog Items API dossier](apis/catalog-items.md) — both v2022-04-01 operations, constraints, pagination, limits, and Python/NestJS examples.
 - [SP-API development guide](guides/development-guide.md)
 - [Order synchronization workflow](workflows/order-lifecycle.md)
 - [Merchant-fulfilled listing and inventory workflow](workflows/inventory-and-listings.md)
@@ -45,6 +46,7 @@ Choose the host for the target Amazon store and provide its `marketplaceId`; do 
 
 | Need | Starting API | Notes |
 |---|---|---|
+| Match or enrich catalog products | Catalog Items API v2022-04-01 | Read-only catalog lookup by identifiers, keywords, or ASIN; see the [two-operation dossier](apis/catalog-items.md). |
 | Search and retrieve orders | Orders API v2026-01-01 | `searchOrders` supports created/updated filters and pagination. Use `includedData` only for required datasets. |
 | Read and update a seller listing | Listings Items API v2021-08-01 | Individual listing operations; review issue/status responses and product-type requirements. |
 | Determine listing attributes | Product Type Definitions API v2020-09-01 | Product type schemas vary by store and account type. |
@@ -79,4 +81,4 @@ Amazon provides static and dynamic hosted SP-API sandboxes, with operation-speci
 - [Sandbox](https://developer-docs.amazon/sp-api/docs/sp-api-sandbox)
 - [Official SP-API models repository](https://github.com/amzn/selling-partner-api-models)
 
-These sources were reviewed on 2026-11-04. API versions, access policies, role requirements, rate plans, and removal dates can change; verify them before implementing or publishing an updated guide.
+These sources were reviewed on 2026-11-05. API versions, access policies, role requirements, rate plans, and removal dates can change; verify them before implementing or publishing an updated guide.
