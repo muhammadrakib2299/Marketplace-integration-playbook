@@ -5,9 +5,11 @@
 | APIs | Listings Items API v2021-08-01; Product Type Definitions API v2020-09-01; Feeds API for bulk JSON listings |
 | Scope | Seller listings and merchant-fulfilled quantity; FBA inbound/inventory is out of scope |
 | Evidence | Official documentation reviewed; no sandbox or production tests performed |
-| Last checked | 2026-11-04 |
+| Last checked | 2026-11-05 |
 
 ## Scope and ownership
+
+This page covers ongoing merchant-fulfilled quantity updates. For an existing seller account's initial listing import, active-listing definition, category/brand enrichment, and baseline reconciliation, use the [active listing migration workflow](active-listing-migration.md).
 
 This workflow publishes a seller's available-to-sell quantity for an existing Amazon listing. Decide the source of truth first: the warehouse or inventory service owns physical stock and allocations, while Amazon reports the resulting marketplace listing/offer state. Do not overwrite Amazon-fulfilled/FBA inventory with the merchant's warehouse count.
 

@@ -6,7 +6,7 @@ export default defineConfig({
   lang: 'en-US',
   title: 'Marketplace Integration Playbook',
   description:
-    'A source-linked developer handbook for marketplace APIs, integration workflows, and implementation guidance.',
+    'A source-linked developer handbook for seller authorization, marketplace API workflows, data migration, and operational reliability.',
   srcExclude: [
     'README.md',
     'CONTRIBUTING.md',
@@ -20,37 +20,31 @@ export default defineConfig({
   },
   themeConfig: {
     nav: [
-      { text: 'Marketplaces', link: '/marketplaces/' },
-      { text: 'Guides', link: '/docs/integration-principles' },
+      { text: 'Developer journey', link: '/marketplaces/amazon/' },
+      { text: 'API directory', link: '/marketplaces/amazon/apis/' },
+      { text: 'Repository guides', link: '/docs/integration-principles' },
       { text: 'GitHub', link: repositoryUrl },
     ],
     sidebar: {
       '/marketplaces/': [
         {
-          text: 'Directory',
+          text: 'Marketplace directory',
           items: [
             { text: 'All marketplaces', link: '/marketplaces/' },
             { text: 'Amazon SP-API', link: '/marketplaces/amazon/' },
           ],
         },
         {
-          text: 'Amazon SP-API',
+          text: 'Amazon · Build sequence',
           items: [
             { text: 'Overview', link: '/marketplaces/amazon/' },
-            { text: 'API catalog', link: '/marketplaces/amazon/apis/' },
+            { text: '1. API directory and map', link: '/marketplaces/amazon/apis/' },
+            { text: '2. Connect a seller account', link: '/marketplaces/amazon/guides/seller-onboarding' },
+            { text: '3. Migrate active listings', link: '/marketplaces/amazon/workflows/active-listing-migration' },
+            { text: '4. Development guide', link: '/marketplaces/amazon/guides/development-guide' },
+            { text: '5. Order synchronization', link: '/marketplaces/amazon/workflows/order-lifecycle' },
+            { text: '6. Seller-fulfilled listings', link: '/marketplaces/amazon/workflows/inventory-and-listings' },
             { text: 'Catalog Items API', link: '/marketplaces/amazon/apis/catalog-items' },
-            {
-              text: 'Development guide',
-              link: '/marketplaces/amazon/guides/development-guide',
-            },
-            {
-              text: 'Order synchronization',
-              link: '/marketplaces/amazon/workflows/order-lifecycle',
-            },
-            {
-              text: 'Listings and inventory',
-              link: '/marketplaces/amazon/workflows/inventory-and-listings',
-            },
           ],
         },
       ],

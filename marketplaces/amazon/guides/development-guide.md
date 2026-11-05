@@ -5,7 +5,7 @@
 | API/version scope | Orders API v2026-01-01; Listings Items API v2021-08-01; Product Type Definitions API v2020-09-01; Notifications API v1 |
 | Regions | North America, Europe, Far East; confirm each operation's coverage |
 | Evidence | Official documentation review only; no sandbox or production requests tested |
-| Last checked | 2026-11-04 |
+| Last checked | 2026-11-05 |
 
 ## 1. Start with the correct Amazon API version
 
@@ -19,7 +19,7 @@ This starter focuses on seller MFN order ingestion and merchant-fulfilled listin
 
 ## 3. Account, app, roles, and onboarding
 
-Follow Amazon's [developer onboarding overview](https://developer-docs.amazon/sp-api/docs/onboarding-overview) and [authorization overview](https://developer-docs.amazon/sp-api/docs/authorizing-selling-partner-api-applications). Register the application in the appropriate Amazon developer portal and request only roles needed by the use case. The exact seller account, developer profile, approval, app type, roles, and authorization steps depend on the application and data requested. Public apps and private apps have different distribution and authorization paths; a public app's availability in the Selling Partner Appstore is subject to Amazon's review.
+Follow Amazon's [developer onboarding overview](https://developer-docs.amazon/sp-api/docs/onboarding-overview) and [authorization overview](https://developer-docs.amazon/sp-api/docs/authorizing-selling-partner-api-applications). Register the application in the appropriate Amazon developer portal and request only roles needed by the use case. The exact seller account, developer profile, approval, app type, roles, and authorization steps depend on the application and data requested. Public apps and private apps have different distribution and authorization paths; a public app's availability in the Selling Partner Appstore is subject to Amazon's review. For the step-by-step seller consent and verified connection journey, see the [seller onboarding guide](seller-onboarding.md).
 
 Before implementation, record these specifics for the target account:
 
@@ -36,7 +36,7 @@ Amazon's [connection guide](https://developer-docs.amazon/sp-api/docs/connecting
 
 The connection guide specifies the SP-API host, `x-amz-access-token`, `x-amz-date`, and required `user-agent` (app name, version, and language). Restricted operations can require a Restricted Data Token rather than an ordinary LWA token; current Orders v2026-01-01 PII rules are different, as described below. Follow the live Amazon connection and API reference for the operation. Do not copy the illustrative credentials in provider examples.
 
-Public apps use seller OAuth authorization; private apps use Amazon's self-authorization flow. Implement token revocation/re-authorization and annual reauthorization where Amazon's current rules require it. Use least-privilege roles and treat tokens as passwords.
+Public apps use seller OAuth authorization; private apps use Amazon's self-authorization flow. Implement a safe reauthorization path for revoked or invalid seller access. Do not assume a universal annual reauthorization schedule; check the current authorization guidance for the app type and connection. Use least-privilege roles and treat tokens as passwords.
 
 ## 5. Endpoint and store routing
 
@@ -59,6 +59,8 @@ The [Orders API migration guide](https://developer-docs.amazon/sp-api/docs/order
 Other SP-API operations and older Orders API versions can require an RDT. Check the [Tokens API](https://developer-docs.amazon/sp-api/docs/tokens-api) and [role mappings](https://developer-docs.amazon/sp-api/docs/role-mappings) for the exact operation and data requested.
 
 ## 8. Listings and inventory surface
+
+For a legacy seller account with many listings, use the separate [active listing migration workflow](../workflows/active-listing-migration.md) before enabling ongoing synchronization. That workflow distinguishes Reports snapshots, seller listings, shared catalog data, product type schemas, and fulfillment inventory.
 
 Use Listings Items API v2021-08-01 for seller listing reads and single-SKU updates, together with Product Type Definitions for current attribute requirements. Amazon's [Listings Items overview](https://developer-docs.amazon/sp-api/docs/listings-items-api) documents `patchListingsItem` and a `merge` update for quantity within `fulfillment_availability`; the `JSON_LISTINGS_FEED` is the bulk counterpart for suitable workflows.
 
@@ -88,4 +90,4 @@ Track per-seller/store sync lag, last successful page/watermark, 429 and error c
 
 ## References and review date
 
-Primary references are linked inline and collected in [`../README.md`](../README.md#official-sources). Reviewed 2026-11-04. Recheck API versions, roles, endpoint mapping, quotas, and deprecation dates before implementation and on each material update.
+Primary references are linked inline. Reviewed 2026-11-05. Recheck API versions, roles, endpoint mapping, quotas, and deprecation dates before implementation and on each material update.
