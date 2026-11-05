@@ -4,6 +4,29 @@
 
 This playbook currently goes deep on the **seller listing migration and synchronization path**. It does not yet contain a complete operation-by-operation dossier for all 57 directory entries. Rows below distinguish covered surfaces from adjacent APIs and unreviewed scope. Use the live reference and role mapping before enabling any operation.
 
+## How Amazon's official documentation is organized
+
+Amazon's [Welcome to SP-API Documentation](https://developer-docs.amazon.com/sp-api/docs/welcome) is a directory, not one consolidated endpoint manual. It links to the interactive [API references](https://developer-docs.amazon.com/sp-api/reference), [code recipes](https://developer-docs.amazon.com/sp-api/recipes), the [SP-API Models index](https://developer-docs.amazon.com/sp-api/docs/sp-api-models), the [deprecation schedule](https://developer-docs.amazon.com/sp-api/docs/sp-api-deprecations), release notes, FAQs, and the API health dashboard. Amazon's [official models repository](https://github.com/amzn/selling-partner-api-models) contains versioned Swagger/OpenAPI artifacts, client libraries, and JSON schemas.
+
+For a developer portal, these sources serve different purposes:
+
+1. Generate or verify operation names, methods, paths, request parameters, request/response schemas, and model versions against Amazon's versioned API models.
+2. Use Amazon's API reference and use-case guides to explain purpose, prerequisites, role requirements, region/marketplace support, operation behavior, error cases, rate plans, and async workflow.
+3. Link to official recipes for supported examples. Any additional payload examples in this project must be labeled as synthetic/illustrative, schema-checked, and tied to a precise API model version; do not imply Amazon supplied an example when it did not.
+4. Link each page back to its exact Amazon API reference, model file, limits page, and testing guidance. Recheck deprecation and release notes before publishing updates.
+
+The model files are the structured source for operation and payload shapes, but they do not replace the narrative guides: access rules, practical workflows, quotas, timing, and testing caveats may live on separate Amazon pages or vary by operation. A spec-derived reference should explicitly say when an example, limit, or workflow was not found rather than fill the gap by guesswork.
+
+## Coverage completed so far
+
+| Work item | Status |
+|---|---|
+| Amazon official Welcome page and models-repository roles in the documentation ecosystem | Reviewed; links recorded above. |
+| API-family directory count | 57 headings in the official SP-API Models directory snapshot dated 2026-11-05; this is not an operation count. |
+| Seller connection and authorization workflow | Documented in the [seller onboarding guide](../guides/seller-onboarding.md); official-source review only, no account test. |
+| Existing seller listing migration and API relationships | Documented in the [active-listing migration workflow](../workflows/active-listing-migration.md); official-source review only, no sandbox/account test. |
+| Operation-by-operation documentation, payloads, roles, and limits across all 57 entries | **Not completed.** The current table is a scoped integration map, not the full Amazon API reference. |
+
 ## Which APIs belong in a seller listing migration?
 
 | Surface / version | Purpose | How it connects | Coverage in this playbook |

@@ -47,7 +47,11 @@ Amazon's API versions, roles, rate plans, authorization requirements, marketplac
 
 ## Official starting points
 
+- [SP-API Welcome page](https://developer-docs.amazon.com/sp-api/docs/welcome) — directory for the API references, code recipes, models, release notes, and deprecation schedule.
+- [Interactive API references](https://developer-docs.amazon.com/sp-api/reference) — operation-level endpoint details.
+- [Official code recipes](https://developer-docs.amazon.com/sp-api/recipes) — task-oriented implementation walkthroughs.
 - [SP-API Models directory](https://developer-docs.amazon.com/sp-api/docs/sp-api-models)
+- [Official versioned models repository](https://github.com/amzn/selling-partner-api-models) — Swagger/OpenAPI artifacts, client libraries, and JSON schemas.
 - [Seller use cases](https://developer-docs.amazon.com/sp-api/docs/sp-api-seller-use-cases)
 - [Developer onboarding](https://developer-docs.amazon.com/sp-api/docs/onboarding-overview)
 - [Role mappings](https://developer-docs.amazon.com/sp-api/docs/role-mappings)
