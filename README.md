@@ -10,11 +10,11 @@ A community-maintained, source-linked handbook for designing marketplace integra
 
 The current detailed marketplace guide is for Amazon SP-API. Follow the order a production integration should be designed:
 
-1. [Review the Amazon API directory and cross-API map](marketplaces/amazon/apis/).
-2. [Register and connect a seller account](marketplaces/amazon/guides/seller-onboarding).
-3. [Migrate existing seller listings and reconcile the baseline](marketplaces/amazon/workflows/active-listing-migration).
-4. [Build the development and operations layer](marketplaces/amazon/guides/development-guide).
-5. Add [order synchronization](marketplaces/amazon/workflows/order-lifecycle) and [seller-fulfilled listing/inventory updates](marketplaces/amazon/workflows/inventory-and-listings) as separate data flows.
+1. [Review the Amazon API directory and cross-API map](marketplaces/amazon/apis/index.md).
+2. [Register and connect a seller account](marketplaces/amazon/guides/seller-onboarding.md).
+3. [Migrate existing seller listings and reconcile the baseline](marketplaces/amazon/workflows/active-listing-migration.md).
+4. [Build the development and operations layer](marketplaces/amazon/guides/development-guide.md).
+5. Add [order synchronization](marketplaces/amazon/workflows/order-lifecycle.md) and [seller-fulfilled listing/inventory updates](marketplaces/amazon/workflows/inventory-and-listings.md) as separate data flows.
 
 Amazon's official SP-API Models directory listed **57 API/model-family entries in the 2026-11-05 snapshot**. That count includes vendor-only and special-purpose entries; it is not an operation count or a statement that every API applies to every seller. The site identifies which API surfaces have detailed coverage and which remain mapped but not yet reviewed operation-by-operation.
 

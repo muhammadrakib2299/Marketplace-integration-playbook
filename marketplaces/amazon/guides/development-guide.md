@@ -19,7 +19,7 @@ This starter focuses on seller MFN order ingestion and merchant-fulfilled listin
 
 ## 3. Account, app, roles, and onboarding
 
-Follow Amazon's [developer onboarding overview](https://developer-docs.amazon/sp-api/docs/onboarding-overview) and [authorization overview](https://developer-docs.amazon/sp-api/docs/authorizing-selling-partner-api-applications). Register the application in the appropriate Amazon developer portal and request only roles needed by the use case. The exact seller account, developer profile, approval, app type, roles, and authorization steps depend on the application and data requested. Public apps and private apps have different distribution and authorization paths; a public app's availability in the Selling Partner Appstore is subject to Amazon's review. For the step-by-step seller consent and verified connection journey, see the [seller onboarding guide](seller-onboarding).
+Follow Amazon's [developer onboarding overview](https://developer-docs.amazon/sp-api/docs/onboarding-overview) and [authorization overview](https://developer-docs.amazon/sp-api/docs/authorizing-selling-partner-api-applications). Register the application in the appropriate Amazon developer portal and request only roles needed by the use case. The exact seller account, developer profile, approval, app type, roles, and authorization steps depend on the application and data requested. Public apps and private apps have different distribution and authorization paths; a public app's availability in the Selling Partner Appstore is subject to Amazon's review. For the step-by-step seller consent and verified connection journey, see the [seller onboarding guide](seller-onboarding.md).
 
 Before implementation, record these specifics for the target account:
 
@@ -60,7 +60,7 @@ Other SP-API operations and older Orders API versions can require an RDT. Check 
 
 ## 8. Listings and inventory surface
 
-For a legacy seller account with many listings, use the separate [active listing migration workflow](../workflows/active-listing-migration) before enabling ongoing synchronization. That workflow distinguishes Reports snapshots, seller listings, shared catalog data, product type schemas, and fulfillment inventory.
+For a legacy seller account with many listings, use the separate [active listing migration workflow](../workflows/active-listing-migration.md) before enabling ongoing synchronization. That workflow distinguishes Reports snapshots, seller listings, shared catalog data, product type schemas, and fulfillment inventory.
 
 Use Listings Items API v2021-08-01 for seller listing reads and single-SKU updates, together with Product Type Definitions for current attribute requirements. Amazon's [Listings Items overview](https://developer-docs.amazon/sp-api/docs/listings-items-api) documents `patchListingsItem` and a `merge` update for quantity within `fulfillment_availability`; the `JSON_LISTINGS_FEED` is the bulk counterpart for suitable workflows.
 

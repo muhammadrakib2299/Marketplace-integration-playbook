@@ -13,23 +13,23 @@ This independent guide helps developers plan a seller-side integration with Amaz
 
 ### 1. Select the correct scope
 
-Decide whether the app is private or public, which seller marketplaces it supports, which roles it needs, and whether the first release migrates listings, reads orders, updates seller-fulfilled quantity, or handles FBA inventory. [Use the API directory](apis/) to see how the API surfaces relate and what still needs operation-level review.
+Decide whether the app is private or public, which seller marketplaces it supports, which roles it needs, and whether the first release migrates listings, reads orders, updates seller-fulfilled quantity, or handles FBA inventory. [Use the API directory](apis/index.md) to see how the API surfaces relate and what still needs operation-level review.
 
 ### 2. Connect the seller account
 
-Follow the step-by-step [seller authorization guide](guides/seller-onboarding). It covers developer registration, seller consent, OAuth state validation, refresh-token handling, regional endpoints, a verified “connected” state, and Python/NestJS backend boundaries.
+Follow the step-by-step [seller authorization guide](guides/seller-onboarding.md). It covers developer registration, seller consent, OAuth state validation, refresh-token handling, regional endpoints, a verified “connected” state, and Python/NestJS backend boundaries.
 
 ### 3. Import existing listings before enabling sync
 
-Use the [active listing migration workflow](workflows/active-listing-migration) to collect a seller/marketplace baseline, preserve SKU and state, enrich catalog facts without confusing them with seller attributes, validate product types, preview writes, and reconcile results.
+Use the [active listing migration workflow](workflows/active-listing-migration.md) to collect a seller/marketplace baseline, preserve SKU and state, enrich catalog facts without confusing them with seller attributes, validate product types, preview writes, and reconcile results.
 
 ### 4. Add ongoing order or inventory flows
 
-The [development guide](guides/development-guide) covers version selection, routing, security, rate-limit handling, and testing boundaries. Use the [order synchronization workflow](workflows/order-lifecycle) for order data, and the [seller-fulfilled listing/inventory workflow](workflows/inventory-and-listings) for quantity updates. FBA inventory is a separate API/data flow.
+The [development guide](guides/development-guide.md) covers version selection, routing, security, rate-limit handling, and testing boundaries. Use the [order synchronization workflow](workflows/order-lifecycle.md) for order data, and the [seller-fulfilled listing/inventory workflow](workflows/inventory-and-listings.md) for quantity updates. FBA inventory is a separate API/data flow.
 
 ## Scope and evidence boundaries
 
-Amazon's official SP-API Models directory listed **57 API/model-family entries on 2026-11-05**. That includes seller-only, vendor-only, and special/region-specific entries; it is not an operation count or a list of APIs every seller needs. See the [API directory and count method](apis/).
+Amazon's official SP-API Models directory listed **57 API/model-family entries on 2026-11-05**. That includes seller-only, vendor-only, and special/region-specific entries; it is not an operation count or a list of APIs every seller needs. See the [API directory and count method](apis/index.md).
 
 The current deep coverage is focused on seller onboarding, active listing migration, catalog enrichment, and the associated API connections. The directory makes other relevant families visible, but a full dossier for all 57 families and every operation is not yet complete. Each operation must be checked for its current model version, seller/vendor eligibility, role, region, input/output schema, rate limit, pagination, and workflow before implementation.
 

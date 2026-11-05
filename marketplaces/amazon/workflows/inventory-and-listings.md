@@ -9,7 +9,7 @@
 
 ## Scope and ownership
 
-This page covers ongoing merchant-fulfilled quantity updates. For an existing seller account's initial listing import, active-listing definition, category/brand enrichment, and baseline reconciliation, use the [active listing migration workflow](active-listing-migration).
+This page covers ongoing merchant-fulfilled quantity updates. For an existing seller account's initial listing import, active-listing definition, category/brand enrichment, and baseline reconciliation, use the [active listing migration workflow](active-listing-migration.md).
 
 This workflow publishes a seller's available-to-sell quantity for an existing Amazon listing. Decide the source of truth first: the warehouse or inventory service owns physical stock and allocations, while Amazon reports the resulting marketplace listing/offer state. Do not overwrite Amazon-fulfilled/FBA inventory with the merchant's warehouse count.
 
