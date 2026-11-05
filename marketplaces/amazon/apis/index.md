@@ -1,42 +1,64 @@
-# Amazon SP-API catalog (initial scope)
+# Amazon SP-API: API directory and workflow map
 
-This is a **curated six-family scope** for the workflows currently summarized in this repository—not a count of every API in Amazon SP-API. The number of API groups in Amazon's full catalog and operation totals for the other versioned models have **not yet been inventoried**. Catalog Items v2022-04-01 has its own dossier and model-verified count of two operations. Do not infer provider-wide totals from this page. Count them only from Amazon's current official catalog/model files and record model version, region, inclusion rules, and review date.
+> **Directory snapshot: 2026-11-05.** Amazon's official [SP-API Models directory](https://developer-docs.amazon.com/sp-api/docs/sp-api-models) listed **57 API/model-family entries** when reviewed. This is a directory-entry count, not 57 APIs needed by every seller, not a count of operations, and not a count of endpoints. The directory includes seller-only, vendor-only, special-purpose and region-scoped entries. Amazon does not publish one timeless operational total. Versions and entries change; re-count from the official directory before implementation.
 
-| API family | Version / region | Primary purpose and features | Workflow connection | Timing and limit source | Operation count status |
-|---|---|---|---|---|---|
-| Catalog Items API | v2022-04-01; NA, EU, FE | Read/search catalog item data by identifiers, keywords, or ASIN; summaries, attributes, identifiers, images, and related datasets. | Product matching and catalog enrichment; does not write seller listings. | [Operation reference](https://developer-docs.amazon/sp-api/docs/catalog-items-api-v2022-04-01-reference) and [usage plans](https://developer-docs.amazon/sp-api/docs/usage-plans-and-rate-limits). | 2 operations; [complete dossier](catalog-items.md) |
-| Orders API | v2026-01-01 target; regional SP-API endpoints | Discover and retrieve seller orders; current field availability and permissions depend on version, role, and requested data. | Order discovery workflow; downstream internal order ingestion and reconciliation. Shipment-confirmation/write-back APIs are not covered here. | [Usage plans and rate limits](https://developer-docs.amazon/sp-api/docs/usage-plans-and-rate-limits); [Orders API guide](https://developer-docs.amazon/sp-api/docs/orders-api). Do not assume a fixed polling cadence. | Not inventoried from the current model |
-| Listings Items API | v2021-08-01 | Read or update an individual seller listing; listing fields and update requirements depend on product type and marketplace. | Merchant-fulfilled listing/inventory workflow. | [Usage plans and rate limits](https://developer-docs.amazon/sp-api/docs/usage-plans-and-rate-limits); [Listings Items API](https://developer-docs.amazon/sp-api/docs/listings-items-api). | Not inventoried from the current model |
-| Product Type Definitions API | v2020-09-01 | Obtain marketplace/product-type-specific requirements used to construct or validate listing data. It is a schema/definition source, not itself the listing-write workflow. | Upstream of Listings Items or a supported listings-feed submission when product definitions are needed. | [Usage plans and rate limits](https://developer-docs.amazon/sp-api/docs/usage-plans-and-rate-limits); [Product Type Definitions API](https://developer-docs.amazon/sp-api/docs/product-type-definitions-api). | Not inventoried from the current model |
-| Notifications API | v1 | Subscribe to supported notification types and receive event messages through configured destinations. Event coverage, delivery behavior, and setup are type-specific. | Event-assisted order/listing updates; keep reconciliation because notifications are not the whole data record. | [Notifications use-case guide](https://developer-docs.amazon/sp-api/docs/notifications-api-v1-use-case-guide); [usage plans](https://developer-docs.amazon/sp-api/docs/usage-plans-and-rate-limits). Verify delivery/retry details per notification type. | Not inventoried from the current model |
-| Feeds API | Version and region: verify current official model before implementation | Submit supported bulk data feeds and retrieve processing status/results; feed type and processing behavior are specific to the feed. | Candidate bulk listing workflow; not a substitute for individual listing operations in every use case. | [Manage product listings guide](https://developer-docs.amazon/sp-api/docs/manage-product-listings-guide); [usage plans](https://developer-docs.amazon/sp-api/docs/usage-plans-and-rate-limits). Verify feed processing windows and quota per feed. | Not inventoried from the current model |
+This playbook currently goes deep on the **seller listing migration and synchronization path**. It does not yet contain a complete operation-by-operation dossier for all 57 directory entries. Rows below distinguish covered surfaces from adjacent APIs and unreviewed scope. Use the live reference and role mapping before enabling any operation.
 
-## Cross-API workflow connections
+## Which APIs belong in a seller listing migration?
+
+| Surface / version | Purpose | How it connects | Coverage in this playbook |
+|---|---|---|---|
+| [Sellers API v1](https://developer-docs.amazon.com/sp-api/reference/sellers-v1) | Seller/account marketplace participation data. | Helps discover supported marketplaces after authorization; does not import listings. | Directory only; operation-level review pending. |
+| [Listings Items API v2021-08-01](https://developer-docs.amazon.com/sp-api/reference/listings-items-v2021-08-01) | Read, search, create, update, or delete seller SKU listings. | Primary live listing surface; use for bounded reads, per-SKU writes, status and issue checks. | Core migration workflow documented below. |
+| [Listings Restrictions API v2021-08-01](https://developer-docs.amazon.com/sp-api/reference/listings-restrictions-v2021-08-01) | Check whether an item can be listed in a marketplace. | Optional preflight before creating or relisting an offer. | Purpose mapped; operation details pending. |
+| [Catalog Items API v2022-04-01](https://developer-docs.amazon.com/sp-api/reference/catalog-items-v2022-04-01) | Search/read Amazon catalog product facts. | Enrich a seller listing by ASIN or product identifier; not a seller listing export. | [Two-operation dossier](catalog-items.md). |
+| [Product Type Definitions API v2020-09-01](https://developer-docs.amazon.com/sp-api/reference/product-type-definitions-v2020-09-01) | Return product-type schemas and requirements. | Use after category/product-type resolution, before validating listing attributes. | Workflow documented; operation details pending. |
+| [Reports API v2021-06-30](https://developer-docs.amazon.com/sp-api/reference/reports-v2021-06-30) | Generate and retrieve asynchronous snapshots. | All Listings / Active Listings reports can provide a large baseline; not a live state stream. | Workflow documented in [migration guide](../workflows/active-listing-migration). |
+| [Feeds API v2021-06-30](https://developer-docs.amazon.com/sp-api/reference/feeds-v2021-06-30) | Submit bulk data and retrieve processing outcomes. | Optional bulk write path using `JSON_LISTINGS_FEED`; not a listing discovery API. | Lifecycle documented in the migration guide; operation dossiers pending. |
+| [Notifications API v1](https://developer-docs.amazon.com/sp-api/reference/notifications-v1) | Subscribe to supported event types through configured destinations. | Signals listing issues/status or async job completion; consumers still fetch authoritative details and reconcile. | Workflow documented; per-type support must be checked. |
+| [FBA Inventory API v1](https://developer-docs.amazon.com/sp-api/reference/fba-inventory-v1) | Read FBA inventory summaries. | Separate from seller-fulfilled listing quantity and listing reports. | Purpose mapped; detailed inventory sync dossier pending. |
+| [Orders API v2026-01-01](https://developer-docs.amazon.com/sp-api/reference/orders-v2026-01-01) | Search and retrieve seller orders. | Separate order-ingestion workflow; not part of the listing baseline. | See [order synchronization](../workflows/order-lifecycle). |
+
+For new order work, review Amazon's [Orders API migration guide](https://developer-docs.amazon.com/sp-api/docs/orders-api-migration-guide) and [deprecation schedule](https://developer-docs.amazon.com/sp-api/docs/sp-api-deprecations); listed v0 order operations have a published removal date of **2027-03-27**. Do not count old and new versions as separate business capabilities when reporting operation totals.
+
+## The APIs are connected like this
 
 ```mermaid
 flowchart LR
-  Seller[Seller authorization and roles] --> Orders[Orders API]
-  Orders -->|order records| WMS[WMS / order system]
-  WMS -->|identifier or keyword lookup| Catalog[Catalog Items API]
-  Catalog -->|ASIN and selected catalog data| WMS
-  Events[Notifications API] -->|event cue; verify supported type| WMS
-  WMS -->|request product-type definition| PTD[Product Type Definitions API]
-  PTD -->|requirements for listing data| WMS
-  WMS -->|individual listing update| Listings[Listings Items API]
-  WMS -->|bulk submission when appropriate| Feeds[Feeds API]
+  S[Seller grants app access] --> M[Resolve seller and marketplaces]
+  M --> R[Reports: baseline snapshot per marketplace]
+  M --> L[Listings Items: live SKU reads and updates]
+  R --> N[Normalize by seller + marketplace + SKU]
+  L --> N
+  N --> C[Catalog Items: enrich catalog facts by ASIN / identifier]
+  N --> P[PTD: fetch product-type schema for marketplace]
+  P --> V[Validate seller listing attributes]
+  V --> W{Write choice}
+  W -->|One/few SKUs| LI[Listings Items put / patch]
+  W -->|Bulk batch| F[JSON_LISTINGS_FEED]
+  LI --> I[Read listing issues and resulting state]
+  F --> I
+  I --> E[Notifications signal changes / job completion]
+  E --> I
+  I --> Q[Periodic Reports / API reconciliation]
 ```
 
-This is a high-level integration pattern, not a provider-required sequence for every seller or workflow. The diagram does not establish shipment-confirmation, cancellation, returns, refund, or fulfillment coverage. Those require separate API/version research and explicit workflow documentation. Notifications may signal change but should not be treated as a replacement for authoritative reads and reconciliation unless Amazon documents that guarantee for the specific event.
+This is an engineering sequence, not a provider-mandated sequence for every account. A **seller listing** is a seller's offer and submitted attributes; a **catalog item** is shared marketplace product data; **inventory** describes quantities by fulfillment surface; a **report** is an asynchronous snapshot. Keep those records separate.
 
-## Count and coverage method
+## Important constraints at a glance
 
-Before publishing exact totals:
+- **Search is paginated but bounded.** `searchListingsItems` supports one marketplace ID per call, up to 20 results per page, and Amazon documents a 1,000-result ceiling. Follow every pagination token. For a large/full listing baseline, consider a per-marketplace listing report and reconcile with API reads. [Reference](https://developer-docs.amazon.com/sp-api/reference/searchlistingsitems)
+- **“Active” must be defined.** The Listings Items status filters include `BUYABLE` (purchasable) and `DISCOVERABLE` (visible); one is not a substitute for the other. Preserve raw statuses and issues. [Reference](https://developer-docs.amazon.com/sp-api/reference/searchlistingsitems)
+- **Reports are asynchronous.** `GET_MERCHANT_LISTINGS_ALL_DATA` includes all listing states; `GET_MERCHANT_LISTINGS_DATA` is the Active Listings report. Request one marketplace per report. Output is tab-delimited and has a UTF-8 BOM; locale headers may vary. [Report types](https://developer-docs.amazon.com/sp-api/docs/report-type-values-inventory)
+- **Feeds are bulk writes, not exports.** Amazon documents `JSON_LISTINGS_FEED` for batch listing submissions and lists a 25,000-SKU/feed cap and five submissions per five minutes in its [Listings APIs FAQ](https://developer-docs.amazon.com/sp-api/docs/listings-apis-faq). Processing remains asynchronous; submission acceptance is not proof that every listing succeeded.
+- **Notifications are signals, not a state database.** Event support, destinations, role requirements, and frequency are type-specific. SQS messages may duplicate or arrive out of order. Fetch current state and reconcile. [Notification types](https://developer-docs.amazon.com/sp-api/docs/notification-type-values)
+- **Limits vary.** Operation references publish default rate/burst values, but Amazon says applied usage plans can vary by selling partner/application. Use `x-amzn-RateLimit-Limit` when present and handle `429`; do not advertise a single universal API quota. [Rate-limit guidance](https://developer-docs.amazon.com/sp-api/docs/usage-plans-and-rate-limits)
+- **Timelines are not blanket SLAs.** The cited sources do not give one completion-time promise for onboarding, listing migration, feeds, reports, or notifications. Model async states, monitor jobs, and show observed progress to users.
 
-1. Define whether “API count” means API groups, versions, operations, resources, notification types, or endpoints. Report these as separate measures.
-2. Use the official [SP-API reference](https://developer-docs.amazon/sp-api/docs/welcome) and Amazon's [Selling Partner API models repository](https://github.com/amzn/selling-partner-api-models). Record the exact model paths/revisions and relevant regional scope.
-3. Decide whether deprecated operations, versioned duplicates, shared schemas, and region-specific variants are included; state the rule.
-4. Tally the complete provider portfolio separately from this playbook's selected groups and workflow operations. Recheck on model/changelog updates.
+## What “API count” means here
 
-## Current documentation status
+The **57** figure counts headings in Amazon's SP-API Models directory snapshot on 2026-11-05. That directory combines distinct versions and account eligibility groups (seller/vendor) and includes special or regional entries. It does not count operations. This playbook's scoped inventory above is a subset and is not a substitute for Amazon's current use-case directories. To count an implementation scope, record the selected API family, model version, operation names, seller/vendor eligibility, and review date. See [seller use cases](https://developer-docs.amazon.com/sp-api/docs/sp-api-seller-use-cases), [vendor use cases](https://developer-docs.amazon.com/sp-api/docs/sp-api-vendor-use-cases), and the [official models repository](https://github.com/amzn/selling-partner-api-models).
 
-The Catalog Items dossier documents both operations in the current v2022-04-01 model and includes source-linked constraints, payloads, and implementation examples. For the other families, detailed operation counts, per-operation payloads, complete cross-API sequencing, and exact sourced timing/limit values remain **to be researched and verified**. The provider-wide API-group total also remains uninventoried. Until then, treat those count fields as unverified—not zero. Add one dossier per remaining API group using the reusable `marketplaces/_template/apis/api-template.md` template.
+## Evidence status
+
+**Officially documented** means the linked Amazon page or model states the fact. **Recommended implementation** means a reliability or data-model practice, not an Amazon guarantee. **Not yet reviewed** means this repository has not yet completed an operation-by-operation dossier. No guide in this repository claims production testing unless it records a specific authorized test, environment, date, and scope.

@@ -12,27 +12,40 @@ marketplaces:
     api_surfaces:
       - name: Orders API
         version: 2026-01-01
-        docs_url: https://developer-docs.amazon/sp-api/docs/orders-api
+        docs_url: https://developer-docs.amazon.com/sp-api/docs/orders-api
       - name: Listings Items API
         version: 2021-08-01
-        docs_url: https://developer-docs.amazon/sp-api/docs/listings-items-api
+        docs_url: https://developer-docs.amazon.com/sp-api/docs/listings-items-api
+      - name: Catalog Items API
+        version: 2022-04-01
+        docs_url: https://developer-docs.amazon.com/sp-api/docs/catalog-items-api
       - name: Product Type Definitions API
         version: 2020-09-01
-        docs_url: https://developer-docs.amazon/sp-api/docs/product-type-definitions-api
+        docs_url: https://developer-docs.amazon.com/sp-api/docs/product-type-definitions-api
+      - name: Feeds API
+        version: 2021-06-30
+        docs_url: https://developer-docs.amazon.com/sp-api/docs/feeds-api
+      - name: Reports API
+        version: 2021-06-30
+        docs_url: https://developer-docs.amazon.com/sp-api/docs/reports-api
       - name: Notifications API
         version: v1
-        docs_url: https://developer-docs.amazon/sp-api/docs/notifications-api-v1-use-case-guide
+        docs_url: https://developer-docs.amazon.com/sp-api/docs/notifications-api
+      - name: FBA Inventory API
+        version: v1
+        docs_url: https://developer-docs.amazon.com/sp-api/docs/fba-inventory-api
     access_model: mixed
     status: documented
     evidence: official
     source_urls:
-      - https://developer-docs.amazon/sp-api/docs/onboarding-overview
-      - https://developer-docs.amazon/sp-api/docs/connecting-to-the-selling-partner-api
-      - https://developer-docs.amazon/sp-api/docs/orders-api-migration-guide
-      - https://developer-docs.amazon/sp-api/docs/sp-api-deprecations
-    last_verified: "2026-11-04"
+      - https://developer-docs.amazon.com/sp-api/docs/sp-api-models
+      - https://developer-docs.amazon.com/sp-api/docs/onboarding-overview
+      - https://developer-docs.amazon.com/sp-api/docs/building-listings-management-workflows-guide
+      - https://developer-docs.amazon.com/sp-api/docs/orders-api-migration-guide
+      - https://developer-docs.amazon.com/sp-api/docs/sp-api-deprecations
+    last_verified: "2026-11-05"
     guide: ../marketplaces/amazon/README.md
-    notes: "Official docs reviewed; not tested. Orders API v0 is deprecated and scheduled for removal on 2027-03-27; this guide targets v2026-01-01."
+    notes: "Official docs reviewed; no sandbox or production tests performed. The Amazon SP-API Models directory contained 57 API/model-family headings on 2026-11-05; this is not an operation count and includes vendor-only and special-purpose entries. Orders API v0 is deprecated and listed operations are scheduled for removal on 2027-03-27; this guide targets v2026-01-01 for new work."
 
 # Suggested category values: marketplace, storefront, marketplace-operator,
 # social-commerce, aggregator, carrier, accounting, warehouse, other.
