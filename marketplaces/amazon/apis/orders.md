@@ -55,7 +55,7 @@ This operation is the targeted detail lookup. Request only additional datasets t
 
 The official Orders API overview lists the same required-role choices for both v2026-01-01 operations, with **at least one** of the following roles: Amazon Fulfillment, Buyer Communication, Buyer Solicitation, Direct to Consumer Shipping (Restricted), Finance and Accounting, Inventory and Order Tracking, Pricing, Product Listing, Professional Services (Restricted), Selling Partner Insights, Tax Invoicing (Restricted), or Tax Remittance (Restricted). It lists regions NA, EU, and FE for both operations.[1] These are documented role/region categories, not evidence that a particular application has approval, a seller has authorized that app, a marketplace is enabled, or returned data is visible. Restricted roles remain subject to Amazon’s role/access approval rules.
 
-Amazon’s migration guide says v2026-01-01 uses role-based permission for PII and does not require Restricted Data Token generation. This does not remove the need for valid SP-API authorization, applicable roles, seller consent, request signing, or regional endpoint selection.[3] The model’s sample host is the NA endpoint; it is not a universal host. Use Amazon’s endpoint/marketplace mappings for the target marketplace rather than deriving region from the marketplace ID.[4] [5]
+Amazon’s migration guide says v2026-01-01 uses role-based permission for PII and does not require Restricted Data Token generation. This does not remove the need for valid SP-API authorization, applicable roles, seller consent, required request headers, or regional endpoint selection.[3] Amazon’s current connection guide lists `host`, `x-amz-access-token`, `x-amz-date`, and `user-agent` as request headers and its example does not include SigV4 signing.[7] The model’s sample host is the NA endpoint; it is not a universal host. Use Amazon’s endpoint/marketplace mappings for the target marketplace rather than deriving region from the marketplace ID.[4] [5]
 
 ## Pagination, asynchronous behavior, and errors
 
@@ -84,10 +84,95 @@ For historical backfills, account for marketplace-specific archival windows. The
 
 No sandbox or live account tests were performed. This dossier makes no claim that credentials, role assignments, marketplace eligibility, example calls, or account-specific rate limits were tested.
 
+## Python `httpx` examples
+
+These examples accept an access token as a function argument; they do not exchange credentials or embed real IDs or tokens. Set `endpoint` to the SP-API regional host for the target marketplace. Per Amazon’s current connection guide, include `x-amz-access-token`, `x-amz-date`, and `user-agent`; the HTTP client supplies `host`. The guide’s request example does not include SigV4 signing. Confirm current authentication instructions when deploying.[7] Only request datasets needed by the caller: omit `includedData` by default, and avoid `BUYER` or `RECIPIENT` unless required.
+
+```python
+import random
+import time
+from datetime import datetime, timezone
+from urllib.parse import quote
+
+import httpx
+
+
+RETRYABLE_STATUS = {429, 500, 503}
+MAX_ATTEMPTS = 5
+
+
+def get_json(client: httpx.Client, url: str, *, access_token: str, params=None):
+    """GET JSON with bounded retries for throttling/transient failures only."""
+    for attempt in range(MAX_ATTEMPTS):
+        headers = {
+            "x-amz-access-token": access_token,
+            "x-amz-date": datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ"),
+            "user-agent": "MarketplaceIntegrationPlaybook/1.0 (Language=Python)",
+            "accept": "application/json",
+        }
+        try:
+            response = client.get(url, headers=headers, params=params)
+        except httpx.TransportError:
+            if attempt == MAX_ATTEMPTS - 1:
+                raise
+        else:
+            # Capture diagnostics before status handling, including for errors.
+            diagnostics = {
+                key: response.headers.get(key)
+                for key in ("x-amzn-RequestId", "x-amz-apigw-id",
+                            "x-amzn-RateLimit-Limit", "retry-after")
+            }
+            if response.status_code not in RETRYABLE_STATUS:
+                response.raise_for_status()  # Invalid/auth 4xx fail without retry.
+                return response.json(), diagnostics
+            if attempt == MAX_ATTEMPTS - 1:
+                response.raise_for_status()  # Preserve final status/response for diagnosis.
+        if attempt < MAX_ATTEMPTS - 1:
+            # Exponential delay capped at 30s with full jitter. Do not assume
+            # Retry-After is guaranteed; the documented API model gives no guarantee.
+            time.sleep(random.uniform(0, min(30.0, 0.5 * (2 ** attempt))))
+    raise RuntimeError("unreachable")
+
+
+def search_orders(client: httpx.Client, endpoint: str, access_token: str,
+                  marketplace_id: str, last_updated_after: str):
+    url = f"{endpoint.rstrip('/')}/orders/2026-01-01/orders"
+    # Keep this base filter set unchanged on every page. No optional datasets
+    # are requested, minimizing returned personal data.
+    base_params = [
+        ("lastUpdatedAfter", last_updated_after),
+        ("marketplaceIds", marketplace_id),
+        ("maxResultsPerPage", "100"),
+    ]
+    token = None
+    while True:
+        params = list(base_params)
+        if token:
+            params.append(("paginationToken", token))
+        page, diagnostics = get_json(
+            client, url, access_token=access_token, params=params
+        )
+        # Persist/log diagnostics safely; never log access_token or PII payloads.
+        yield page, diagnostics
+        token = (page.get("pagination") or {}).get("nextToken")
+        if not token:
+            break
+
+
+def get_order(client: httpx.Client, endpoint: str, access_token: str,
+              order_id: str):
+    url = f"{endpoint.rstrip('/')}/orders/2026-01-01/orders/{quote(order_id, safe='')}"
+    return get_json(client, url, access_token=access_token)
+```
+
+The `search_orders` example uses exactly one time-bound filter and retains the same filters while passing each `nextToken` as `paginationToken`. Adjust the time axis and filters for the use case. The retry policy is deliberately limited to `429`, `500`, `503`, and network transport failures, with a finite attempt count and exponential backoff plus jitter. Other HTTP errors, including invalid-parameter and authentication/authorization `4xx` responses, fail immediately for caller diagnosis; do not retry them unchanged. Capture and retain request IDs and rate-limit headers from both success and error responses, while redacting tokens and minimizing logged order data.[1] [2] [6]
+
 ## Official references
 
 [1]: https://developer-docs.amazon/sp-api/docs/orders-api "Orders API overview and role tables"
 [2]: https://github.com/amzn/selling-partner-api-models/blob/main/models/orders-api-model/orders_2026-01-01.json "Official versioned Orders API model v2026-01-01"
 [3]: https://developer-docs.amazon/sp-api/docs/orders-api-migration-guide "Orders API migration guide"
-[4]: https://developer-docs.amazon.com/sp-api/docs/sp-api-endpoints "SP-API endpoints"
+[4]: https://developer-docs.amazon/sp-api/docs/sp-api-endpoints "SP-API endpoints"
 [5]: https://developer-docs.amazon/sp-api/docs/marketplace-ids "Marketplace IDs"
+[6]: https://developer-docs.amazon.com/sp-api/reference/searchorders "Search Orders operation reference"
+[7]: https://developer-docs.amazon.com/sp-api/docs/connecting-to-the-selling-partner-api "Amazon's current SP-API connection and request-header guide"

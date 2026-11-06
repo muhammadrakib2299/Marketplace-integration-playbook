@@ -39,6 +39,38 @@ All operation IDs, paths, methods, and success schema names in this table match 
 
 **Response:** `200` returns an `Item`, which requires `sku` and can include the requested datasets. A response may include issues that occurred after a listing submission was accepted and processed; this differs from the immediate submission response. The API overview also cautions that `attributes` reflects the latest data supplied by the selling partner, while datasets such as `fulfillmentAvailability` represent live listing data.[1] [2]
 
+**Runnable-style Python (`httpx`):** Supply an SP-API access token through the environment; this example uses placeholders and does not include credentials. Configure `SP_API_BASE` for the marketplace's SP-API region. Amazon's current connection guide lists `host`, `x-amz-access-token`, `x-amz-date`, and `user-agent` as request headers; the HTTP client supplies `host`. This example includes the other documented headers.[8]
+
+```python
+import os
+from datetime import datetime, timezone
+from urllib.parse import quote
+
+import httpx
+
+base = os.environ.get("SP_API_BASE", "https://sellingpartnerapi-na.amazon.com")
+seller_id = "SELLER_ID"
+sku = "SELLER_SKU"
+marketplace_id = "MARKETPLACE_ID"
+headers = {
+    "x-amz-access-token": os.environ["SP_API_ACCESS_TOKEN"],
+    "x-amz-date": datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ"),
+    "user-agent": "MarketplaceIntegrationPlaybook/1.0 (Language=Python)",
+}
+url = f"{base}/listings/2021-08-01/items/{quote(seller_id, safe='')}/{quote(sku, safe='')}"
+
+response = httpx.get(
+    url,
+    params={"marketplaceIds": marketplace_id, "includedData": "summaries,issues"},
+    headers=headers,
+    timeout=30.0,
+)
+response.raise_for_status()
+print(response.json())
+```
+
+The query and response shape follow `getListingsItem`; no request body is sent.[2] [3]
+
 ## `patchListingsItem`
 
 **Request:** `PATCH /listings/2021-08-01/items/{sellerId}/{sku}`. Required path parameters are `sellerId` and `sku`; required query `marketplaceIds` is limited to one store. Optional `includedData` defaults to `issues` and supports `identifiers` and `issues`. Optional `mode` currently has the enum value `VALIDATION_PREVIEW`; optional `issueLocale` localizes issues. There is no requirement to send optional parameters unless needed.[2]
@@ -48,6 +80,48 @@ The required `application/json` body follows `ListingsItemPatchRequest`: require
 **PATCH versus PUT:** PATCH is the partial-update operation and accepts explicit patch operations. PUT creates a listing or replaces its existing content; omitted existing attributes may be dropped. Prefer PATCH when changing only selected top-level attributes, but follow the product type schema and operation-specific documented limitations. This recommendation is an implementation choice based on Amazon’s documented semantics, not a guarantee of the outcome for every attribute.[1] [2]
 
 **Response:** `200` returns `ListingsItemSubmissionResponse`. Check `status` and `issues`. `mode=VALIDATION_PREVIEW` requests validation without normal submission: the response may report `VALID` or `INVALID`; `VALID` is only returned for preview. Without preview, `ACCEPTED` means accepted for processing, not that subsequent processing succeeded. Amazon states that immediate PUT/PATCH/DELETE responses do not include issues that arise after acceptance.[1] [2]
+
+**Quantity-only merge example (`httpx`):** This uses the documented `fulfillment_availability` merge use case; the JSON body is a `ListingsItemPatchRequest` with a single `PatchOperation`. Confirm the product type and fulfillment channel are appropriate for the listing. Set `VALIDATION_PREVIEW=1` to send a validation-only request; omit `mode` for normal submission.[1] [2] [7] [8]
+
+```python
+import os
+from datetime import datetime, timezone
+from urllib.parse import quote
+
+import httpx
+
+base = os.environ.get("SP_API_BASE", "https://sellingpartnerapi-na.amazon.com")
+seller_id = "SELLER_ID"
+sku = "SELLER_SKU"
+marketplace_id = "MARKETPLACE_ID"
+product_type = "PRODUCT_TYPE"
+quantity = 12
+headers = {
+    "x-amz-access-token": os.environ["SP_API_ACCESS_TOKEN"],
+    "x-amz-date": datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ"),
+    "user-agent": "MarketplaceIntegrationPlaybook/1.0 (Language=Python)",
+    "content-type": "application/json",
+}
+url = f"{base}/listings/2021-08-01/items/{quote(seller_id, safe='')}/{quote(sku, safe='')}"
+params = {"marketplaceIds": marketplace_id}
+if os.getenv("VALIDATION_PREVIEW") == "1":
+    params["mode"] = "VALIDATION_PREVIEW"
+body = {
+    "productType": product_type,
+    "patches": [{
+        "op": "merge",
+        "path": "/attributes/fulfillment_availability",
+        "value": [{"fulfillment_channel_code": "DEFAULT", "quantity": quantity}],
+    }],
+}
+
+response = httpx.patch(url, params=params, headers=headers, json=body, timeout=30.0)
+response.raise_for_status()
+result = response.json()
+print(result)  # Inspect status, submissionId, and issues; ACCEPTED is not completion.
+```
+
+The model requires `productType` and a non-empty `patches` array; each operation has `op` and JSON Pointer `path`, with the value represented as an array of objects.[2] The guide specifically documents quantity merge on this top-level attribute; merge is not generally supported for arbitrary attributes.[1] In preview mode interpret `VALID`/`INVALID` as validation outcomes rather than a normal listing submission. A normal `ACCEPTED` result only confirms acceptance for processing; read the listing back after processing with `getListingsItem` and inspect returned details/issues for downstream results.[1] [2]
 
 ## `putListingsItem`
 
@@ -99,9 +173,11 @@ Every operation models `400`, `403`, `413`, `415`, `429`, `500`, and `503` error
 | `404` | Specified resource does not exist. Only modeled for GET and search. | Treat as not found where appropriate; verify identifiers and marketplace. |
 | `413` | Request size exceeded maximum accepted size. | Reduce or correct request size. |
 | `415` | Request payload uses unsupported format. | Check content type and JSON serialization. |
-| `429` | Request frequency exceeded allowed rate. | Respect applied limits and retry conservatively. |
-| `500` | Unexpected condition prevented server from fulfilling request. | Consider bounded retry with backoff. |
-| `503` | Temporary overload or maintenance. | Consider bounded retry with backoff. |
+| `429` | Request frequency exceeded allowed rate. | For reads, use bounded exponential backoff with jitter and respect `Retry-After` if present. For writes, reconcile an uncertain outcome before retrying. |
+| `500` | Unexpected condition prevented server from fulfilling request. | For reads, bounded exponential backoff with jitter is reasonable. For writes, reconcile an uncertain outcome before retrying. |
+| `503` | Temporary overload or maintenance. | For reads, bounded exponential backoff with jitter is reasonable. For writes, reconcile an uncertain outcome before retrying. |
+
+Correct invalid 4xx requests (including malformed payloads) rather than retrying them unchanged. Stop and resolve authorization, token, signature, or role denial on `403`; do not keep retrying. Bound read retries for `429` and transient `5xx` with exponential backoff and jitter. If a write times out or returns an ambiguous transient failure, do not blindly replay it: read back the affected listing and reconcile its current state before deciding whether to submit again. These are client safety recommendations, not Amazon guarantees.[1] [2]
 
 Amazon’s role/region and rate-limit claims above are the documented availability statements, not a certification of account eligibility. Operation-specific business approval, catalog restrictions, and product-type support can still affect outcomes. Amazon notes that fully supported product types vary by seller/vendor type and store; for partially supported types, offer-only submissions for existing ASINs and partial updates via product type `PRODUCT` are described as supported. Check current PTD guidance before relying on a specific product type.[1]
 
@@ -121,3 +197,5 @@ Keep seller SKU, seller identity, and marketplace context together in stored rec
 [4]: https://developer-docs.amazon.com/sp-api/docs/usage-plans-and-rate-limits "SP-API usage plans and rate limits"
 [5]: https://developer-docs.amazon.com/sp-api/docs/product-type-definitions-api "Product Type Definitions API overview"
 [6]: https://developer-docs.amazon.com/sp-api/docs/feeds-api-v2021-06-30-reference "Feeds API v2021-06-30 reference"
+[7]: https://developer-docs.amazon.com/sp-api/reference/patchlistingsitem "Listings Items API patchListingsItem operation reference"
+[8]: https://developer-docs.amazon.com/sp-api/docs/connecting-to-the-selling-partner-api "Amazon's current SP-API connection and request-header guide"

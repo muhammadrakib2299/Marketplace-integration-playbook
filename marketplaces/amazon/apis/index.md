@@ -30,7 +30,12 @@ The model files are the structured source for operation and payload shapes, but 
 | Listings Items v2021-08-01 | [Operation dossier](listings-items.md); documentation review only, no sandbox/account test. |
 | Orders v2026-01-01 | [Operation dossier](orders.md); documentation review only, no sandbox/account test. |
 | Reports v2021-06-30 | [Operation dossier](reports.md); documentation review only, no sandbox/account test. |
-| Remaining API families | Operation-by-operation documentation, payloads, roles, limits, and async behavior remain **not completed**; this is a scoped first batch, not the full Amazon API reference. |
+| Orders and Listings Items code examples | Credential-safe Python request and error-handling examples; no live credentials or tests. |
+| Finances API v0 | [Operation dossier](finances.md); documentation review only, no sandbox/account test. |
+| Feeds API v2021-06-30 | [Operation dossier](feeds.md); documentation review only, no sandbox/account test. |
+| FBA Inventory API v1 | [Operation dossier](fba-inventory.md); documentation review only, no sandbox/account test. |
+| SP-API notifications | [Notification integration guide](../guides/notifications-integration.md); event delivery and app webhook boundary documented, no account test. |
+| Remaining API families | Operation-by-operation documentation, payloads, roles, limits, and async behavior remain **not completed**; this remains a phased, partial API reference. |
 
 ## Which APIs belong in a seller listing migration?
 
@@ -42,9 +47,10 @@ The model files are the structured source for operation and payload shapes, but 
 | [Catalog Items API v2022-04-01](https://developer-docs.amazon.com/sp-api/reference/catalog-items-v2022-04-01) | Search/read Amazon catalog product facts. | Enrich a seller listing by ASIN or product identifier; not a seller listing export. | [Operation reference](catalog-items-reference.md); see also the [integration guide](catalog-items.md). |
 | [Product Type Definitions API v2020-09-01](https://developer-docs.amazon.com/sp-api/reference/product-type-definitions-v2020-09-01) | Return product-type schemas and requirements. | Use after category/product-type resolution, before validating listing attributes. | Workflow documented; operation details pending. |
 | [Reports API v2021-06-30](https://developer-docs.amazon.com/sp-api/reference/reports-v2021-06-30) | Generate and retrieve asynchronous snapshots. | All Listings / Active Listings reports can provide a large baseline; not a live state stream. | [Operation dossier](reports.md) and [migration workflow](../workflows/active-listing-migration.md). |
-| [Feeds API v2021-06-30](https://developer-docs.amazon.com/sp-api/reference/feeds-v2021-06-30) | Submit bulk data and retrieve processing outcomes. | Optional bulk write path using `JSON_LISTINGS_FEED`; not a listing discovery API. | Lifecycle documented in the migration guide; operation dossiers pending. |
-| [Notifications API v1](https://developer-docs.amazon.com/sp-api/reference/notifications-v1) | Subscribe to supported event types through configured destinations. | Signals listing issues/status or async job completion; consumers still fetch authoritative details and reconcile. | Workflow documented; per-type support must be checked. |
-| [FBA Inventory API v1](https://developer-docs.amazon.com/sp-api/reference/fba-inventory-v1) | Read FBA inventory summaries. | Separate from seller-fulfilled listing quantity and listing reports. | Purpose mapped; detailed inventory sync dossier pending. |
+| [Feeds API v2021-06-30](https://developer-docs.amazon.com/sp-api/reference/feeds-v2021-06-30) | Submit bulk data and retrieve processing outcomes. | Optional bulk write path using supported feed types; not a listing discovery API. | [Operation dossier](feeds.md). |
+| [Notifications API v1](https://developer-docs.amazon.com/sp-api/reference/notifications-v1) | Subscribe to supported event types through configured destinations. | Signals listing issues/status or async job completion; consumers still fetch authoritative details and reconcile. | See the [notification integration guide](../guides/notifications-integration.md); verify type support. |
+| [FBA Inventory API v1](https://developer-docs.amazon.com/sp-api/reference/fba-inventory-v1) | Read FBA inventory summaries. | Separate from seller-fulfilled listing quantity and listing reports. | [Operation dossier](fba-inventory.md). |
+| [Finances API v0](https://developer-docs.amazon.com/sp-api/reference/finances-v0) | Retrieve seller financial events and event groups. | Finance reconciliation is separate from vendor remittance and payout APIs. | [Operation dossier](finances.md). |
 | [Orders API v2026-01-01](https://developer-docs.amazon/sp-api/reference/orders-v2026-01-01) | Search and retrieve seller orders. | Separate order-ingestion workflow; not part of the listing baseline. | [Operation dossier](orders.md) and [order synchronization](../workflows/order-lifecycle.md). |
 
 For new order work, review Amazon's [Orders API migration guide](https://developer-docs.amazon.com/sp-api/docs/orders-api-migration-guide) and [deprecation schedule](https://developer-docs.amazon.com/sp-api/docs/sp-api-deprecations); listed v0 order operations have a published removal date of **2027-03-27**. Do not count old and new versions as separate business capabilities when reporting operation totals.
