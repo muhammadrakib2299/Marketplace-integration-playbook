@@ -5,7 +5,7 @@
 | Documentation status | Source-linked implementation guidance; no integration claim |
 | Scope | Seller account authorization, listing migration, catalog enrichment, seller-fulfilled listings, order-sync entry point |
 | Evidence | Official Amazon documentation reviewed; no sandbox or production tests performed |
-| Last checked | 2026-11-05 |
+| Last checked | 2026-11-06 |
 
 This independent guide helps developers plan a seller-side integration with Amazon. It does not claim that this repository connects to Amazon or that any example has been production-tested.
 
@@ -13,7 +13,7 @@ This independent guide helps developers plan a seller-side integration with Amaz
 
 ### 1. Select the correct scope
 
-Decide whether the app is private or public, which seller marketplaces it supports, which roles it needs, and whether the first release migrates listings, reads orders, updates seller-fulfilled quantity, or handles FBA inventory. [Use the API directory](apis/index.md) to see how the API surfaces relate and what still needs operation-level review.
+Decide whether the app is private or public, which seller or vendor workflows it supports, which roles it needs, and whether the first release migrates listings, reads orders, updates seller-fulfilled quantity, or handles FBA inventory. Use the [seller-versus-vendor comparison](apis/seller-vendor-comparison.md) and [API directory](apis/index.md) to see how the API surfaces relate and what still needs operation-level review.
 
 ### 2. Connect the seller account
 
@@ -29,9 +29,11 @@ The [development guide](guides/development-guide.md) covers version selection, r
 
 ## Scope and evidence boundaries
 
-Amazon's official SP-API Models directory listed **57 API/model-family entries on 2026-11-05**. That includes seller-only, vendor-only, and special/region-specific entries; it is not an operation count or a list of APIs every seller needs. See the [API directory and count method](apis/index.md).
+Amazon's official SP-API Models directory listed **57 API/model-family entries on 2026-11-06**. That includes seller-only, vendor-only, shared, and special/region-specific entries; it is not an operation count or a list of APIs every seller needs. See the [API directory and count method](apis/index.md).
 
-The current deep coverage is focused on seller onboarding, active listing migration, catalog enrichment, and the associated API connections. The directory makes other relevant families visible, but a full dossier for all 57 families and every operation is not yet complete. Each operation must be checked for its current model version, seller/vendor eligibility, role, region, input/output schema, rate limit, pagination, and workflow before implementation.
+The comparison page classifies all 57 directory entries by seller, vendor, shared, or program-specific use-case evidence. For operation-level reference, start with [Catalog Items](apis/catalog-items-reference.md), [Listings Items](apis/listings-items.md), [Orders](apis/orders.md), and [Reports](apis/reports.md). The longer [Catalog Items integration guide](apis/catalog-items.md) preserves the existing workflow examples. These four API families form the first documentation batch; each page identifies its version and source/evidence status.
+
+The current deep coverage is focused on seller onboarding, active listing migration, catalog enrichment, and the associated API connections. The four operation dossiers are documentation reviews, not sandbox or production tests. Dossiers for the remaining API families are still pending. Each operation must be checked for its current model version, seller/vendor eligibility, role, region, input/output schema, rate limit, pagination, and workflow before implementation.
 
 **Documented** means Amazon's linked documentation describes the behavior. **Recommended** labels engineering practices, not provider guarantees. **Tested** is reserved for behavior observed in an authorized environment with scope/date recorded; no material in this guide currently has that status.
 

@@ -1,8 +1,8 @@
 # Amazon SP-API: API directory and workflow map
 
-> **Directory snapshot: 2026-11-05.** Amazon's official [SP-API Models directory](https://developer-docs.amazon.com/sp-api/docs/sp-api-models) listed **57 API/model-family entries** when reviewed. This is a directory-entry count, not 57 APIs needed by every seller, not a count of operations, and not a count of endpoints. The directory includes seller-only, vendor-only, special-purpose and region-scoped entries. Amazon does not publish one timeless operational total. Versions and entries change; re-count from the official directory before implementation.
+> **Directory snapshot: 2026-11-06.** Amazon's official [SP-API Models directory](https://developer-docs.amazon.com/sp-api/docs/sp-api-models) lists **57 API/model-family entries** in this snapshot. This is a directory-entry count, not 57 APIs needed by every seller, not a count of operations, and not a count of endpoints. The directory includes seller-only, vendor-only, shared, special-purpose, and region-scoped entries. Versions and entries change; re-count from the official directory before implementation.
 
-This playbook currently goes deep on the **seller listing migration and synchronization path**. It does not yet contain a complete operation-by-operation dossier for all 57 directory entries. Rows below distinguish covered surfaces from adjacent APIs and unreviewed scope. Use the live reference and role mapping before enabling any operation.
+This playbook currently goes deep on the **seller listing migration and synchronization path** and begins operation-level coverage for Catalog Items, Listings Items, Orders, and Reports. The [seller-versus-vendor comparison](seller-vendor-comparison.md) classifies all 57 directory entries at the family/use-case level. It does not replace operation-level permission checks or complete the remaining API dossiers. Use the live reference and role mapping before enabling any operation.
 
 ## How Amazon's official documentation is organized
 
@@ -22,10 +22,15 @@ The model files are the structured source for operation and payload shapes, but 
 | Work item | Status |
 |---|---|
 | Amazon official Welcome page and models-repository roles in the documentation ecosystem | Reviewed; links recorded above. |
-| API-family directory count | 57 headings in the official SP-API Models directory snapshot dated 2026-11-05; this is not an operation count. |
+| API-family directory count | 57 headings in the official SP-API Models directory snapshot dated 2026-11-06; this is not an operation count. |
 | Seller connection and authorization workflow | Documented in the [seller onboarding guide](../guides/seller-onboarding.md); official-source review only, no account test. |
 | Existing seller listing migration and API relationships | Documented in the [active-listing migration workflow](../workflows/active-listing-migration.md); official-source review only, no sandbox/account test. |
-| Operation-by-operation documentation, payloads, roles, and limits across all 57 entries | **Not completed.** The current table is a scoped integration map, not the full Amazon API reference. |
+| Seller-versus-vendor audience comparison | [All 57 directory entries](seller-vendor-comparison.md) classified by official directory/use-case evidence; operation-level access must still be verified. |
+| Catalog Items v2022-04-01 | [Operation reference](catalog-items-reference.md) and [integration guide](catalog-items.md); two operations; documentation review only, no sandbox/account test. |
+| Listings Items v2021-08-01 | [Operation dossier](listings-items.md); documentation review only, no sandbox/account test. |
+| Orders v2026-01-01 | [Operation dossier](orders.md); documentation review only, no sandbox/account test. |
+| Reports v2021-06-30 | [Operation dossier](reports.md); documentation review only, no sandbox/account test. |
+| Remaining API families | Operation-by-operation documentation, payloads, roles, limits, and async behavior remain **not completed**; this is a scoped first batch, not the full Amazon API reference. |
 
 ## Which APIs belong in a seller listing migration?
 
@@ -34,13 +39,13 @@ The model files are the structured source for operation and payload shapes, but 
 | [Sellers API v1](https://developer-docs.amazon.com/sp-api/reference/sellers-v1) | Seller/account marketplace participation data. | Helps discover supported marketplaces after authorization; does not import listings. | Directory only; operation-level review pending. |
 | [Listings Items API v2021-08-01](https://developer-docs.amazon.com/sp-api/reference/listings-items-v2021-08-01) | Read, search, create, update, or delete seller SKU listings. | Primary live listing surface; use for bounded reads, per-SKU writes, status and issue checks. | Core migration workflow documented below. |
 | [Listings Restrictions API v2021-08-01](https://developer-docs.amazon.com/sp-api/reference/listings-restrictions-v2021-08-01) | Check whether an item can be listed in a marketplace. | Optional preflight before creating or relisting an offer. | Purpose mapped; operation details pending. |
-| [Catalog Items API v2022-04-01](https://developer-docs.amazon.com/sp-api/reference/catalog-items-v2022-04-01) | Search/read Amazon catalog product facts. | Enrich a seller listing by ASIN or product identifier; not a seller listing export. | [Two-operation dossier](catalog-items.md). |
+| [Catalog Items API v2022-04-01](https://developer-docs.amazon.com/sp-api/reference/catalog-items-v2022-04-01) | Search/read Amazon catalog product facts. | Enrich a seller listing by ASIN or product identifier; not a seller listing export. | [Operation reference](catalog-items-reference.md); see also the [integration guide](catalog-items.md). |
 | [Product Type Definitions API v2020-09-01](https://developer-docs.amazon.com/sp-api/reference/product-type-definitions-v2020-09-01) | Return product-type schemas and requirements. | Use after category/product-type resolution, before validating listing attributes. | Workflow documented; operation details pending. |
-| [Reports API v2021-06-30](https://developer-docs.amazon.com/sp-api/reference/reports-v2021-06-30) | Generate and retrieve asynchronous snapshots. | All Listings / Active Listings reports can provide a large baseline; not a live state stream. | Workflow documented in [migration guide](../workflows/active-listing-migration.md). |
+| [Reports API v2021-06-30](https://developer-docs.amazon.com/sp-api/reference/reports-v2021-06-30) | Generate and retrieve asynchronous snapshots. | All Listings / Active Listings reports can provide a large baseline; not a live state stream. | [Operation dossier](reports.md) and [migration workflow](../workflows/active-listing-migration.md). |
 | [Feeds API v2021-06-30](https://developer-docs.amazon.com/sp-api/reference/feeds-v2021-06-30) | Submit bulk data and retrieve processing outcomes. | Optional bulk write path using `JSON_LISTINGS_FEED`; not a listing discovery API. | Lifecycle documented in the migration guide; operation dossiers pending. |
 | [Notifications API v1](https://developer-docs.amazon.com/sp-api/reference/notifications-v1) | Subscribe to supported event types through configured destinations. | Signals listing issues/status or async job completion; consumers still fetch authoritative details and reconcile. | Workflow documented; per-type support must be checked. |
 | [FBA Inventory API v1](https://developer-docs.amazon.com/sp-api/reference/fba-inventory-v1) | Read FBA inventory summaries. | Separate from seller-fulfilled listing quantity and listing reports. | Purpose mapped; detailed inventory sync dossier pending. |
-| [Orders API v2026-01-01](https://developer-docs.amazon.com/sp-api/reference/orders-v2026-01-01) | Search and retrieve seller orders. | Separate order-ingestion workflow; not part of the listing baseline. | See [order synchronization](../workflows/order-lifecycle.md). |
+| [Orders API v2026-01-01](https://developer-docs.amazon/sp-api/reference/orders-v2026-01-01) | Search and retrieve seller orders. | Separate order-ingestion workflow; not part of the listing baseline. | [Operation dossier](orders.md) and [order synchronization](../workflows/order-lifecycle.md). |
 
 For new order work, review Amazon's [Orders API migration guide](https://developer-docs.amazon.com/sp-api/docs/orders-api-migration-guide) and [deprecation schedule](https://developer-docs.amazon.com/sp-api/docs/sp-api-deprecations); listed v0 order operations have a published removal date of **2027-03-27**. Do not count old and new versions as separate business capabilities when reporting operation totals.
 
