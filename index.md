@@ -28,6 +28,7 @@ features:
     title: Build from evidence
     details: Follow official provider sources and distinguish documented behavior from engineering recommendations and untested assumptions.
 ---
+<!-- markdownlint-disable MD033 -->
 
 <div class="home-intro">
   <div class="eyebrow"><span class="eyebrow-mark"></span> A practical path from first consent to reliable operations</div>
