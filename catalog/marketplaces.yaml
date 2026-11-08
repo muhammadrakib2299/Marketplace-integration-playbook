@@ -47,6 +47,28 @@ marketplaces:
     guide: ../marketplaces/amazon/README.md
     notes: "Official docs reviewed; no sandbox or production tests performed. The Amazon SP-API Models directory contained 57 API/model-family headings on 2026-11-05; this is not an operation count and includes vendor-only and special-purpose entries. Orders API v0 is deprecated and listed operations are scheduled for removal on 2027-03-27; this guide targets v2026-01-01 for new work."
 
+  - id: tiktok-shop-partner-api
+    name: TikTok Shop Partner API
+    category: social-commerce
+    regions:
+      - Target-market dependent; verify in Partner Center
+    api_surfaces:
+      - name: Get Authorized Category Assets
+        version: '202405'
+        docs_url: https://partner.tiktokshop.com/docv2/page/get-authorized-category-assets-202405
+    access_model: partner-only
+    status: documented
+    evidence: official
+    source_urls:
+      - https://developers.tiktok.com/docs/en/welcome
+      - https://developers.tiktok.com/doc/scopes-overview?enter_method=left_navigation
+      - https://developers.tiktok.com/doc/login-kit-manage-user-access-tokens/
+      - https://partner.tiktokshop.com/docv2/page/get-authorized-category-assets-202405
+      - https://partner.tiktokshop.com/docv2/page/678e3a3978f4c20311b8b555
+    last_verified: "2026-11-09"
+    guide: ../marketplaces/tiktok-shop/README.md
+    notes: "Only the 202405 Get Authorized Category Assets operation is documented. Partner-level app category authorization is not seller/shop authorization. No API, sandbox, or production calls were tested; registration region and target market must be confirmed for each app."
+
 # Suggested category values: marketplace, storefront, marketplace-operator,
 # social-commerce, aggregator, carrier, accounting, warehouse, other.
 # Suggested access_model values: public, seller-account, approval-required,
