@@ -4,6 +4,7 @@ const repositoryUrl = 'https://github.com/muhammadrakib2299/Marketplace-integrat
 
 export default defineConfig({
   lang: 'en-US',
+  appearance: true,
   title: 'Marketplace Integration Playbook',
   description:
     'A source-linked developer handbook for seller authorization, marketplace API workflows, data migration, and operational reliability.',

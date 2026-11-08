@@ -1,8 +1,19 @@
 :root {
+  --vp-c-bg: #f8faf7;
+  --vp-c-bg-alt: #f0f5f1;
+  --vp-c-bg-elv: #ffffff;
+  --vp-c-bg-soft: #edf4ef;
+  --vp-c-text-1: #1b302d;
+  --vp-c-text-2: #526b65;
+  --vp-c-text-3: #788b84;
+  --vp-c-divider: #dce7df;
   --vp-c-brand-1: #176b60;
   --vp-c-brand-2: #12584f;
   --vp-c-brand-3: #0f4942;
   --vp-c-brand-soft: rgba(23, 107, 96, 0.11);
+  --vp-input-switch-bg-color: #e1ebe4;
+  --vp-input-border-color: #cfddd3;
+  --vp-c-neutral-inverse: #ffffff;
   --vp-home-hero-name-color: #112f31;
   --vp-home-hero-name-background: transparent;
   --vp-home-hero-image-background-image: none;
@@ -11,10 +22,21 @@
   --vp-font-family-mono: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
 }
 .dark {
+  --vp-c-bg: #111a19;
+  --vp-c-bg-alt: #0c1312;
+  --vp-c-bg-elv: #1a2523;
+  --vp-c-bg-soft: #1c2c28;
+  --vp-c-text-1: #e7f1ed;
+  --vp-c-text-2: #b0c4bc;
+  --vp-c-text-3: #879d94;
+  --vp-c-divider: #2b4039;
   --vp-c-brand-1: #72d2bb;
   --vp-c-brand-2: #8ae0ca;
   --vp-c-brand-3: #a8edda;
   --vp-c-brand-soft: rgba(114, 210, 187, 0.13);
+  --vp-input-switch-bg-color: #263b34;
+  --vp-input-border-color: #3b564b;
+  --vp-c-neutral-inverse: #dff2e9;
   --vp-home-hero-name-color: #e0f5ec;
   --vp-home-hero-name-background: transparent;
   --vp-home-hero-image-background-image: none;
@@ -22,6 +44,10 @@
 .VPNavBar { backdrop-filter: blur(16px); }
 .VPNavBar .title { font-weight: 750; letter-spacing: -0.035em; }
 .VPNavBar .VPNavBarMenuLink, .VPNavBar .VPNavBarMenuGroup { font-size: 13px; font-weight: 600; }
+.VPNavBarAppearance .VPSwitchAppearance { width: 44px; height: 24px; border-radius: 999px; background-color: var(--vp-c-bg-soft); border-color: var(--vp-c-divider); }
+.VPNavBarAppearance .VPSwitchAppearance:hover { background-color: var(--vp-c-brand-soft); border-color: var(--vp-c-brand-1); }
+.VPNavBarAppearance .VPSwitchAppearance:focus-visible { outline: 2px solid var(--vp-c-brand-1); outline-offset: 3px; }
+.VPNavBarAppearance .VPSwitchAppearance .check { top: 2px; left: 2px; }
 .VPButton { min-height: 46px; border-radius: 12px !important; font-weight: 650 !important; transition: transform 180ms ease, box-shadow 180ms ease, background 180ms ease; }
 .VPButton:hover { transform: translateY(-2px); }
 .VPButton.brand { box-shadow: 0 8px 20px rgba(23, 107, 96, 0.18); }
