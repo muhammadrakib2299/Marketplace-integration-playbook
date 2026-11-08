@@ -37,14 +37,14 @@ features:
 </div>
 
 <div class="journey-grid">
-  <a class="journey-card" href="/marketplaces/amazon/guides/seller-onboarding">
+  <a class="journey-card" href="https://marketplace-integration-playbook.vercel.app/marketplaces/amazon/guides/seller-onboarding.html">
     <span class="journey-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="4"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0M16 11l2 2 4-5"/></svg></span>
     <span class="journey-meta">01 <span>ACCESS</span></span>
     <strong>Connect a seller account</strong>
     <span>Register the app, handle consent and OAuth securely, then verify marketplace access.</span>
     <span class="journey-link">Explore onboarding <span aria-hidden="true">↗</span></span>
   </a>
-  <a class="journey-card" href="/marketplaces/amazon/workflows/active-listing-migration">
+  <a class="journey-card" href="https://marketplace-integration-playbook.vercel.app/marketplaces/amazon/workflows/active-listing-migration.html">
     <span class="journey-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16v16H4zM8 8h8M8 12h8M8 16h4"/><path d="m15 16 2 2 3-3"/></svg></span>
     <span class="journey-meta">02 <span>MIGRATE</span></span>
     <strong>Import existing listings</strong>
@@ -58,7 +58,7 @@ features:
     <span>See which API surfaces read listings, enrich products, submit changes, and signal outcomes.</span>
     <span class="journey-link">Browse API directory <span aria-hidden="true">↗</span></span>
   </a>
-  <a class="journey-card" href="/marketplaces/amazon/guides/development-guide">
+  <a class="journey-card" href="https://marketplace-integration-playbook.vercel.app/marketplaces/amazon/guides/development-guide.html">
     <span class="journey-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 1 2.7 6.4M3 18v-6h6"/><path d="M12 7v5l3 2"/></svg></span>
     <span class="journey-meta">04 <span>OPERATE</span></span>
     <strong>Build reliable sync</strong>
