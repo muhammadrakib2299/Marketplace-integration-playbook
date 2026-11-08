@@ -21,10 +21,8 @@ export default defineConfig({
   },
   themeConfig: {
     nav: [
-      { text: 'Developer journey', link: '/marketplaces/amazon/' },
-      { text: 'API directory', link: '/marketplaces/amazon/apis/' },
-      { text: 'Repository guides', link: '/docs/integration-principles' },
-      { text: 'GitHub', link: repositoryUrl },
+      { text: 'Marketplace directory', link: '/marketplaces/' },
+      { text: 'TikTok Shop', link: '/marketplaces/tiktok-shop/' },
     ],
     sidebar: {
       '/marketplaces/': [
@@ -33,6 +31,7 @@ export default defineConfig({
           items: [
             { text: 'All marketplaces', link: '/marketplaces/' },
             { text: 'Amazon SP-API', link: '/marketplaces/amazon/' },
+            { text: 'TikTok Shop Partner API', link: '/marketplaces/tiktok-shop/' },
           ],
         },
         {
@@ -55,6 +54,13 @@ export default defineConfig({
             { text: 'Feeds API', link: '/marketplaces/amazon/apis/feeds' },
             { text: 'FBA Inventory API', link: '/marketplaces/amazon/apis/fba-inventory' },
             { text: 'Notifications integration', link: '/marketplaces/amazon/guides/notifications-integration' },
+          ],
+        },
+        {
+          text: 'TikTok Shop · Partner API',
+          items: [
+            { text: 'Overview', link: '/marketplaces/tiktok-shop/' },
+            { text: 'Get Authorized Category Assets · 202405', link: '/marketplaces/tiktok-shop/apis/authorized-category-assets' },
           ],
         },
       ],

@@ -12,8 +12,8 @@ hero:
       text: Start with Amazon
       link: /marketplaces/amazon/
     - theme: alt
-      text: Browse API directory
-      link: /marketplaces/amazon/apis/
+      text: Explore marketplaces
+      link: /marketplaces/
 features:
   - icon:
       svg: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="M8 12h8M12 8v8"/></svg>'
@@ -69,7 +69,7 @@ features:
 
 <div class="home-note">
   <span class="note-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01"/></svg></span>
-  <div><strong>One marketplace is currently documented</strong><p>The repository currently has an Amazon SP-API guide. The official models directory showed 57 API/model-family entries in the 2026-11-05 snapshot. This is not an operation count and does not imply every entry applies to every seller. <a href="/marketplaces/amazon/apis/">See how the directory is scoped.</a></p></div>
+  <div><strong>Coverage is source-linked and intentionally scoped</strong><p>Amazon SP-API has broader but partial workflow and API coverage. TikTok Shop currently documents one Partner API operation: Get Authorized Category Assets version 202405. Neither guide claims a live integration. <a href="/marketplaces/">Explore and filter the marketplace directory.</a></p></div>
 </div>
 
-<p class="home-disclaimer">An independent developer resource—not an official Amazon guide. Documentation is not proof of a live integration, and this repository does not connect to seller accounts.</p>
+<p class="home-disclaimer">An independent developer resource—not official Amazon or TikTok documentation. Documentation is not proof of a live integration, and this repository does not connect to provider accounts.</p>
