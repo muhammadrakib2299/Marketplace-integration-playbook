@@ -950,3 +950,78 @@ a:hover .ui-icon { transform: translateX(2px); }
   .explorer-search input { padding-right: 12px; }
   .VPDoc .vp-doc > h1::after { margin-top: 14px; }
 }
+
+
+/* Lightweight motion language inspired by Anime.js: staggered, purposeful, and quiet. */
+@keyframes ui-rise-in {
+  from { opacity: 0; transform: translateY(14px) scale(.99); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+@keyframes ui-soft-drift {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-4px); }
+}
+@keyframes ui-glow-pulse {
+  0%, 100% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--ui-accent) 0%, transparent); }
+  50% { box-shadow: 0 0 0 7px color-mix(in srgb, var(--ui-accent) 9%, transparent); }
+}
+
+.VPHome .VPHero .main,
+.VPHome .VPHero .image-container,
+.VPHome .VPFeatures .item,
+.home-dashboard > .home-section,
+.home-dashboard > .home-disclaimer {
+  animation: ui-rise-in 620ms cubic-bezier(.22, 1, .36, 1) both;
+}
+.VPHome .VPHero .image-container { animation-delay: 110ms; }
+.VPHome .VPFeatures .item:nth-child(2) { animation-delay: 90ms; }
+.VPHome .VPFeatures .item:nth-child(3) { animation-delay: 160ms; }
+.home-dashboard > .home-section:nth-child(2) { animation-delay: 80ms; }
+.home-dashboard > .home-section:nth-child(3) { animation-delay: 140ms; }
+.home-dashboard > .home-section:nth-child(4) { animation-delay: 200ms; }
+.home-dashboard > .home-section:nth-child(5) { animation-delay: 260ms; }
+.home-dashboard > .home-disclaimer { animation-delay: 320ms; }
+
+.journey-card,
+.practice-card,
+.platform-card,
+.marketplace-result,
+.coverage-card {
+  animation: ui-rise-in 540ms cubic-bezier(.22, 1, .36, 1) both;
+}
+.journey-card:nth-child(2),
+.practice-card:nth-child(2),
+.platform-card:nth-child(2),
+.marketplace-result:nth-child(2),
+.coverage-card:nth-child(2) { animation-delay: 70ms; }
+.journey-card:nth-child(3),
+.practice-card:nth-child(3),
+.platform-card:nth-child(3),
+.marketplace-result:nth-child(3),
+.coverage-card:nth-child(3) { animation-delay: 140ms; }
+.journey-card:nth-child(4),
+.platform-card:nth-child(4),
+.marketplace-result:nth-child(4),
+.coverage-card:nth-child(4) { animation-delay: 210ms; }
+
+.journey-card:hover .journey-icon,
+.practice-card:hover .practice-icon { animation: ui-soft-drift 900ms ease-in-out infinite; }
+.explorer-card:hover .platform-mark,
+.marketplace-result:hover .marketplace-category { animation: ui-glow-pulse 900ms ease-in-out; }
+.section-action:hover .ui-icon,
+.journey-link:hover .ui-icon { transform: translateX(4px); }
+
+@media (prefers-reduced-motion: reduce) {
+  .VPHome .VPHero .main,
+  .VPHome .VPHero .image-container,
+  .VPHome .VPFeatures .item,
+  .home-dashboard > .home-section,
+  .home-dashboard > .home-disclaimer,
+  .journey-card,
+  .practice-card,
+  .platform-card,
+  .marketplace-result,
+  .coverage-card {
+    animation: none;
+  }
+}
