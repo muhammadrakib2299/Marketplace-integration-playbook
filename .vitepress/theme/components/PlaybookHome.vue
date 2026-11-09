@@ -126,29 +126,13 @@ const principles = [
     <section class="home-section" aria-labelledby="platforms-title">
       <div class="section-heading">
         <div>
-          <span class="section-kicker">Marketplace directory</span>
-          <h2 id="platforms-title">Start with the guide that fits</h2>
-          <p>Each entry makes its access model, API scope, regional context, and limitations explicit.</p>
+          <span class="section-kicker">Interactive directory</span>
+          <h2 id="platforms-title">Search marketplaces and integration guides</h2>
+          <p>Filter by content type and topic, or search API names, regions, and capabilities.</p>
         </div>
-        <a class="section-action" href="/marketplaces/">Search and filter guides <span aria-hidden="true">→</span></a>
+        <a class="section-action" href="/marketplaces/">Open the full directory <span aria-hidden="true">→</span></a>
       </div>
-      <div class="platform-grid">
-        <article v-for="platform in platforms" :key="platform.name" class="platform-card">
-          <div class="platform-card-top">
-            <span class="platform-mark" :class="platform.markClass" aria-hidden="true">{{ platform.mark }}</span>
-            <span class="status-pill"><span></span>{{ platform.status }}</span>
-          </div>
-          <h3><a :href="platform.href">{{ platform.name }}</a></h3>
-          <p>{{ platform.summary }}</p>
-          <div class="platform-tags">
-            <span v-for="tag in platform.tags" :key="tag">{{ tag }}</span>
-          </div>
-          <div class="platform-footer">
-            <span>{{ platform.scope }}</span>
-            <a :href="platform.href">Open guide <span aria-hidden="true">→</span></a>
-          </div>
-        </article>
-      </div>
+      <PlaybookExplorer :platforms="platforms" />
     </section>
 
     <section class="home-section" aria-labelledby="engineering-title">

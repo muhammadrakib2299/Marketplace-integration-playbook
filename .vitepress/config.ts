@@ -4,6 +4,7 @@ const repositoryUrl = 'https://github.com/muhammadrakib2299/Marketplace-integrat
 
 export default defineConfig({
   lang: 'en-US',
+  // VitePress persists the user's selection in localStorage (`vitepress-theme-appearance`).
   appearance: true,
   title: 'Marketplace Integration Playbook',
   description:
@@ -20,6 +21,8 @@ export default defineConfig({
     'marketplaces/:marketplace/README.md': 'marketplaces/:marketplace/index.md',
   },
   themeConfig: {
+    lightModeSwitchTitle: 'Switch to light mode',
+    darkModeSwitchTitle: 'Switch to dark mode',
     nav: [
       { text: 'Marketplaces', link: '/marketplaces/' },
       {

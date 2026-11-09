@@ -607,3 +607,152 @@ body { min-width: 320px; }
     animation-iteration-count: 1 !important;
   }
 }
+
+
+/* Combined marketplace and integration-guide explorer */
+.platform-mark-guide {
+  color: var(--vp-c-brand-1);
+  background: var(--vp-c-brand-soft);
+  font-size: 11px;
+  font-variant-numeric: tabular-nums;
+}
+.explorer-controls {
+  display: grid;
+  grid-template-columns: minmax(220px, 1.6fr) repeat(2, minmax(155px, 0.8fr));
+  gap: 10px;
+  margin-bottom: 9px;
+  padding: 12px;
+  background: var(--vp-c-bg-soft);
+  border: 1px solid var(--vp-c-divider);
+  border-radius: var(--ui-radius);
+}
+.explorer-search {
+  position: relative;
+  display: flex;
+  min-width: 0;
+  align-items: center;
+}
+.explorer-search svg {
+  position: absolute;
+  left: 12px;
+  width: 17px;
+  height: 17px;
+  color: var(--vp-c-text-3);
+  pointer-events: none;
+}
+.explorer-search input,
+.explorer-filter select {
+  width: 100%;
+  min-width: 0;
+  min-height: 42px;
+  color: var(--vp-c-text-1);
+  background: var(--vp-c-bg-elv);
+  border: 1px solid var(--vp-input-border-color);
+  border-radius: 9px;
+  font: inherit;
+  font-size: 12px;
+}
+.explorer-search input { padding: 0 12px 0 38px; }
+.explorer-search input::placeholder { color: var(--vp-c-text-3); }
+.explorer-search input:focus-visible,
+.explorer-filter select:focus-visible {
+  outline: 2px solid var(--vp-c-brand-1);
+  outline-offset: 2px;
+}
+.explorer-filter {
+  display: grid;
+  min-width: 0;
+  gap: 5px;
+}
+.explorer-filter > span {
+  color: var(--vp-c-text-3);
+  font-size: 9px;
+  font-weight: 740;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+}
+.explorer-filter select { padding: 0 10px; }
+.explorer-results-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  min-height: 33px;
+  margin-bottom: 9px;
+}
+.explorer-result-count {
+  color: var(--vp-c-text-2);
+  font-size: 11px;
+  font-weight: 650;
+  font-variant-numeric: tabular-nums;
+}
+.explorer-clear {
+  display: inline-flex;
+  min-height: 34px;
+  align-items: center;
+  justify-content: center;
+  padding: 0 11px;
+  color: var(--vp-c-brand-1);
+  background: transparent;
+  border: 1px solid var(--vp-c-divider);
+  border-radius: 8px;
+  font: inherit;
+  font-size: 10px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background-color 150ms ease, border-color 150ms ease;
+}
+.explorer-clear:hover {
+  background: var(--vp-c-brand-soft);
+  border-color: var(--vp-c-brand-1);
+}
+.explorer-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+}
+.explorer-card {
+  min-height: 276px;
+  padding: 18px;
+}
+.explorer-card-type {
+  margin-top: 12px;
+  color: var(--vp-c-text-3);
+  font-size: 9px;
+  font-weight: 730;
+  letter-spacing: 0.065em;
+  text-transform: uppercase;
+}
+.explorer-type-guide { color: var(--vp-c-brand-1); }
+.explorer-card h3 { margin: 6px 0 7px; font-size: 15px; }
+.explorer-card > p { font-size: 11px; }
+.explorer-card .platform-tags { margin-top: auto; }
+.explorer-card .platform-footer { align-items: flex-start; }
+.explorer-empty {
+  display: grid;
+  justify-items: center;
+  gap: 8px;
+  padding: 30px 18px;
+  color: var(--vp-c-text-2);
+  background: var(--vp-c-bg-soft);
+  border: 1px dashed var(--vp-c-divider);
+  border-radius: var(--ui-radius);
+  text-align: center;
+}
+.explorer-empty strong { color: var(--vp-c-text-1); font-size: 14px; }
+.explorer-empty p { margin: 0 0 3px; font-size: 12px; }
+
+@media (max-width: 980px) {
+  .explorer-controls { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .explorer-search { grid-column: 1 / -1; }
+  .explorer-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 600px) {
+  .explorer-controls { grid-template-columns: 1fr; gap: 9px; padding: 10px; }
+  .explorer-search { grid-column: auto; }
+  .explorer-grid { grid-template-columns: 1fr; gap: 10px; }
+  .explorer-card { min-height: 0; padding: 17px; }
+  .explorer-card .platform-tags { margin-top: 0; }
+  .explorer-results-bar { align-items: flex-start; }
+}
