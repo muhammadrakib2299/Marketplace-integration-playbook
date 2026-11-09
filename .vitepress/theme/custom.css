@@ -1025,3 +1025,152 @@ a:hover .ui-icon { transform: translateX(2px); }
     animation: none;
   }
 }
+
+
+/* Full responsive pass: keep every surface usable from 320px phones to wide desktop. */
+.VPContent,
+.VPDoc,
+.VPDoc .container,
+.VPDoc .content,
+.VPDoc .content-container,
+.VPHome,
+.home-dashboard,
+.marketplace-explorer,
+.playbook-explorer { min-width: 0; }
+
+.VPDoc .container { width: 100%; }
+.VPDoc .vp-doc { overflow-wrap: anywhere; }
+.VPDoc .vp-doc img,
+.VPDoc .vp-doc video,
+.VPDoc .vp-doc iframe { max-width: 100%; height: auto; }
+.VPDoc .vp-doc table {
+  display: block;
+  max-width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+.VPDoc .vp-doc table code { white-space: nowrap; }
+.VPDoc div[class*='language-'] {
+  max-width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+.VPDoc div[class*='language-'] pre { min-width: max-content; }
+.VPDoc .custom-block { max-width: 100%; overflow-wrap: anywhere; }
+
+@media (max-width: 1200px) {
+  .VPHome .VPHero .container,
+  .VPHome .VPFeatures .container,
+  .home-dashboard { max-width: 100%; }
+  .home-dashboard { padding-inline: clamp(24px, 4vw, 40px); }
+  .VPDoc .container { padding-inline: clamp(24px, 4vw, 48px); }
+  .VPDoc .aside { padding-left: 24px; }
+  .explorer-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+@media (max-width: 960px) {
+  .VPNavBar .title { max-width: 245px; }
+  .VPNavBar .content { padding-inline: 20px; }
+  .VPHome .VPHero .container { gap: 28px; }
+  .VPHome .VPHero .main { max-width: 56%; }
+  .VPHome .VPHero .image { width: min(38vw, 360px); }
+  .VPDoc .aside { display: none; }
+  .VPDoc .content { max-width: 100%; }
+  .VPDoc .container { padding-right: 32px; }
+  .marketplace-filters { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .marketplace-search { grid-column: 1 / -1; }
+  .explorer-controls { grid-template-columns: minmax(0, 1fr) repeat(2, minmax(145px, .7fr)); }
+}
+
+@media (max-width: 720px) {
+  .VPNavBar .content { padding-inline: 16px; }
+  .VPNavBar .title { max-width: min(55vw, 220px); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .VPNavBar .VPNavBarSearch { margin-left: auto; }
+  .VPNavScreen { padding: 0 18px 24px; }
+  .VPNavScreenMenuLink,
+  .VPNavScreenMenuGroup { padding: 12px 0; }
+  .VPHome .VPHero .container { flex-direction: column; align-items: stretch; }
+  .VPHome .VPHero .main { width: 100%; max-width: 100%; }
+  .VPHome .VPHero .image { width: min(100%, 430px); max-width: 100%; align-self: center; }
+  .VPHome .VPFeatures .items { grid-template-columns: 1fr; }
+  .VPHome .VPFeatures .item.grid-3,
+  .VPHome .VPFeatures .item.grid-3:nth-child(3) { width: 100%; margin-left: 0; }
+  .home-dashboard { padding-inline: 20px; }
+  .coverage-grid,
+  .journey-grid,
+  .practice-grid,
+  .platform-grid,
+  .marketplace-results,
+  .explorer-grid { grid-template-columns: 1fr; }
+  .coverage-card,
+  .journey-card,
+  .practice-card,
+  .platform-card,
+  .marketplace-result { min-height: 0; }
+  .section-heading { align-items: flex-start; flex-direction: column; }
+  .resource-band { grid-template-columns: 1fr; }
+  .VPDoc .container { padding: 32px 20px 52px; }
+  .VPDoc .content { padding-bottom: 24px; }
+  .VPDoc .vp-doc > h1 { font-size: clamp(30px, 8vw, 40px); }
+  .VPDoc h2 { font-size: clamp(21px, 5vw, 25px); }
+  .VPDoc h3 { font-size: 17px; }
+  .marketplace-explorer-heading { align-items: flex-start; flex-direction: column; }
+  .marketplace-filters,
+  .explorer-controls { grid-template-columns: 1fr 1fr; }
+  .marketplace-search,
+  .explorer-search { grid-column: 1 / -1; }
+  .marketplace-result-links { align-items: flex-start; flex-wrap: wrap; }
+  .explorer-card .platform-footer { flex-direction: column; }
+}
+
+@media (max-width: 480px) {
+  .VPNavBar .content { padding-inline: 12px; }
+  .VPNavBar .title { max-width: 45vw; font-size: 13px; }
+  .VPNavBar .VPNavBarSearch .DocSearch-Button,
+  .VPNavBar .DocSearch-Button { min-width: 38px; width: 38px; padding: 0; }
+  .VPNavBar .DocSearch-Button-Placeholder,
+  .VPNavBar .DocSearch-Button-Keys { display: none; }
+  .VPHome .VPHero { padding-inline: 16px; }
+  .VPHome .VPHero .name { font-size: clamp(31px, 10.5vw, 42px); }
+  .VPHome .VPHero .text { font-size: clamp(22px, 7.2vw, 29px); }
+  .VPHome .VPHero .tagline { font-size: 13px; }
+  .home-dashboard { gap: 32px; padding: 8px 16px 40px; }
+  .coverage-grid { grid-template-columns: 1fr 1fr; }
+  .coverage-card { padding: 14px; }
+  .coverage-value { font-size: 25px; }
+  .coverage-word { font-size: 16px; }
+  .journey-card,
+  .practice-card,
+  .platform-card,
+  .marketplace-result,
+  .explorer-card { padding: 15px; }
+  .resource-band { padding: 16px; }
+  .resource-actions { width: 100%; }
+  .VPDoc .container { padding: 24px 16px 42px; }
+  .VPDoc .vp-doc > h1 { font-size: clamp(27px, 9vw, 34px); }
+  .VPDoc h2 { margin-top: 30px; padding-top: 12px; }
+  .VPDoc p,
+  .VPDoc li { font-size: 14px; line-height: 1.7; }
+  .VPDoc td,
+  .VPDoc th { min-width: 120px; padding: 9px 10px; font-size: 11px; }
+  .marketplace-filters,
+  .explorer-controls { grid-template-columns: 1fr; padding: 10px; }
+  .marketplace-search,
+  .explorer-search { grid-column: auto; }
+  .marketplace-result-links { flex-direction: column; gap: 10px; }
+  .marketplace-meta { grid-template-columns: 1fr; }
+  .explorer-results-bar { align-items: flex-start; flex-direction: column; }
+  .explorer-active-filters,
+  .directory-active-filters { align-items: flex-start; flex-direction: column; }
+  .active-filter-label,
+  .directory-active-filters > span { margin-bottom: 2px; }
+}
+
+@media (max-width: 360px) {
+  .coverage-grid { grid-template-columns: 1fr; }
+  .VPHome .VPHero .actions { gap: 8px; }
+  .VPDoc .container { padding-inline: 13px; }
+  .VPDoc .vp-doc > h1 { font-size: 28px; }
+  .VPDoc td,
+  .VPDoc th { min-width: 110px; }
+}
