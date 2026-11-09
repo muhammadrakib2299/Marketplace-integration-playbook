@@ -7,7 +7,7 @@ export default defineConfig({
   appearance: true,
   title: 'Marketplace Integration Playbook',
   description:
-    'A source-linked developer handbook for seller authorization, marketplace API workflows, data migration, and operational reliability.',
+    'A source-linked developer handbook for seller authorization, marketplace APIs, data migration, and reliable operations.',
   srcExclude: [
     'README.md',
     'CONTRIBUTING.md',
@@ -21,8 +21,26 @@ export default defineConfig({
   },
   themeConfig: {
     nav: [
-      { text: 'Marketplace directory', link: '/marketplaces/' },
-      { text: 'TikTok Shop', link: '/marketplaces/tiktok-shop/' },
+      { text: 'Marketplaces', link: '/marketplaces/' },
+      {
+        text: 'Amazon SP-API',
+        items: [
+          { text: 'Overview', link: '/marketplaces/amazon/' },
+          { text: 'API directory', link: '/marketplaces/amazon/apis/' },
+          { text: 'Seller onboarding', link: '/marketplaces/amazon/guides/seller-onboarding' },
+          { text: 'Active listing migration', link: '/marketplaces/amazon/workflows/active-listing-migration' },
+          { text: 'Development guide', link: '/marketplaces/amazon/guides/development-guide' },
+        ],
+      },
+      {
+        text: 'Engineering',
+        items: [
+          { text: 'Integration principles', link: '/docs/integration-principles' },
+          { text: 'Lifecycle and evidence status', link: '/docs/lifecycle-and-status' },
+          { text: 'API schema validation', link: '/docs/api-schema-validation' },
+          { text: 'Glossary', link: '/docs/glossary' },
+        ],
+      },
     ],
     sidebar: {
       '/marketplaces/': [
