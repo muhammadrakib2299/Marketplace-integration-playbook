@@ -60,27 +60,44 @@ marketplaces:
     regions:
       - Target-market dependent; verify in Partner Center
     api_surfaces:
+      - name: Product API
+        version: versioned; confirm in Partner Center
+        docs_url: https://partner.tiktokshop.com/docv2/page/products-api-overview
+      - name: Order API
+        version: versioned; confirm in Partner Center
+        docs_url: https://partner.tiktokshop.com/docv2/page/order-api-overview
+      - name: Fulfillment, Return & Refund, Logistics, Finance, Authorization, and Events APIs
+        version: versioned; confirm in Partner Center
+        docs_url: https://partner.tiktokshop.com/docv2/page/tts-api-concepts-overview
       - name: Get Authorized Category Assets
         version: '202405'
         docs_url: https://partner.tiktokshop.com/docv2/page/get-authorized-category-assets-202405
-    access_model: partner-only
+    access_model: mixed
     status: documented
     evidence: official
     source_urls:
       - https://developers.tiktok.com/docs/en/welcome
       - https://developers.tiktok.com/doc/scopes-overview?enter_method=left_navigation
       - https://developers.tiktok.com/doc/login-kit-manage-user-access-tokens/
+      - https://partner.tiktokshop.com/docv2/page/tts-api-concepts-overview
+      - https://partner.tiktokshop.com/docv2/page/656559fcf4488c02dfe8ce82
+      - https://partner.tiktokshop.com/docv2/page/678e3a3292b0f40314a92d75
+      - https://partner.tiktokshop.com/docv2/page/products-api-overview
+      - https://partner.tiktokshop.com/docv2/page/order-api-overview
+      - https://partner.tiktokshop.com/docv2/page/678e3a45786253031531b942
       - https://partner.tiktokshop.com/docv2/page/get-authorized-category-assets-202405
       - https://partner.tiktokshop.com/docv2/page/678e3a3978f4c20311b8b555
-    last_verified: "2026-11-09"
+    last_verified: "2026-11-10"
     guide: ../marketplaces/tiktok-shop/README.md
-    summary: "A focused reference for Get Authorized Category Assets · 202405, with partner access and scope boundaries called out."
+    summary: "Source-linked API map covering products, orders, fulfillment, logistics, returns, finance, authorization, events, and partner category assets."
     tags:
+      - Seller authorization
+      - Products and orders
+      - Fulfillment and returns
       - Partner access
       - Target-market dependent
-      - One operation
-    scope: "Partner API · operation reference"
-    notes: "Only the 202405 Get Authorized Category Assets operation is documented. Partner-level app category authorization is not seller/shop authorization. No API, sandbox, or production calls were tested; registration region and target market must be confirmed for each app."
+    scope: "TTS API · family directory and core integration guides"
+    notes: "Expanded from one partner operation to an official-source API-family map and core domain guides. Exact operation versions, scopes, entity tags, schemas, and market availability remain endpoint-specific. No API, sandbox, or production calls were tested; registration region and target market must be confirmed for each app."
 
 # Suggested category values: marketplace, storefront, marketplace-operator,
 # social-commerce, aggregator, carrier, accounting, warehouse, other.

@@ -1,27 +1,39 @@
 # TikTok Shop Partner API
 
-**Status:** documented from official sources; no API calls or account tests have been performed. **Coverage:** one partner API reference, not a complete TikTok Shop integration.
+**Status:** expanded from a single operation into a source-linked API directory covering the major TTS API domains. **Evidence:** official documentation review only; no app authorization, API, sandbox, or production calls were performed. **Coverage:** broad API-family mapping plus focused guides for authorization, products, orders, fulfillment, logistics, returns/refunds, finance, events, and development. Operation-level schemas remain on the live Partner Center references.
 
-This guide covers the `Get Authorized Category Assets` endpoint, version `202405`. It returns the business-category assets currently authorized by a partner for an app. Its category asset cipher is described as an input to related affiliate-partner APIs. The endpoint is not a seller-shop authorization check, and category access should not be treated as approval for unrelated APIs.
+TikTok Shop Partner Center and TikTok for Developers are separate documentation and access contexts. This playbook covers the **TikTok Shop TTS API**, not Login Kit, Content Posting, Research API, or other TikTok for Developers products.
 
-## Important platform distinction
+## Start here
 
-TikTok for Developers and TikTok Shop Partner Center are separate documentation and access contexts. The [TikTok for Developers welcome page](https://developers.tiktok.com/docs/en/welcome) organizes product areas such as Login & Identity and Share to TikTok. Its APIs use user-granted scopes: TikTok says scope approval alone does not provide user data access; each user must authorize the app, and can grant only a subset of the requested scopes. [Scopes overview](https://developers.tiktok.com/doc/scopes-overview?enter_method=left_navigation)
+- [API directory and workflow map](apis/)
+- [Development guide](guides/development-guide.md)
+- [Authorization and token lifecycle](apis/authorization.md)
+- [Products API](apis/products.md)
+- [Order API](apis/orders.md)
+- [Fulfillment, logistics, and finance](apis/fulfillment.md)
+- [Returns, refunds, and cancellations](apis/returns-refunds.md)
+- [Events and operational reliability](apis/events.md)
+- [Get Authorized Category Assets · 202405](apis/authorized-category-assets.md)
 
-The endpoint documented here is in the [TikTok Shop Partner Center](https://partner.tiktokshop.com/docv2/page/get-authorized-category-assets-202405). It requires the `partner.authorization.info` scope and a partner access token. Do not reuse assumptions about TikTok for Developers user tokens, scopes, or API hosts as if they applied to TikTok Shop Partner APIs.
+## API domains covered by the official overview
 
-## Guide map
+The official [TTS API overview](https://partner.tiktokshop.com/docv2/page/tts-api-concepts-overview) lists Product, Order, Fulfillment, Return & Refund, Logistics, Promotion, Finance, Seller, Authorization, Events, Data Reconciliation, and Supply Chain APIs. Access depends on the app, authorization principal, enabled scopes, entity tag, registration region, target market, and endpoint version.
 
-- [Get Authorized Category Assets · 202405](apis/authorized-category-assets.md) — request requirements, permission boundary, and known unknowns.
+The current directory documents the first ten domains at a family level and goes deeper on the core seller integration path. Promotion, Seller, Data Reconciliation, and Supply Chain are mapped with their official boundaries but do not yet have operation-by-operation dossiers here. This distinction prevents a family inventory from being mistaken for a complete generated SDK or a universal endpoint list.
 
 ## Access and regions
 
-The API reference marks the target partner as **All** and requires `partner.authorization.info`. It says partner authorization is required before an app can access partner data, with access granted by business category. The request's `x-tts-access-token` must be the partner `access_token` from the [Get Access Token flow](https://partner.tiktokshop.com/docv2/page/678e3a3292b0f40314a92d75#Get%20Access%20Token%20API) with `user_type = 3`. See the official [Partner authorization guide](https://partner.tiktokshop.com/docv2/page/678e3a3978f4c20311b8b555).
+TikTok Shop authorization is OAuth-based. Seller, creator, and partner/TAP flows use different authorization entry points and return different `user_type` values. The token endpoints are shared, but the API endpoint, scope, entity tag, and shop identifier requirements are operation-specific. The app's registration region and the seller's target market affect availability; confirm both in Partner Center.
 
-The reference's category viewer asks developers to select a registration region and target market. This guide does not claim a complete region list or that an app/category is available in every market. Confirm the app's actual registration region, target market, and authorized categories in the Partner Center before building against them.
+The partner-specific [Get Authorized Category Assets](https://partner.tiktokshop.com/docv2/page/get-authorized-category-assets-202405) operation remains a separate permission check. Its category asset cipher is not a seller authorization token and should not be treated as proof that product, order, or shop APIs are available.
+
+## Reliability baseline
+
+Use webhooks for timely signals and API reads for authoritative state. Persist raw provider identifiers and `request_id`, deduplicate notifications, follow pagination, refresh tokens before expiry, back off on rate limits, and reconcile products, orders, fulfillment, returns, and finance independently. API success means the request was processed; it does not necessarily mean an asynchronous business operation completed.
 
 ## Coverage and verification
 
-Only the 202405 category-assets reference has been reviewed at operation level. The repository does not yet document product, order, inventory, fulfillment, or shop-authorization operations for TikTok Shop. No account authorization, token exchange, signing, sandbox, or production API request was tested. Follow the linked official docs for current schemas and access requirements.
+**Officially documented** means the linked Partner Center page states the fact. **Recommended implementation** is an engineering practice, not a TikTok guarantee. **Mapped** means the official overview confirms the API family while the exact operation set remains on the live reference. No page in this repository claims live account access or production testing.
 
-**Last reviewed:** 2026-11-09.
+**Last reviewed:** 2026-11-10.
