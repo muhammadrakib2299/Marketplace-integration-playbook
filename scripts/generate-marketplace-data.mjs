@@ -47,7 +47,7 @@ const marketplaces = catalog.marketplaces.map((record) => {
     tags: record.tags,
     scope: record.scope,
     apis,
-    guide: record.guide.replace(/^\.\./, ''),
+    guide: record.guide.replace(/^\.\./, '').replace(/README\.md$/, ''),
     source: record.source_urls[0],
     lastVerified: record.last_verified,
     mark: isAmazon ? 'a' : 't',
