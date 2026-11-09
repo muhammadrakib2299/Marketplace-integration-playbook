@@ -45,6 +45,13 @@ marketplaces:
       - https://developer-docs.amazon.com/sp-api/docs/sp-api-deprecations
     last_verified: "2026-11-05"
     guide: ../marketplaces/amazon/README.md
+    summary: "Seller authorization, listing migration, catalog enrichment, orders, and selected operational API surfaces. No sandbox or production tests are claimed."
+    tags:
+      - Seller account
+      - North America
+      - Europe
+      - Far East
+    scope: "API map · workflows · onboarding"
     notes: "Official docs reviewed; no sandbox or production tests performed. The Amazon SP-API Models directory contained 57 API/model-family headings on 2026-11-05; this is not an operation count and includes vendor-only and special-purpose entries. Orders API v0 is deprecated and listed operations are scheduled for removal on 2027-03-27; this guide targets v2026-01-01 for new work."
 
   - id: tiktok-shop-partner-api
@@ -67,6 +74,12 @@ marketplaces:
       - https://partner.tiktokshop.com/docv2/page/678e3a3978f4c20311b8b555
     last_verified: "2026-11-09"
     guide: ../marketplaces/tiktok-shop/README.md
+    summary: "A focused reference for Get Authorized Category Assets · 202405, with partner access and scope boundaries called out."
+    tags:
+      - Partner access
+      - Target-market dependent
+      - One operation
+    scope: "Partner API · operation reference"
     notes: "Only the 202405 Get Authorized Category Assets operation is documented. Partner-level app category authorization is not seller/shop authorization. No API, sandbox, or production calls were tested; registration region and target market must be confirmed for each app."
 
 # Suggested category values: marketplace, storefront, marketplace-operator,

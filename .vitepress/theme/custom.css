@@ -756,3 +756,197 @@ body { min-width: 320px; }
   .explorer-card .platform-tags { margin-top: 0; }
   .explorer-results-bar { align-items: flex-start; }
 }
+
+
+/* Enterprise UI refinement layer */
+:root {
+  --ui-ink: #14213d;
+  --ui-muted: #61708a;
+  --ui-accent: #3157d5;
+  --ui-accent-strong: #2343ad;
+  --ui-accent-wash: rgba(49, 87, 213, 0.1);
+  --ui-teal: #087c78;
+  --ui-border-strong: #cbd5e3;
+  --ui-focus-ring: 0 0 0 3px rgba(49, 87, 213, 0.2);
+}
+
+.dark {
+  --ui-ink: #f4f7fb;
+  --ui-muted: #a9b7cb;
+  --ui-accent: #8ba9ff;
+  --ui-accent-strong: #b7caff;
+  --ui-accent-wash: rgba(139, 169, 255, 0.13);
+  --ui-teal: #5ed0c4;
+  --ui-border-strong: #3b4c64;
+}
+
+html {
+  scrollbar-width: thin;
+  scrollbar-color: var(--ui-accent) var(--vp-c-bg-soft);
+}
+
+::-webkit-scrollbar { width: 11px; height: 11px; }
+::-webkit-scrollbar-track { background: var(--vp-c-bg-soft); }
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, var(--ui-accent), var(--ui-accent-strong));
+  border: 3px solid var(--vp-c-bg-soft);
+  border-radius: 999px;
+}
+::-webkit-scrollbar-thumb:hover { background: var(--ui-accent-strong); }
+
+.ui-icon { display: block; flex: 0 0 auto; }
+button .ui-icon,
+a .ui-icon { transition: transform 160ms ease; }
+a:hover .ui-icon { transform: translateX(2px); }
+
+.VPNavBar {
+  box-shadow: 0 1px 0 color-mix(in srgb, var(--vp-c-divider) 65%, transparent), 0 8px 26px rgba(18, 34, 58, 0.04);
+}
+.VPNavBar .title { color: var(--ui-ink); }
+.VPNavBar .VPNavBarMenuLink,
+.VPNavBar .VPNavBarMenuGroup { border-radius: 8px; }
+.VPNavBar .VPNavBarMenuLink:hover,
+.VPNavBar .VPNavBarMenuGroup:hover { background: var(--ui-accent-wash); }
+.VPNavScreen { background: var(--vp-c-bg); }
+.VPNavScreenMenuLink,
+.VPNavScreenMenuGroup { border-bottom-color: var(--vp-c-divider); }
+
+/* More intentional article chrome */
+.VPDoc .content-container { position: relative; }
+.VPDoc .content { padding-bottom: 46px; }
+.VPDoc .vp-doc > h1 { max-width: 820px; margin-bottom: 22px; }
+.VPDoc .vp-doc > h1::after {
+  display: block;
+  width: 54px;
+  height: 4px;
+  margin-top: 18px;
+  background: linear-gradient(90deg, var(--ui-accent), var(--ui-teal));
+  border-radius: 999px;
+  content: '';
+}
+.VPDoc .vp-doc > blockquote {
+  margin: 24px 0;
+  padding: 16px 18px;
+  background: var(--vp-c-bg-soft);
+  border: 1px solid var(--vp-c-divider);
+  border-left: 3px solid var(--ui-accent);
+  border-radius: 0 var(--ui-radius) var(--ui-radius) 0;
+}
+.VPDoc .vp-doc > blockquote p { margin: 0; }
+.VPDoc h2 { scroll-margin-top: calc(var(--vp-nav-height) + 24px); }
+.VPDoc h2 .header-anchor,
+.VPDoc h3 .header-anchor { color: var(--ui-accent); }
+.VPDoc a { color: var(--ui-accent); }
+.VPDoc a:hover { color: var(--ui-accent-strong); }
+.VPDoc .custom-block-title { letter-spacing: -0.01em; }
+.VPDoc div[class*='language-'] { box-shadow: var(--ui-shadow-sm); }
+.VPDoc div[class*='language-'] code { font-size: 13px; line-height: 1.7; }
+.VPDoc th { letter-spacing: 0.075em; }
+.VPDoc td:first-child { color: var(--ui-ink); font-weight: 600; }
+
+/* Shared filter polish */
+.marketplace-filters,
+.explorer-controls {
+  box-shadow: var(--ui-shadow-sm);
+  background: linear-gradient(135deg, var(--vp-c-bg-soft), color-mix(in srgb, var(--vp-c-bg-elv) 72%, var(--vp-c-bg-soft)));
+}
+.marketplace-search input,
+.marketplace-filter select,
+.explorer-search input,
+.explorer-filter select {
+  border-color: var(--ui-border-strong);
+  box-shadow: inset 0 1px 2px rgba(20, 33, 61, 0.03);
+}
+.marketplace-search input:focus-visible,
+.marketplace-filter select:focus-visible,
+.explorer-search input:focus-visible,
+.explorer-filter select:focus-visible { outline: none; box-shadow: var(--ui-focus-ring); border-color: var(--ui-accent); }
+.explorer-search kbd {
+  position: absolute;
+  right: 10px;
+  display: inline-flex;
+  align-items: center;
+  min-height: 22px;
+  padding: 0 6px;
+  color: var(--vp-c-text-3);
+  background: var(--vp-c-bg-soft);
+  border: 1px solid var(--vp-c-divider);
+  border-radius: 5px;
+  font-family: var(--vp-font-family-mono);
+  font-size: 10px;
+  line-height: 1;
+  pointer-events: none;
+}
+.explorer-search input { padding-right: 58px; }
+.explorer-active-filters,
+.directory-active-filters {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 7px;
+  margin: 0 0 12px;
+  color: var(--vp-c-text-3);
+  font-size: 10px;
+}
+.active-filter-label,
+.directory-active-filters > span {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  margin-right: 2px;
+  font-weight: 720;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+}
+.filter-chip,
+.directory-active-filters button {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  min-height: 25px;
+  padding: 0 8px;
+  color: var(--ui-accent);
+  background: var(--ui-accent-wash);
+  border: 1px solid color-mix(in srgb, var(--ui-accent) 22%, var(--vp-c-divider));
+  border-radius: 999px;
+  font: inherit;
+  font-size: 10px;
+  font-weight: 650;
+  cursor: pointer;
+}
+.filter-chip:hover,
+.directory-active-filters button:hover { background: color-mix(in srgb, var(--ui-accent) 17%, var(--vp-c-bg-elv)); }
+.explorer-clear,
+.marketplace-reset { gap: 5px; }
+.platform-footer a,
+.marketplace-result-links a { display: inline-flex; align-items: center; gap: 6px; }
+
+/* Card depth and state */
+.platform-card,
+.marketplace-result,
+.journey-card,
+.practice-card,
+.coverage-card { position: relative; overflow: hidden; }
+.platform-card::before,
+.marketplace-result::before,
+.journey-card::before,
+.practice-card::before {
+  position: absolute;
+  inset: 0 0 auto;
+  height: 3px;
+  background: linear-gradient(90deg, var(--ui-accent), var(--ui-teal));
+  opacity: 0;
+  content: '';
+  transition: opacity 160ms ease;
+}
+.platform-card:hover::before,
+.marketplace-result:hover::before,
+.journey-card:hover::before,
+.practice-card:hover::before { opacity: 1; }
+.status-pill > span { box-shadow: 0 0 0 3px var(--vp-c-bg-soft); }
+
+@media (max-width: 600px) {
+  .explorer-search kbd { display: none; }
+  .explorer-search input { padding-right: 12px; }
+  .VPDoc .vp-doc > h1::after { margin-top: 14px; }
+}

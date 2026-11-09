@@ -1,5 +1,7 @@
 <script setup lang="ts">
-import { computed, ref } from 'vue'
+import { computed, onMounted, onUnmounted, ref, watch } from 'vue'
+import { fuzzySearch } from '../../../scripts/fuzzy-search.mjs'
+import { readFilterState, writeFilterState } from '../../../scripts/filter-state.mjs'
 
 type Marketplace = {
   name: string
@@ -136,6 +138,9 @@ const topics = [
 const query = ref('')
 const selectedKind = ref('all')
 const selectedTopic = ref('all')
+const searchInput = ref<HTMLInputElement | null>(null)
+const hydrated = ref(false)
+const defaults = { q: '', type: 'all', topic: 'all' }
 
 const resources = computed<Resource[]>(() => [
   ...props.platforms.map((platform) => ({
@@ -157,10 +162,12 @@ const resources = computed<Resource[]>(() => [
 ])
 
 const filteredResources = computed(() => {
-  const term = query.value.trim().toLocaleLowerCase()
+  const filtered = resources.value.filter((resource) =>
+    (selectedKind.value === 'all' || resource.kind === selectedKind.value) &&
+    (selectedTopic.value === 'all' || resource.topic === selectedTopic.value),
+  )
 
-  return resources.value.filter((resource) => {
-    const searchable = [
+  return fuzzySearch(filtered, query.value, (resource) => [
       resource.title,
       resource.kindLabel,
       resource.topicLabel,
@@ -168,16 +175,7 @@ const filteredResources = computed(() => {
       resource.status,
       resource.scope,
       resource.tags.join(' '),
-    ]
-      .join(' ')
-      .toLocaleLowerCase()
-
-    return (
-      (!term || searchable.includes(term)) &&
-      (selectedKind.value === 'all' || resource.kind === selectedKind.value) &&
-      (selectedTopic.value === 'all' || resource.topic === selectedTopic.value)
-    )
-  })
+  ])
 })
 
 const hasActiveFilters = computed(
@@ -189,6 +187,37 @@ function clearFilters() {
   selectedKind.value = 'all'
   selectedTopic.value = 'all'
 }
+
+function syncUrl() {
+  if (!hydrated.value) return
+  const nextUrl = writeFilterState(window.location.pathname, {
+    q: query.value.trim(),
+    type: selectedKind.value,
+    topic: selectedTopic.value,
+  }, defaults, window.location.hash)
+  window.history.replaceState({}, '', nextUrl)
+}
+
+function focusSearch(event: KeyboardEvent) {
+  if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === 'k') {
+    event.preventDefault()
+    searchInput.value?.focus()
+  }
+}
+
+onMounted(() => {
+  const state = readFilterState(window.location.search, defaults, {
+    type: ['all', 'marketplace', 'guide'],
+    topic: topics.map((topic) => topic.value),
+  })
+  query.value = state.q
+  selectedKind.value = state.type
+  selectedTopic.value = state.topic
+  hydrated.value = true
+  window.addEventListener('keydown', focusSearch)
+})
+onUnmounted(() => window.removeEventListener('keydown', focusSearch))
+watch([query, selectedKind, selectedTopic], syncUrl)
 </script>
 
 <template>
@@ -196,11 +225,9 @@ function clearFilters() {
     <div class="explorer-controls" role="search" aria-label="Search marketplace cards and integration guides">
       <label class="explorer-search">
         <span class="sr-only">Search marketplaces and integration guides</span>
-        <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
-          <circle cx="10.8" cy="10.8" r="6.8" />
-          <path d="m16 16 4.5 4.5" />
-        </svg>
-        <input v-model="query" type="search" placeholder="Search APIs, guides, regions, or topics" autocomplete="off" />
+        <UiIcon name="search" :size="17" />
+        <input ref="searchInput" v-model="query" type="search" placeholder="Search APIs, guides, regions, or topics" autocomplete="off" />
+        <kbd aria-label="Keyboard shortcut Command or Control K">⌘/Ctrl K</kbd>
       </label>
 
       <label class="explorer-filter">
@@ -225,7 +252,14 @@ function clearFilters() {
       <span class="explorer-result-count" role="status" aria-live="polite">
         {{ filteredResources.length }} of {{ resources.length }} resources
       </span>
-      <button v-if="hasActiveFilters" class="explorer-clear" type="button" @click="clearFilters">Clear search and filters</button>
+      <button v-if="hasActiveFilters" class="explorer-clear" type="button" @click="clearFilters"><UiIcon name="x" :size="14" /> Clear search and filters</button>
+    </div>
+
+    <div v-if="hasActiveFilters" class="explorer-active-filters" aria-label="Active search filters">
+      <span class="active-filter-label"><UiIcon name="filter" :size="13" /> Active filters</span>
+      <button v-if="query.trim()" type="button" class="filter-chip" @click="query = ''">“{{ query }}” <UiIcon name="x" :size="12" /></button>
+      <button v-if="selectedKind !== 'all'" type="button" class="filter-chip" @click="selectedKind = 'all'">{{ selectedKind === 'guide' ? 'Integration guides' : 'Marketplace cards' }} <UiIcon name="x" :size="12" /></button>
+      <button v-if="selectedTopic !== 'all'" type="button" class="filter-chip" @click="selectedTopic = 'all'">{{ topics.find((topic) => topic.value === selectedTopic)?.label }} <UiIcon name="x" :size="12" /></button>
     </div>
 
     <div v-if="filteredResources.length" class="explorer-grid">
@@ -242,7 +276,7 @@ function clearFilters() {
         </div>
         <div class="platform-footer">
           <span>{{ resource.scope }}</span>
-          <a :href="resource.href">Open {{ resource.kind === 'marketplace' ? 'overview' : 'guide' }} <span aria-hidden="true">→</span></a>
+          <a :href="resource.href">Open {{ resource.kind === 'marketplace' ? 'overview' : 'guide' }} <UiIcon name="arrow-right" :size="14" /></a>
         </div>
       </article>
     </div>
@@ -250,7 +284,7 @@ function clearFilters() {
     <div v-else class="explorer-empty" role="status">
       <strong>No matching marketplaces or guides</strong>
       <p>Try another search term or broaden your filters.</p>
-      <button class="explorer-clear" type="button" @click="clearFilters">Clear search and filters</button>
+      <button class="explorer-clear" type="button" @click="clearFilters"><UiIcon name="refresh" :size="14" /> Clear search and filters</button>
     </div>
   </div>
 </template>

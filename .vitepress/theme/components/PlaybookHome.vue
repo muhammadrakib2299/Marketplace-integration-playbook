@@ -1,28 +1,16 @@
 <script setup lang="ts">
-const platforms = [
-  {
-    name: 'Amazon Selling Partner API',
-    mark: 'a',
-    markClass: 'platform-mark-amazon',
-    status: 'Documented · partial scope',
-    summary:
-      'Seller authorization, listings migration, catalog enrichment, orders, and selected operational API surfaces.',
-    tags: ['Seller account', 'North America', 'Europe', 'Far East'],
-    scope: 'API map · workflows · onboarding',
-    href: '/marketplaces/amazon/',
-  },
-  {
-    name: 'TikTok Shop Partner API',
-    mark: 't',
-    markClass: 'platform-mark-tiktok',
-    status: 'Documented · focused reference',
-    summary:
-      'A focused reference for Get Authorized Category Assets · 202405, with partner access and scope boundaries called out.',
-    tags: ['Partner access', 'Target-market dependent', 'One operation'],
-    scope: 'Partner API · operation reference',
-    href: '/marketplaces/tiktok-shop/',
-  },
-]
+import { marketplaces as catalogMarketplaces } from '../generated/marketplaces.mjs'
+
+const platforms = catalogMarketplaces.map((marketplace) => ({
+  name: marketplace.name,
+  mark: marketplace.mark,
+  markClass: marketplace.markClass,
+  status: marketplace.statusLabel,
+  summary: marketplace.summary,
+  tags: marketplace.tags,
+  scope: marketplace.scope,
+  href: marketplace.guide,
+}))
 
 const coverage = [
   { label: 'Marketplace guides', value: platforms.length.toString().padStart(2, '0'), detail: 'Amazon SP-API and TikTok Shop' },
@@ -108,12 +96,9 @@ const principles = [
         </div>
       </div>
       <div class="journey-grid">
-        <a v-for="step in journeys" :key="step.number" class="journey-card" :href="step.href">
-          <span class="journey-icon" aria-hidden="true">
-            <svg v-if="step.icon === 'access'" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="4"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0M16 11l2 2 4-5"/></svg>
-            <svg v-else-if="step.icon === 'migrate'" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16v16H4zM8 8h8M8 12h8M8 16h4"/><path d="m15 16 2 2 3-3"/></svg>
-            <svg v-else-if="step.icon === 'design'" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 8 4 12l4 4M16 8l4 4-4 4M14 5l-4 14"/></svg>
-            <svg v-else viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 1 2.7 6.4M3 18v-6h6"/><path d="M12 7v5l3 2"/></svg>
+          <a v-for="step in journeys" :key="step.number" class="journey-card" :href="step.href">
+            <span class="journey-icon" aria-hidden="true">
+            <UiIcon :name="step.icon === 'access' ? 'user-check' : step.icon === 'migrate' ? 'database' : step.icon === 'design' ? 'code' : 'refresh'" :size="21" />
           </span>
           <span class="journey-meta"><span class="journey-number">{{ step.number }}</span> {{ step.phase }}</span>
           <strong>{{ step.title }}</strong>
@@ -144,11 +129,9 @@ const principles = [
         </div>
       </div>
       <div class="practice-grid">
-        <a v-for="item in foundations" :key="item.title" class="practice-card" :href="item.href">
-          <span class="practice-icon" :class="item.tone" aria-hidden="true">
-            <svg v-if="item.icon === 'shield'" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 20 7v5c0 5-3.4 8-8 9-4.6-1-8-4-8-9V7l8-4Z"/><path d="m9 12 2 2 4-4"/></svg>
-            <svg v-else-if="item.icon === 'clock'" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
-            <svg v-else viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m8 8-4 4 4 4M16 8l4 4-4 4M14 5l-4 14"/></svg>
+          <a v-for="item in foundations" :key="item.title" class="practice-card" :href="item.href">
+            <span class="practice-icon" :class="item.tone" aria-hidden="true">
+            <UiIcon :name="item.icon === 'shield' ? 'shield-check' : item.icon === 'clock' ? 'clock' : 'code'" :size="19" />
           </span>
           <strong>{{ item.title }}</strong>
           <span>{{ item.description }}</span>
@@ -163,8 +146,8 @@ const principles = [
         <h2 id="resources-title">Built to be reviewed and improved</h2>
         <p>Use the site-wide search to find an operation or workflow. Contributions should stay source-linked, scoped, and explicit about what has—and has not—been tested.</p>
         <div class="resource-actions">
-          <a class="btn-link btn-primary" href="/docs/glossary">Browse the glossary <span aria-hidden="true">→</span></a>
-          <a class="btn-link btn-secondary" href="https://github.com/muhammadrakib2299/Marketplace-integration-playbook/blob/main/CONTRIBUTING.md" target="_blank" rel="noreferrer">Contribution guide <span aria-hidden="true">↗</span></a>
+          <a class="btn-link btn-primary" href="/docs/glossary">Browse the glossary <UiIcon name="arrow-right" :size="15" /></a>
+          <a class="btn-link btn-secondary" href="https://github.com/muhammadrakib2299/Marketplace-integration-playbook/blob/main/CONTRIBUTING.md" target="_blank" rel="noreferrer">Contribution guide <UiIcon name="external" :size="15" /></a>
         </div>
       </div>
       <div class="resource-checklist" aria-label="Playbook principles">
@@ -176,7 +159,7 @@ const principles = [
     </section>
 
     <aside class="home-disclaimer" aria-label="Coverage disclaimer">
-      <span class="disclaimer-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01"/></svg></span>
+      <span class="disclaimer-icon" aria-hidden="true"><UiIcon name="info" :size="19" /></span>
       <p><strong>Independent developer resource.</strong> This playbook is not official Amazon or TikTok documentation and does not connect to provider accounts. Coverage is intentionally partial; open a guide for its sources, access requirements, and evidence scope.</p>
     </aside>
   </div>

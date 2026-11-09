@@ -2,6 +2,7 @@ import DefaultTheme from 'vitepress/theme'
 import MarketplaceDirectory from './components/MarketplaceDirectory.vue'
 import PlaybookExplorer from './components/PlaybookExplorer.vue'
 import PlaybookHome from './components/PlaybookHome.vue'
+import UiIcon from './components/UiIcon.vue'
 import './custom.css'
 
 export default {
@@ -10,5 +11,6 @@ export default {
     app.component('MarketplaceDirectory', MarketplaceDirectory)
     app.component('PlaybookExplorer', PlaybookExplorer)
     app.component('PlaybookHome', PlaybookHome)
+    app.component('UiIcon', UiIcon)
   },
 }
