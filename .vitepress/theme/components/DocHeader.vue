@@ -25,13 +25,12 @@ const checkedOn = computed(() => formatDisplayDate(frontmatter.value.checked))
 
 <template>
   <header v-if="visible" class="mip-doc-header">
-    <p class="mip-doc-trail">
-      <template v-if="marketplace">
-        <a :href="withBase(marketplace.guide)">{{ marketplace.name }}</a>
-        <span aria-hidden="true">/</span>
-      </template>
-      <span>API reference</span>
-    </p>
+    <nav class="mip-doc-trail" aria-label="Breadcrumb">
+      <ol>
+        <li v-if="marketplace"><a :href="withBase(marketplace.guide)">{{ marketplace.name }}</a></li>
+        <li>API reference</li>
+      </ol>
+    </nav>
     <div class="mip-doc-title-row">
       <h1>{{ frontmatter.title }}</h1>
       <a v-if="reference" class="mip-btn mip-btn--sm" :href="reference" target="_blank" rel="noreferrer">

@@ -372,12 +372,31 @@
 }
 
 .mip-doc-trail {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
   margin: 0 0 8px;
   color: var(--mip-muted);
   font-size: 13.5px;
+}
+
+.mip-doc-trail ol {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* The separator is decoration: the empty alternative text keeps screen readers from reading it. */
+.mip-doc-trail li + li::before {
+  margin-right: 6px;
+  color: var(--mip-faint-text);
+  content: '/' / '';
+}
+
+/* A dossier's title comes from frontmatter (DocHeader.vue). If the Markdown also starts with an H1,
+   hide it so the page never shows two (see CONTRIBUTING.md, "API dossier pages"). */
+.mip-doc-header ~ .main .vp-doc > div > h1:first-child {
+  display: none;
 }
 
 .mip-doc-trail a {
