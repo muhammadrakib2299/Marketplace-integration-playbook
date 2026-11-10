@@ -7,6 +7,7 @@ import { stringify } from 'yaml'
 import {
   buildGuides,
   buildMarketplaces,
+  countCoverage,
   findMissingRoutes,
   loadCatalogData,
   repositoryRoot,
@@ -160,6 +161,23 @@ test('loading the catalog fails when an explorer guide links to a missing page',
       ),
     /\/marketplaces\/ebay\/guides\/seller-access/,
   )
+})
+
+test('coverage counts API pages and workflows across marketplaces, skipping index pages and the template', () => {
+  const coverage = withTempRoot(
+    {
+      'marketplaces/ebay/apis/index.md': '# APIs\n',
+      'marketplaces/ebay/apis/orders.md': '# Orders\n',
+      'marketplaces/ebay/apis/listings.md': '# Listings\n',
+      'marketplaces/ebay/workflows/order-sync.md': '# Order sync\n',
+      'marketplaces/otto/apis/products.md': '# Products\n',
+      'marketplaces/otto/guides/development-guide.md': '# Development guide\n',
+      'marketplaces/_template/apis/api-template.md': '# Template\n',
+      'marketplaces/_template/workflows/order-lifecycle.md': '# Template\n',
+    },
+    (root) => countCoverage(root),
+  )
+  assert.deepEqual(coverage, { apiReferencePages: 3, workflowGuides: 1 })
 })
 
 test('every documented marketplace in the catalog has at least one explorer guide', () => {

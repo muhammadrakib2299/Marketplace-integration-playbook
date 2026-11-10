@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { marketplaces as catalogMarketplaces } from '../generated/catalog.mjs'
+import { coverage as docsCoverage, marketplaces as catalogMarketplaces } from '../generated/catalog.mjs'
 
 const platforms = catalogMarketplaces.map((marketplace) => ({
   name: marketplace.name,
@@ -12,10 +12,12 @@ const platforms = catalogMarketplaces.map((marketplace) => ({
   href: marketplace.guide,
 }))
 
+// Counts are generated from the catalog and docs tree at build time (scripts/catalog-data.mjs).
+const pad = (count: number) => count.toString().padStart(2, '0')
 const coverage = [
-  { label: 'Marketplace guides', value: platforms.length.toString().padStart(2, '0'), detail: 'Amazon SP-API and TikTok Shop' },
-  { label: 'API reference pages', value: '10', detail: 'Including operation and comparison references' },
-  { label: 'Workflow guides', value: '03', detail: 'Migration, inventory, listings, and orders' },
+  { label: 'Marketplace guides', value: pad(platforms.length), detail: 'Each with its scope, access model, and official sources' },
+  { label: 'API reference pages', value: pad(docsCoverage.apiReferencePages), detail: 'Including operation and comparison references' },
+  { label: 'Workflow guides', value: pad(docsCoverage.workflowGuides), detail: 'Step-by-step data flows such as migration and order sync' },
   { label: 'Evidence standard', value: 'Source-linked', detail: 'Documentation is not a claim of a live connection or test.', featured: true },
 ]
 

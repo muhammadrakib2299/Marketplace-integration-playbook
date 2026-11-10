@@ -1,4 +1,4 @@
-import { existsSync, readFileSync } from 'node:fs'
+import { existsSync, readdirSync, readFileSync } from 'node:fs'
 import { join } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { parse } from 'yaml'
@@ -138,6 +138,24 @@ export function findMissingRoutes(root, routes) {
   })
 }
 
+// Counts the published pages behind the homepage coverage figures. Folders
+// starting with "_" (the template) and section index pages are not counted.
+export function countCoverage(root = repositoryRoot) {
+  const marketplacesDir = join(root, 'marketplaces')
+  const pagesIn = (dir) =>
+    existsSync(dir) ? readdirSync(dir).filter((file) => file.endsWith('.md') && file !== 'index.md').length : 0
+
+  return readdirSync(marketplacesDir, { withFileTypes: true })
+    .filter((entry) => entry.isDirectory() && !entry.name.startsWith('_'))
+    .reduce(
+      (totals, folder) => ({
+        apiReferencePages: totals.apiReferencePages + pagesIn(join(marketplacesDir, folder.name, 'apis')),
+        workflowGuides: totals.workflowGuides + pagesIn(join(marketplacesDir, folder.name, 'workflows')),
+      }),
+      { apiReferencePages: 0, workflowGuides: 0 },
+    )
+}
+
 export function loadCatalogData(root = repositoryRoot) {
   const readCatalog = (file) => parse(readFileSync(join(root, 'catalog', file), 'utf8'))
   const marketplaces = buildMarketplaces(readCatalog('marketplaces.yaml'))
@@ -151,5 +169,5 @@ export function loadCatalogData(root = repositoryRoot) {
     throw new Error(`Catalog links point to pages that do not exist: ${missing.join(', ')}`)
   }
 
-  return { marketplaces, topics, guides }
+  return { marketplaces, topics, guides, coverage: countCoverage(root) }
 }
