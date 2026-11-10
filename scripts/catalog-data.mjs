@@ -3,22 +3,31 @@ import { join } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import * as simpleIcons from 'simple-icons'
 import { parse } from 'yaml'
+import { statusName } from './labels.mjs'
 
 // Absolute path of the repository checkout (the directory above scripts/).
 // fileURLToPath keeps Windows drive letters intact; URL.pathname would turn
 // D:\repo into /D:/repo, which path.resolve then mangles into D:\D:\repo.
 export const repositoryRoot = fileURLToPath(new URL('..', import.meta.url))
 
+// Labels for the categories suggested in catalog/marketplaces.yaml; others fall back to sentence case.
 const categoryLabels = {
   marketplace: 'Marketplace',
+  storefront: 'Storefront',
+  'marketplace-operator': 'Marketplace operator',
   'social-commerce': 'Social commerce',
+  aggregator: 'Aggregator',
+  carrier: 'Carrier',
+  accounting: 'Accounting',
+  warehouse: 'Warehouse',
+  other: 'Other',
 }
-const statusLabels = {
-  documented: 'Documented',
-  tested: 'Tested',
-  research: 'Research',
-  blocked: 'Blocked',
-  deprecated: 'Deprecated',
+// The lifecycle vocabulary in docs/lifecycle-and-status.md.
+const statuses = ['documented', 'tested', 'research', 'blocked', 'deprecated']
+
+const sentenceCase = (value) => {
+  const text = value.replace(/-/g, ' ')
+  return `${text.charAt(0).toUpperCase()}${text.slice(1)}`
 }
 
 // The marketplace folder name is the stable slug (see CONTRIBUTING.md), so it
@@ -38,12 +47,25 @@ export function buildMarketplaces(catalog) {
     throw new Error('catalog/marketplaces.yaml must contain a marketplaces array')
   }
 
+  const ids = new Set()
+  const folders = new Map()
+
   return catalog.marketplaces.map((record) => {
+    if (ids.has(record.id)) throw new Error(`duplicate catalog id "${record.id}" in catalog/marketplaces.yaml`)
+    ids.add(record.id)
     const slug = marketplaceSlug(record)
+    if (folders.has(slug)) {
+      throw new Error(`${record.id}: guide folder marketplaces/${slug}/ is already used by ${folders.get(slug)}`)
+    }
+    folders.set(slug, record.id)
+    if (!statuses.includes(record.status)) {
+      throw new Error(`${record.id}: unknown status "${record.status}" (use ${statuses.join(', ')})`)
+    }
+
     const name = record.name.replace(/ \(SP-API\)$/, '')
-    const apis = record.api_surfaces.map((surface) => `${surface.name}${surface.version ? ` · ${surface.version}` : ''}`)
-    const categoryLabel = categoryLabels[record.category] ?? record.category.replace(/-/g, ' ')
-    const statusLabel = `${statusLabels[record.status] ?? record.status} · ${record.evidence === 'official' ? 'source-linked' : record.evidence}`
+    const apis = record.api_surfaces.map((surface) => `${surface.name}${surface.version ? ` (${surface.version})` : ''}`)
+    const categoryLabel = categoryLabels[record.category] ?? sentenceCase(record.category)
+    const evidence = evidenceLabel(record.evidence)
 
     return {
       id: record.id,
@@ -55,22 +77,25 @@ export function buildMarketplaces(catalog) {
       regions: record.regions,
       access: record.access_model.replace(/-/g, ' ').replace(/\b\w/g, (letter) => letter.toUpperCase()),
       status: record.status,
-      statusLabel,
+      statusName: statusName(record.status),
+      // Search text; the UI shows statusName and evidenceLabel separately.
+      statusLabel: `${statusName(record.status)}, ${evidence.toLowerCase()}`,
       evidence: record.evidence,
+      evidenceLabel: evidence,
       summary: record.summary,
       tags: record.tags,
       scope: record.scope,
       apis,
-      apiSurfaces: record.api_surfaces.map((surface) => ({
+      apiSurfaces: record.api_surfaces.map((surface, index) => ({
         name: surface.name,
         version: surface.version ?? null,
-        docsUrl: surface.docs_url ?? null,
+        docsUrl: httpsUrl(record, `api_surfaces[${index}].docs_url`, surface.docs_url),
       })),
       guide: `/marketplaces/${slug}/`,
       docsHome: docsHome(record),
       source: record.source_urls[0],
       sourceUrls: record.source_urls,
-      lastVerified: record.last_verified,
+      lastVerified: verifiedDate(record),
       mark: name.charAt(0).toLowerCase(),
       logo: resolveLogo(record),
       buildSequence: navigationList(record, 'build_sequence'),
@@ -79,15 +104,30 @@ export function buildMarketplaces(catalog) {
   })
 }
 
+// Catalog links are rendered as hrefs, so anything but an https URL (or nothing) is rejected.
+function httpsUrl(record, field, value) {
+  if (value === undefined || value === null) return null
+  if (typeof value !== 'string' || !value.startsWith('https://')) {
+    throw new Error(`${record.id}: ${field} must be an https:// URL (got ${value})`)
+  }
+  return value
+}
+
 // The provider's own developer-documentation entry point, linked as "Official docs".
 // Optional: source_urls[0] is not a substitute, because it can belong to another product
 // (TikTok's first source is TikTok for Developers, not the TikTok Shop Partner Center).
-function docsHome(record) {
-  if (record.docs_home === undefined || record.docs_home === null) return null
-  if (typeof record.docs_home !== 'string' || !record.docs_home.startsWith('https://')) {
-    throw new Error(`${record.id}: docs_home must be an https:// URL (got ${record.docs_home})`)
-  }
-  return record.docs_home
+const docsHome = (record) => httpsUrl(record, 'docs_home', record.docs_home)
+
+// YYYY-MM-DD or null. A malformed date would otherwise crash date formatting during the build.
+function verifiedDate(record) {
+  const value = record.last_verified
+  if (value === undefined || value === null) return null
+  const text = value instanceof Date ? value.toISOString().slice(0, 10) : String(value)
+  const date = new Date(`${text}T00:00:00Z`)
+  // The round trip rejects impossible dates such as 2026-02-30, which Date would roll over.
+  const valid = /^\d{4}-\d{2}-\d{2}$/.test(text) && !Number.isNaN(date.getTime()) && date.toISOString().startsWith(text)
+  if (!valid) throw new Error(`${record.id}: last_verified must be a YYYY-MM-DD date or null (got ${value})`)
+  return text
 }
 
 // Logo colours near black or white disappear on one of the two themes; the shell

@@ -188,6 +188,53 @@ test("a marketplace's official docs home is optional and must be an https URL", 
   )
 })
 
+test('last_verified must be a real YYYY-MM-DD date or null', () => {
+  assert.equal(buildMarketplaces({ marketplaces: [marketplaceRecord({ last_verified: '2026-11-05' })] })[0].lastVerified, '2026-11-05')
+  assert.equal(buildMarketplaces({ marketplaces: [marketplaceRecord({ last_verified: null })] })[0].lastVerified, null)
+  for (const bad of ['2026-11-5', '2026-13-01', 'last week']) {
+    assert.throws(
+      () => buildMarketplaces({ marketplaces: [marketplaceRecord({ last_verified: bad })] }),
+      /ebay-sell-api.*last_verified/,
+      `expected ${bad} to be rejected`,
+    )
+  }
+})
+
+test('an API surface docs_url, when present, must be an https URL', () => {
+  const surface = (docs_url) => ({ api_surfaces: [{ name: 'Inventory API', version: 'v1', docs_url }] })
+  assert.equal(buildMarketplaces({ marketplaces: [marketplaceRecord(surface(undefined))] })[0].apiSurfaces[0].docsUrl, null)
+  assert.throws(
+    () => buildMarketplaces({ marketplaces: [marketplaceRecord(surface('javascript:alert(1)'))] }),
+    /ebay-sell-api.*api_surfaces\[0\]\.docs_url/,
+  )
+})
+
+test('catalog ids and marketplace folders must be unique', () => {
+  assert.throws(() => buildMarketplaces({ marketplaces: [marketplaceRecord(), marketplaceRecord()] }), /duplicate.*ebay-sell-api/)
+  assert.throws(
+    () => buildMarketplaces({ marketplaces: [marketplaceRecord(), ottoRecord({ guide: '../marketplaces/ebay/README.md' })] }),
+    /otto-api.*marketplaces\/ebay\//,
+  )
+})
+
+test('a status outside the documented vocabulary is rejected', () => {
+  assert.throws(() => buildMarketplaces({ marketplaces: [marketplaceRecord({ status: 'live' })] }), /ebay-sell-api.*status "live"/)
+})
+
+test('every suggested category has a sentence-case label', () => {
+  const labels = ['marketplace-operator', 'aggregator', 'carrier', 'warehouse'].map(
+    (category) => buildMarketplaces({ marketplaces: [marketplaceRecord({ category })] })[0].categoryLabel,
+  )
+  assert.deepEqual(labels, ['Marketplace operator', 'Aggregator', 'Carrier', 'Warehouse'])
+  assert.equal(buildMarketplaces({ marketplaces: [marketplaceRecord({ category: 'b2b-portal' })] })[0].categoryLabel, 'B2b portal')
+})
+
+test('a marketplace carries its status and evidence as separate labels', () => {
+  const [ebay] = buildMarketplaces({ marketplaces: [marketplaceRecord({ status: 'documented', evidence: 'official' })] })
+  assert.equal(ebay.statusName, 'Documented')
+  assert.equal(ebay.evidenceLabel, 'Source-linked')
+})
+
 test('a capability counts as documented only when the marketplace has a guide on that topic', () => {
   const marketplaces = buildMarketplaces({ marketplaces: [marketplaceRecord(), ottoRecord()] })
   const { topics, guides } = buildGuides(
