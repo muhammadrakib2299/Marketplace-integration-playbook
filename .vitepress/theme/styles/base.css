@@ -5,8 +5,10 @@ html {
   scroll-behavior: smooth;
 }
 
+/* VitePress sets body { min-width: 320px }. At 320 CSS px (a 1280 px screen zoomed to 400 %, WCAG
+   1.4.10) a classic 10 px scrollbar leaves 310 px, so that minimum scrolled every page sideways. */
 body {
-  min-width: 320px;
+  min-width: 0;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
