@@ -61,8 +61,14 @@ export function buildMarketplaces(catalog) {
       tags: record.tags,
       scope: record.scope,
       apis,
+      apiSurfaces: record.api_surfaces.map((surface) => ({
+        name: surface.name,
+        version: surface.version ?? null,
+        docsUrl: surface.docs_url ?? null,
+      })),
       guide: `/marketplaces/${slug}/`,
       source: record.source_urls[0],
+      sourceUrls: record.source_urls,
       lastVerified: record.last_verified,
       mark: name.charAt(0).toLowerCase(),
       markClass: `platform-mark-${slug}`,
@@ -191,6 +197,23 @@ export function readFrontmatter(root, route) {
   return match ? (parse(match[1]) ?? {}) : {}
 }
 
+// Per marketplace, which guide topics this playbook documents. A capability is "documented"
+// only when a guide on that topic exists; nothing is inferred from the API alone.
+export function buildCapabilities(marketplaces, guides, topics) {
+  return Object.fromEntries(
+    marketplaces.map((marketplace) => [
+      marketplace.id,
+      topics.map((topic) => ({
+        id: topic.id,
+        label: topic.label,
+        guides: guides
+          .filter((guide) => guide.marketplace === marketplace.id && guide.topic === topic.id)
+          .map((guide) => ({ title: guide.title, href: guide.href })),
+      })),
+    ]),
+  )
+}
+
 // Counts the published pages behind the homepage coverage figures. Folders
 // starting with "_" (the template) and section index pages are not counted.
 export function countCoverage(root = repositoryRoot) {
@@ -198,15 +221,23 @@ export function countCoverage(root = repositoryRoot) {
   const pagesIn = (dir) =>
     existsSync(dir) ? readdirSync(dir).filter((file) => file.endsWith('.md') && file !== 'index.md').length : 0
 
-  return readdirSync(marketplacesDir, { withFileTypes: true })
-    .filter((entry) => entry.isDirectory() && !entry.name.startsWith('_'))
-    .reduce(
-      (totals, folder) => ({
-        apiReferencePages: totals.apiReferencePages + pagesIn(join(marketplacesDir, folder.name, 'apis')),
-        workflowGuides: totals.workflowGuides + pagesIn(join(marketplacesDir, folder.name, 'workflows')),
-      }),
-      { apiReferencePages: 0, workflowGuides: 0 },
-    )
+  const byMarketplace = Object.fromEntries(
+    readdirSync(marketplacesDir, { withFileTypes: true })
+      .filter((entry) => entry.isDirectory() && !entry.name.startsWith('_'))
+      .map((folder) => [
+        folder.name,
+        {
+          apiReferencePages: pagesIn(join(marketplacesDir, folder.name, 'apis')),
+          workflowGuides: pagesIn(join(marketplacesDir, folder.name, 'workflows')),
+        },
+      ]),
+  )
+  const counts = Object.values(byMarketplace)
+  return {
+    apiReferencePages: counts.reduce((total, count) => total + count.apiReferencePages, 0),
+    workflowGuides: counts.reduce((total, count) => total + count.workflowGuides, 0),
+    byMarketplace,
+  }
 }
 
 export function loadCatalogData(root = repositoryRoot) {
@@ -226,5 +257,11 @@ export function loadCatalogData(root = repositoryRoot) {
     throw new Error(`Catalog links point to pages that do not exist: ${missing.join(', ')}`)
   }
 
-  return { marketplaces, topics, guides, coverage: countCoverage(root) }
+  return {
+    marketplaces,
+    topics,
+    guides,
+    capabilities: buildCapabilities(marketplaces, guides, topics),
+    coverage: countCoverage(root),
+  }
 }

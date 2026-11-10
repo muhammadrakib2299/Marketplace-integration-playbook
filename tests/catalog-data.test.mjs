@@ -5,6 +5,7 @@ import { tmpdir } from 'node:os'
 import { dirname, join } from 'node:path'
 import { stringify } from 'yaml'
 import {
+  buildCapabilities,
   buildGuides,
   buildMarketplaces,
   countCoverage,
@@ -158,7 +159,42 @@ test('coverage counts API pages and workflows across marketplaces, skipping inde
     },
     (root) => countCoverage(root),
   )
-  assert.deepEqual(coverage, { apiReferencePages: 3, workflowGuides: 1 })
+  assert.deepEqual(coverage, {
+    apiReferencePages: 3,
+    workflowGuides: 1,
+    byMarketplace: {
+      ebay: { apiReferencePages: 2, workflowGuides: 1 },
+      otto: { apiReferencePages: 1, workflowGuides: 0 },
+    },
+  })
+})
+
+test('catalog API surfaces keep their official documentation links', () => {
+  const [ebay] = buildMarketplaces({ marketplaces: [marketplaceRecord()] })
+  assert.deepEqual(ebay.apiSurfaces, [
+    { name: 'Inventory API', version: 'v1', docsUrl: 'https://developer.ebay.com/develop/api/sell' },
+  ])
+  assert.deepEqual(ebay.sourceUrls, ['https://developer.ebay.com/'])
+})
+
+test('a capability counts as documented only when the marketplace has a guide on that topic', () => {
+  const marketplaces = buildMarketplaces({ marketplaces: [marketplaceRecord(), ottoRecord()] })
+  const { topics, guides } = buildGuides(
+    guideCatalog([
+      guideRecord(),
+      guideRecord({ id: 'otto-orders', marketplace: 'otto-api', topic: 'orders', href: '/marketplaces/otto/guides/orders' }),
+    ]),
+    marketplaces,
+  )
+  const capabilities = buildCapabilities(marketplaces, guides, topics)
+  assert.deepEqual(
+    capabilities['ebay-sell-api'].map((capability) => [capability.id, capability.guides.map((guide) => guide.href)]),
+    [['access', ['/marketplaces/ebay/guides/seller-access']], ['orders', []]],
+  )
+  assert.deepEqual(
+    capabilities['otto-api'].map((capability) => [capability.id, capability.guides.length]),
+    [['access', 0], ['orders', 1]],
+  )
 })
 
 test('a catalog logo slug resolves to its Simple Icons mark', () => {
