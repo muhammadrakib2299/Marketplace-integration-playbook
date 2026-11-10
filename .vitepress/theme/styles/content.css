@@ -1,0 +1,327 @@
+/*
+ * Article layer: prose, headings, links, tables, code, callouts, and the doc footer (spec 5.1).
+ * Selectors target VitePress 1.6.4 classes; recheck them when upgrading VitePress.
+ */
+
+:root,
+.dark {
+  --vp-code-bg: var(--mip-surface-2);
+  --vp-code-color: var(--mip-ink);
+  --vp-code-link-color: var(--mip-primary);
+  /* Code blocks are dark panels in both themes, as in the mockup. */
+  --vp-code-block-bg: #0F1520;
+  --vp-code-block-color: #D5DBE5;
+  --vp-code-block-divider-color: #1F2838;
+  --vp-code-lang-color: #8B95A7;
+  --vp-code-copy-code-border-color: #2A3547;
+  --vp-code-copy-code-bg: #182131;
+  --vp-code-copy-code-hover-border-color: #3A4659;
+  --vp-code-copy-code-hover-bg: #1E2A3D;
+  --vp-code-copy-code-active-text: #D5DBE5;
+}
+
+/* ---------- Layout ---------- */
+
+.Layout .VPDoc.has-aside .content-container {
+  max-width: 880px;
+}
+
+.Layout .VPDoc .aside {
+  max-width: 264px; /* 232px rail + 32px gutter */
+}
+
+/* ---------- Prose ---------- */
+
+.vp-doc {
+  color: var(--mip-text);
+  font-size: 15px;
+  line-height: 1.65;
+}
+
+.vp-doc p,
+.vp-doc li {
+  line-height: 1.65;
+  overflow-wrap: break-word;
+}
+
+.vp-doc p {
+  margin: 14px 0;
+}
+
+.vp-doc p,
+.vp-doc ul,
+.vp-doc ol,
+.vp-doc blockquote {
+  max-width: 72ch;
+}
+
+.vp-doc h1,
+.vp-doc h2,
+.vp-doc h3,
+.vp-doc h4 {
+  color: var(--mip-ink);
+  font-weight: 600;
+  overflow-wrap: break-word;
+}
+
+.vp-doc h1 {
+  margin: 0 0 16px;
+  font-size: 28px;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+}
+
+.vp-doc h2 {
+  margin: 40px 0 12px;
+  padding-top: 0;
+  border-top: 0;
+  font-size: 20px;
+  letter-spacing: -0.01em;
+  line-height: 1.3;
+}
+
+.vp-doc h3 {
+  margin: 28px 0 8px;
+  font-size: 16px;
+  letter-spacing: -0.01em;
+  line-height: 1.4;
+}
+
+.vp-doc h4 {
+  margin: 20px 0 6px;
+  font-size: 14px;
+}
+
+.vp-doc .header-anchor {
+  color: var(--mip-faint);
+  text-decoration: none;
+}
+
+/* Links keep a light underline at rest: primary blue alone is under 3:1 against body text (WCAG 1.4.1). */
+.vp-doc a {
+  color: var(--mip-primary);
+  font-weight: 500;
+  text-decoration: underline;
+  text-decoration-color: var(--mip-primary-border);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+  transition:
+    color var(--mip-duration-fast) var(--mip-ease),
+    text-decoration-color var(--mip-duration-fast) var(--mip-ease);
+}
+
+.vp-doc a:hover {
+  color: var(--mip-primary-ink);
+  text-decoration-color: currentColor;
+}
+
+.vp-doc :not(pre) > code {
+  padding: 1px 6px;
+  border: 1px solid var(--mip-border);
+  border-radius: 5px;
+  background: var(--mip-surface-2);
+  font-size: 12.5px;
+}
+
+.vp-doc blockquote {
+  margin: 16px 0;
+  padding: 12px 16px;
+  border-left: 3px solid var(--mip-primary-border);
+  border-radius: 0 var(--mip-radius) var(--mip-radius) 0;
+  background: var(--mip-surface);
+  color: var(--mip-muted);
+}
+
+.vp-doc blockquote > p {
+  margin: 0;
+  font-size: 14.5px;
+}
+
+/* ---------- Tables (wrapped in .mip-table by the markdown config) ---------- */
+
+.vp-doc .mip-table {
+  margin: 20px 0;
+  overflow-x: auto;
+  border: 1px solid var(--mip-border);
+  border-radius: var(--mip-radius);
+  background: var(--mip-surface);
+}
+
+.vp-doc .mip-table table {
+  display: table;
+  width: 100%;
+  margin: 0;
+  overflow: visible;
+  border-collapse: collapse;
+  font-size: 13.5px;
+  font-variant-numeric: tabular-nums;
+}
+
+.vp-doc .mip-table tr,
+.vp-doc .mip-table tr:nth-child(2n) {
+  border-top: 0;
+  background: transparent;
+}
+
+.vp-doc .mip-table th,
+.vp-doc .mip-table td {
+  padding: 11px 12px;
+  border: 0;
+  border-bottom: 1px solid var(--mip-border);
+  line-height: 1.55;
+  text-align: left;
+  vertical-align: top;
+}
+
+.vp-doc .mip-table th {
+  padding-block: 10px;
+  background: var(--mip-surface-2);
+  color: var(--mip-muted);
+  font-size: 11.5px;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.vp-doc .mip-table tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+.vp-doc .mip-table tbody tr {
+  transition: background-color var(--mip-duration-fast) var(--mip-ease);
+}
+
+.vp-doc .mip-table tbody tr:hover {
+  background: var(--mip-surface-2);
+}
+
+/* ---------- Code blocks ---------- */
+
+.vp-doc div[class*='language-'] {
+  margin: 20px 0;
+  padding-top: 34px;
+  overflow: hidden; /* the inner <pre> scrolls, so the header strip stays put */
+  border: 1px solid #1F2838;
+  border-radius: var(--mip-radius);
+}
+
+.vp-doc div[class*='language-']::before {
+  position: absolute;
+  inset: 0 0 auto;
+  height: 34px;
+  border-bottom: 1px solid #1F2838;
+  background: #121A27;
+  content: '';
+}
+
+.vp-doc div[class*='language-'] > span.lang,
+.vp-doc div[class*='language-']:hover > span.lang {
+  top: 8px;
+  right: auto;
+  left: 14px;
+  opacity: 1;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+/* Icon-only copy button, always visible in the header strip. */
+.vp-doc div[class*='language-'] > button.copy {
+  top: 3px;
+  right: 6px;
+  width: 28px;
+  height: 28px;
+  border-radius: 6px;
+  background-size: 14px;
+  opacity: 1;
+}
+
+.vp-doc div[class*='language-'] pre {
+  padding: 14px 0;
+}
+
+.vp-doc div[class*='language-'] code {
+  font-size: 12.5px;
+  line-height: 1.6;
+}
+
+/* ---------- Callouts (VitePress custom containers) ---------- */
+
+.vp-doc .custom-block {
+  margin: 16px 0;
+  padding: 14px 16px;
+  border: 1px solid var(--mip-border);
+  border-left-width: 3px;
+  border-radius: var(--mip-radius);
+  color: var(--mip-text);
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.vp-doc .custom-block .custom-block-title {
+  margin-bottom: 4px;
+  color: var(--mip-ink);
+  font-weight: 600;
+}
+
+.vp-doc .custom-block.info {
+  border-left-color: var(--mip-info);
+  background: var(--mip-info-soft);
+}
+
+.vp-doc .custom-block.tip {
+  border-left-color: var(--mip-success);
+  background: var(--mip-success-soft);
+}
+
+.vp-doc .custom-block.warning {
+  border-left-color: var(--mip-warning);
+  background: var(--mip-warning-soft);
+}
+
+.vp-doc .custom-block.danger {
+  border-left-color: var(--mip-danger);
+  background: var(--mip-danger-soft);
+}
+
+.vp-doc .custom-block.details {
+  background: var(--mip-surface-2);
+}
+
+/* ---------- Doc footer: edit link and prev/next cards ---------- */
+
+.VPDocFooter .edit-link-button {
+  color: var(--mip-muted);
+  font-size: 13px;
+}
+
+.VPDocFooter .edit-link-button:hover {
+  color: var(--mip-ink);
+}
+
+.VPDocFooter .pager-link {
+  border: 1px solid var(--mip-border);
+  border-radius: var(--mip-radius-lg);
+  background: var(--mip-surface);
+  transition:
+    border-color var(--mip-duration-fast) var(--mip-ease),
+    box-shadow var(--mip-duration-fast) var(--mip-ease),
+    transform var(--mip-duration-fast) var(--mip-ease);
+}
+
+.VPDocFooter .pager-link:hover {
+  border-color: var(--mip-primary-border);
+  box-shadow: var(--mip-shadow);
+  transform: translateY(-1px);
+}
+
+.VPDocFooter .pager-link .desc {
+  color: var(--mip-faint-text);
+  font-size: 12px;
+}
+
+.VPDocFooter .pager-link .title {
+  color: var(--mip-primary-ink);
+  font-size: 14px;
+}

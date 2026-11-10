@@ -372,25 +372,7 @@ body { min-width: 320px; }
 .home-disclaimer strong { color: var(--vp-c-text-1); }
 
 /* Documentation articles */
-.VPDoc .container { max-width: 1440px; }
-.VPDoc .content,
-.VPDoc .content-container { max-width: 860px; }
-.VPDoc h1 { color: var(--vp-c-text-1); font-size: clamp(32px, 4vw, 43px); font-weight: 770; letter-spacing: -0.055em; line-height: 1.12; }
-.VPDoc h2 { margin-top: 48px; padding-top: 18px; color: var(--vp-c-text-1); border-top: 1px solid var(--vp-c-divider); font-size: 24px; font-weight: 710; letter-spacing: -0.04em; }
-.VPDoc h3 { margin-top: 32px; color: var(--vp-c-text-1); font-size: 18px; font-weight: 690; letter-spacing: -0.025em; }
-.VPDoc p,
-.VPDoc li { color: var(--vp-c-text-2); line-height: 1.76; }
-.VPDoc p { margin: 16px 0; }
-.VPDoc a:not(.header-anchor) { font-weight: 560; text-underline-offset: 3px; text-decoration-thickness: 1px; }
 .VPHome .home-dashboard a:not(.header-anchor) { text-decoration: none; }
-.VPDoc table { display: block; width: 100%; overflow-x: auto; border: 1px solid var(--vp-c-divider); border-collapse: separate; border-spacing: 0; border-radius: 11px; }
-.VPDoc th { color: var(--vp-c-text-1); background: var(--vp-c-bg-soft); font-size: 11px; letter-spacing: 0.04em; text-transform: uppercase; }
-.VPDoc td,
-.VPDoc th { min-width: 100px; padding: 12px 14px; line-height: 1.6; }
-.VPDoc tr:nth-child(2n) { background: color-mix(in srgb, var(--vp-c-bg-soft) 55%, transparent); }
-.VPDoc div[class*="language-"] { max-width: 100%; margin: 20px 0; overflow-x: auto; border: 1px solid var(--vp-c-divider); border-radius: 12px; }
-.VPDoc .custom-block { padding: 16px 18px; border-radius: 11px; }
-.VPDoc .tip { border-color: color-mix(in srgb, var(--vp-c-brand-1) 28%, var(--vp-c-divider)); }
 
 /* Searchable marketplace directory */
 .marketplace-explorer { margin: 28px 0 44px; }
@@ -454,10 +436,6 @@ body { min-width: 320px; }
   .practice-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .practice-card:last-child { grid-column: 1 / -1; }
   .resource-band { grid-template-columns: 1fr; gap: 18px; }
-  .VPDoc .container { padding: 40px 26px 56px; }
-  .VPDoc .content,
-  .VPDoc .content-container { max-width: 100%; min-width: 0; }
-  .VPDoc table { max-width: 100%; }
 }
 @media (max-width: 600px) {
   .VPHome .VPHero { padding: calc(var(--vp-nav-height) + 14px) 20px 21px; }
@@ -505,17 +483,6 @@ body { min-width: 320px; }
   .btn-link { justify-content: space-between; }
   .home-disclaimer { gap: 9px; padding: 13px; }
   .home-disclaimer p { font-size: 10px; }
-  .VPDoc .container { padding: 26px 18px 46px; }
-  .VPDoc h1 { margin-top: 6px; font-size: clamp(28px, 8vw, 36px); line-height: 1.16; letter-spacing: -0.045em; overflow-wrap: anywhere; }
-  .VPDoc h2 { margin-top: 36px; padding-top: 14px; font-size: 21px; line-height: 1.3; }
-  .VPDoc h3 { margin-top: 25px; font-size: 17px; }
-  .VPDoc p { margin: 13px 0; }
-  .VPDoc p,
-  .VPDoc li { line-height: 1.68; }
-  .VPDoc li + li { margin-top: 5px; }
-  .VPDoc td,
-  .VPDoc th { min-width: 92px; padding: 9px 10px; font-size: 12px; }
-  .VPDoc div[class*="language-"] { margin: 16px 0; border-radius: 10px; }
   .marketplace-explorer { margin: 22px 0 34px; }
   .marketplace-explorer-heading { align-items: flex-start; flex-direction: column; gap: 9px; }
   .marketplace-filters { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 9px; padding: 12px; }
@@ -723,37 +690,6 @@ a:hover .ui-icon { transform: translateX(2px); }
 
 
 /* More intentional article chrome */
-.VPDoc .content-container { position: relative; }
-.VPDoc .content { padding-bottom: 46px; }
-.VPDoc .vp-doc > h1 { max-width: 820px; margin-bottom: 22px; }
-.VPDoc .vp-doc > h1::after {
-  display: block;
-  width: 54px;
-  height: 4px;
-  margin-top: 18px;
-  background: linear-gradient(90deg, var(--ui-accent), var(--ui-teal));
-  border-radius: 999px;
-  content: '';
-}
-.VPDoc .vp-doc > blockquote {
-  margin: 24px 0;
-  padding: 16px 18px;
-  background: var(--vp-c-bg-soft);
-  border: 1px solid var(--vp-c-divider);
-  border-left: 3px solid var(--ui-accent);
-  border-radius: 0 var(--ui-radius) var(--ui-radius) 0;
-}
-.VPDoc .vp-doc > blockquote p { margin: 0; }
-.VPDoc h2 { scroll-margin-top: calc(var(--vp-nav-height) + 24px); }
-.VPDoc h2 .header-anchor,
-.VPDoc h3 .header-anchor { color: var(--ui-accent); }
-.VPDoc a { color: var(--ui-accent); }
-.VPDoc a:hover { color: var(--ui-accent-strong); }
-.VPDoc .custom-block-title { letter-spacing: -0.01em; }
-.VPDoc div[class*='language-'] { box-shadow: var(--ui-shadow-sm); }
-.VPDoc div[class*='language-'] code { font-size: 13px; line-height: 1.7; }
-.VPDoc th { letter-spacing: 0.075em; }
-.VPDoc td:first-child { color: var(--ui-ink); font-weight: 600; }
 
 /* Shared filter polish */
 .marketplace-filters,
@@ -859,7 +795,6 @@ a:hover .ui-icon { transform: translateX(2px); }
 @media (max-width: 600px) {
   .explorer-search kbd { display: none; }
   .explorer-search input { padding-right: 12px; }
-  .VPDoc .vp-doc > h1::after { margin-top: 14px; }
 }
 
 
@@ -940,42 +875,16 @@ a:hover .ui-icon { transform: translateX(2px); }
 
 /* Full responsive pass: keep every surface usable from 320px phones to wide desktop. */
 .VPContent,
-.VPDoc,
-.VPDoc .container,
-.VPDoc .content,
-.VPDoc .content-container,
 .VPHome,
 .home-dashboard,
 .marketplace-explorer,
 .playbook-explorer { min-width: 0; }
-
-.VPDoc .container { width: 100%; }
-.VPDoc .vp-doc { overflow-wrap: anywhere; }
-.VPDoc .vp-doc img,
-.VPDoc .vp-doc video,
-.VPDoc .vp-doc iframe { max-width: 100%; height: auto; }
-.VPDoc .vp-doc table {
-  display: block;
-  max-width: 100%;
-  overflow-x: auto;
-  -webkit-overflow-scrolling: touch;
-}
-.VPDoc .vp-doc table code { white-space: nowrap; }
-.VPDoc div[class*='language-'] {
-  max-width: 100%;
-  overflow-x: auto;
-  -webkit-overflow-scrolling: touch;
-}
-.VPDoc div[class*='language-'] pre { min-width: max-content; }
-.VPDoc .custom-block { max-width: 100%; overflow-wrap: anywhere; }
 
 @media (max-width: 1200px) {
   .VPHome .VPHero .container,
   .VPHome .VPFeatures .container,
   .home-dashboard { max-width: 100%; }
   .home-dashboard { padding-inline: clamp(24px, 4vw, 40px); }
-  .VPDoc .container { padding-inline: clamp(24px, 4vw, 48px); }
-  .VPDoc .aside { padding-left: 24px; }
   .explorer-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 
@@ -983,9 +892,6 @@ a:hover .ui-icon { transform: translateX(2px); }
   .VPHome .VPHero .container { gap: 28px; }
   .VPHome .VPHero .main { max-width: 56%; }
   .VPHome .VPHero .image { width: min(38vw, 360px); }
-  .VPDoc .aside { display: none; }
-  .VPDoc .content { max-width: 100%; }
-  .VPDoc .container { padding-right: 32px; }
   .marketplace-filters { grid-template-columns: repeat(3, minmax(0, 1fr)); }
   .marketplace-search { grid-column: 1 / -1; }
   .explorer-controls { grid-template-columns: minmax(0, 1fr) repeat(2, minmax(145px, .7fr)); }
@@ -1012,11 +918,6 @@ a:hover .ui-icon { transform: translateX(2px); }
   .marketplace-result { min-height: 0; }
   .section-heading { align-items: flex-start; flex-direction: column; }
   .resource-band { grid-template-columns: 1fr; }
-  .VPDoc .container { padding: 32px 20px 52px; }
-  .VPDoc .content { padding-bottom: 24px; }
-  .VPDoc .vp-doc > h1 { font-size: clamp(30px, 8vw, 40px); }
-  .VPDoc h2 { font-size: clamp(21px, 5vw, 25px); }
-  .VPDoc h3 { font-size: 17px; }
   .marketplace-explorer-heading { align-items: flex-start; flex-direction: column; }
   .marketplace-filters,
   .explorer-controls { grid-template-columns: 1fr 1fr; }
@@ -1043,13 +944,6 @@ a:hover .ui-icon { transform: translateX(2px); }
   .explorer-card { padding: 15px; }
   .resource-band { padding: 16px; }
   .resource-actions { width: 100%; }
-  .VPDoc .container { padding: 24px 16px 42px; }
-  .VPDoc .vp-doc > h1 { font-size: clamp(27px, 9vw, 34px); }
-  .VPDoc h2 { margin-top: 30px; padding-top: 12px; }
-  .VPDoc p,
-  .VPDoc li { font-size: 14px; line-height: 1.7; }
-  .VPDoc td,
-  .VPDoc th { min-width: 120px; padding: 9px 10px; font-size: 11px; }
   .marketplace-filters,
   .explorer-controls { grid-template-columns: 1fr; padding: 10px; }
   .marketplace-search,
@@ -1066,8 +960,4 @@ a:hover .ui-icon { transform: translateX(2px); }
 @media (max-width: 360px) {
   .coverage-grid { grid-template-columns: 1fr; }
   .VPHome .VPHero .actions { gap: 8px; }
-  .VPDoc .container { padding-inline: 13px; }
-  .VPDoc .vp-doc > h1 { font-size: 28px; }
-  .VPDoc td,
-  .VPDoc th { min-width: 110px; }
 }

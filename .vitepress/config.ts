@@ -46,6 +46,11 @@ export default defineConfigWithTheme<DefaultTheme.Config & { buildDate: string }
   markdown: {
     // Code blocks use dark panels in both themes, as in the mockup.
     theme: { light: 'github-dark', dark: 'github-dark' },
+    config: (md) => {
+      // Wrap tables so wide ones scroll inside a rounded frame instead of widening the page.
+      md.renderer.rules.table_open = () => '<div class="mip-table"><table>\n'
+      md.renderer.rules.table_close = () => '</table></div>\n'
+    },
   },
   themeConfig: {
     logo: '/brand-mark.svg',
