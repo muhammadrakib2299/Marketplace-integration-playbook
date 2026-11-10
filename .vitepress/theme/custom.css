@@ -1,31 +1,11 @@
 :root {
   color-scheme: light;
-  --vp-c-bg: #f5f7fa;
-  --vp-c-bg-alt: #eef2f7;
-  --vp-c-bg-elv: #ffffff;
-  --vp-c-bg-soft: #f0f4f9;
-  --vp-c-text-1: #172337;
-  --vp-c-text-2: #52627a;
-  --vp-c-text-3: #748198;
-  --vp-c-divider: #dfe5ee;
-  --vp-c-brand-1: #2759d2;
-  --vp-c-brand-2: #1f49b3;
-  --vp-c-brand-3: #183b91;
-  --vp-c-brand-soft: rgba(39, 89, 210, 0.1);
-  --vp-c-green-1: #087b5a;
-  --vp-c-green-soft: rgba(8, 123, 90, 0.1);
-  --vp-c-yellow-1: #a75c08;
-  --vp-c-yellow-soft: rgba(167, 92, 8, 0.11);
-  --vp-c-red-1: #be3c46;
   --vp-input-switch-bg-color: #e5eaf1;
   --vp-input-border-color: #d6deea;
-  --vp-c-neutral-inverse: #ffffff;
   --vp-home-hero-name-color: #14243c;
   --vp-home-hero-name-background: transparent;
   --vp-home-hero-image-background-image: none;
   --vp-home-hero-image-filter: none;
-  --vp-font-family-base: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-  --vp-font-family-mono: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
   --ui-radius-sm: 8px;
   --ui-radius: 12px;
   --ui-radius-lg: 18px;
@@ -36,26 +16,8 @@
 
 .dark {
   color-scheme: dark;
-  --vp-c-bg: #0c1422;
-  --vp-c-bg-alt: #101b2b;
-  --vp-c-bg-elv: #121e30;
-  --vp-c-bg-soft: #17253a;
-  --vp-c-text-1: #edf3fc;
-  --vp-c-text-2: #b7c5d9;
-  --vp-c-text-3: #91a1b9;
-  --vp-c-divider: #28384e;
-  --vp-c-brand-1: #89adff;
-  --vp-c-brand-2: #a4c0ff;
-  --vp-c-brand-3: #c1d4ff;
-  --vp-c-brand-soft: rgba(120, 159, 255, 0.13);
-  --vp-c-green-1: #65d3a9;
-  --vp-c-green-soft: rgba(70, 195, 145, 0.13);
-  --vp-c-yellow-1: #efb65c;
-  --vp-c-yellow-soft: rgba(236, 170, 68, 0.13);
-  --vp-c-red-1: #f28b93;
   --vp-input-switch-bg-color: #23354c;
   --vp-input-border-color: #344760;
-  --vp-c-neutral-inverse: #101a2a;
   --vp-home-hero-name-color: #edf3fc;
   --vp-home-hero-name-background: transparent;
   --vp-home-hero-image-background-image: none;
