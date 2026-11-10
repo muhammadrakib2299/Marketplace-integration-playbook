@@ -634,8 +634,16 @@ html:not(.dark) .mip-logo[data-tone='bright'] .mip-logo-glyph {
 }
 
 .mip-icon-button--compact {
+  position: relative;
   width: 30px;
   height: 30px;
+}
+
+/* A 36 px hit area (spec 5.1a) around the 30 px button; the inset counts from inside its 1 px border. */
+.mip-icon-button--compact::after {
+  position: absolute;
+  inset: -4px;
+  content: '';
 }
 
 @media (hover: hover) {

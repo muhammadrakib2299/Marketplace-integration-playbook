@@ -214,7 +214,7 @@
 
 .vp-doc div[class*='language-'] {
   margin: 20px 0;
-  padding-top: 34px;
+  padding-top: 36px;
   overflow: hidden; /* the inner <pre> scrolls, so the header strip stays put */
   border: 1px solid var(--mip-code-line);
   border-radius: var(--mip-radius-lg);
@@ -223,7 +223,7 @@
 .vp-doc div[class*='language-']::before {
   position: absolute;
   inset: 0 0 auto;
-  height: 34px;
+  height: 36px;
   border-bottom: 1px solid var(--mip-code-line);
   background: var(--mip-code-head);
   content: '';
@@ -231,7 +231,7 @@
 
 .vp-doc div[class*='language-'] > span.lang,
 .vp-doc div[class*='language-']:hover > span.lang {
-  top: 8px;
+  top: 9px;
   right: auto;
   left: 14px;
   opacity: 1;
@@ -242,13 +242,21 @@
 
 /* Icon-only copy button, always visible in the header strip. */
 .vp-doc div[class*='language-'] > button.copy {
-  top: 3px;
+  top: 4px;
   right: 6px;
   width: 28px;
   height: 28px;
   border-radius: 6px;
   background-size: 14px;
   opacity: 1;
+}
+
+/* A 36 px hit area around the 28 px button (spec 5.1a); ::before is VitePress's "Copied" label.
+   The inset counts from inside the 1 px border. */
+.vp-doc div[class*='language-'] > button.copy::after {
+  position: absolute;
+  inset: -5px;
+  content: '';
 }
 
 .vp-doc div[class*='language-'] pre {
@@ -448,7 +456,7 @@
   color: var(--mip-muted);
   font-family: var(--vp-font-family-mono);
   font-size: 11.5px;
-  font-weight: 600;
+  font-weight: 500; /* IBM Plex Mono is loaded at 400 and 500 only, so 600 would be faux bold. */
   letter-spacing: 0.02em;
   line-height: 20px;
 }

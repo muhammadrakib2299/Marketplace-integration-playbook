@@ -365,6 +365,7 @@
 }
 
 .mip-sequence-steps a {
+  position: relative;
   display: grid;
   place-items: center;
   width: 26px;
@@ -380,6 +381,15 @@
   transition:
     border-color var(--mip-duration-fast) var(--mip-ease),
     color var(--mip-duration-fast) var(--mip-ease);
+}
+
+/* A 36 px hit area around each 26 px step (spec 5.1a); the inset counts from inside the 1.5 px
+   border. Neighbouring areas stay 2 px apart. */
+.mip-sequence-steps a::after {
+  position: absolute;
+  inset: -6.5px;
+  border-radius: 999px;
+  content: '';
 }
 
 .mip-sequence-steps a:hover {
