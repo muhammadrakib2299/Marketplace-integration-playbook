@@ -22,6 +22,7 @@ Success means:
 | **Real data only.** Mockup sample data (36 marketplaces, "42 test reports · 38 passed", "Sandbox tested · run #42", rate limits, capability grid) is not published. | Owner, 2026-11-10 |
 | Empty states, not hidden sections, where no evidence exists yet. | Owner, 2026-11-10 (option 1) |
 | Work lands on `dev`, one focused commit per change, CI green before reporting. | Owner, 2026-11-10 |
+| Custom scrollbars, modern section layouts, deliberate typography, modern icons on buttons in place of text, real marketplace logos or icons, and a little animation. | Owner, 2026-11-10 (follow-up request) |
 
 ## 3. Constraints
 
@@ -46,10 +47,50 @@ The mockup's shell (top bar, 272 px sidebar, content column, 232 px right rail, 
 
 - Mockup tokens become CSS custom properties (`--mip-bg`, `--mip-surface`, `--mip-border`, `--mip-ink`, `--mip-text`, `--mip-muted`, `--mip-primary`, and the success, warning, danger, info, and violet families with their soft and border variants), with dark values under `.dark`.
 - VitePress variables (`--vp-c-brand-*`, `--vp-c-bg*`, `--vp-c-text-*`, `--vp-c-divider`) are pointed at those tokens, so default-theme components inherit the palette.
-- Inter for UI and prose, JetBrains Mono for code, IDs, versions, and dates.
-- Scale from the mockup: H1 28/600, H2 20/600, H3 16/600, UI text 14/1.55. Long-form article prose uses 15/1.65 for readability (see decision 5).
 - Flat surfaces only: no gradients, 1 px borders, three shadow levels, radii 6, 10, and 14 px, 4 px spacing scale.
-- Custom scrollbar: 10 px with a 3 px inset pill thumb; Firefox `scrollbar-width: thin`.
+- Custom scrollbar everywhere that scrolls (page, sidebar, outline, code blocks, wide tables, search results): 10 px track, 3 px inset pill thumb in `--mip-border-strong`, darkening on hover, transparent track; Firefox gets `scrollbar-width: thin` with the same colours. Both themes are covered.
+
+**Typography**
+
+- **Families:** Inter (variable) for UI and prose; JetBrains Mono for code, operation IDs, versions, and dates. Both are self-hosted (decision 2).
+- **Scale:** H1 28/600 with −0.02em tracking, H2 20/600, H3 16/600, UI text 14/1.55, captions and labels 12–12.5. The home hero H1 is fluid, `clamp(28px, 4vw, 34px)`.
+- **Prose:** long-form articles use 15/1.65 with a 72-character maximum line length (decision 5). Headings carry more space above than below, so each section reads as one block.
+- **Details:** tabular numerals (`font-variant-numeric: tabular-nums`) for stats, counts, dates, and table columns. `text-wrap: balance` on headings and `text-wrap: pretty` on paragraphs where supported. Inter's disambiguation alternates (`cv11`, `ss01`) keep IDs such as `l`, `I`, and `1` distinct. Uppercase labels and eyebrows use +0.06–0.08em tracking at 11–11.5 px.
+
+**Section patterns**
+
+Every page is built from a small set of section patterns from the mockup:
+
+- **Section header:** optional eyebrow, title, one-line description, and an optional action aligned right.
+- **Split hero:** message on the left, live coverage snapshot on the right.
+- **Stat grids:** bento-style cards with icon, label, value, and a short delta line.
+- **Card lists:** journey cards, marketplace cards, and list rows with a type badge and a monospace date.
+- **Sticky filter toolbar** for long lists.
+- **Callouts** for info, success, warning, and danger.
+
+Sections are separated by 32 px. Cards use 20 px padding and 16 px grid gaps.
+
+### 5.1a Icons and buttons
+
+- Icons come from Lucide (decision 3) at a 24 px grid with 1.75 px strokes, sized 15, 18, or 22 px.
+- **Icon-only buttons** with a tooltip and an `aria-label` handle secondary and utility actions: copy code, open official docs, edit on GitHub, theme toggle, GitHub, grid/table view, clear filters, close, and expand or collapse.
+- **Primary actions** keep a short label beside the icon, such as "Start with Amazon SP-API" or "Open API catalog". An icon alone does not say where a primary action goes, and screen-reader users need the label (decision 9).
+- Every icon-only control has a visible focus ring and a minimum 36 px hit area (30 px for compact table actions).
+
+### 5.1b Marketplace logos
+
+- Marketplace marks use the official brand icons from the Simple Icons set (`simple-icons`, CC0-1.0; Amazon and TikTok are both available). They render unaltered, in the brand's own colour or monochrome, on a neutral tile.
+- Marketplaces without an available icon keep the neutral monogram tile. The catalog gains an optional `logo` field naming the Simple Icons slug, so no marketplace is mapped to a logo by guesswork.
+- A footer line states that marketplace names and logos are trademarks of their owners and that their use does not imply endorsement, matching the site's existing independence disclaimer.
+- This conflicts with the current rule in `CONTRIBUTING.md` against provider assets without redistribution permission. Shipping logos requires the owner to accept nominative logo use and amend that rule, or to keep monograms (decision 8).
+
+### 5.1c Motion
+
+- **Timing:** 150–220 ms with the mockup's `cubic-bezier(.2,.7,.2,1)` easing; nothing loops and nothing moves without a user action, except the one-time entrance below.
+- **Entrance:** page content fades up 4 px on navigation; card grids stagger in 40 ms steps, capped at 8 cards.
+- **Hover and focus:** cards lift 1 px with a stronger border and shadow; arrow icons in links nudge 3 px; buttons darken; focus rings fade in.
+- **State changes:** the tab indicator slides between tabs, the search palette and dialogs scale in from 98 %, toasts slide up, and grid/table view switches cross-fade.
+- **Reduced motion:** under `prefers-reduced-motion: reduce` every transition and animation drops to an instant change.
 
 ### 5.2 App shell (every page)
 
@@ -98,6 +139,7 @@ All derivations live in `scripts/catalog-data.mjs`, are unit-tested first, and f
 | Test runs | New `evidence/test-runs/*.yaml` folder; zero files today, so every test count is 0 |
 | Build sequence | New optional `build_sequence` list of page routes on catalog entries; Amazon's six steps move here from `.vitepress/config.ts` |
 | Limits matrix | New `catalog/limits.yaml`: per marketplace and dimension (authorization model, rate-limit model, pagination, sandbox, event delivery), a value plus the docs page that states it |
+| Marketplace logo | New optional `logo` field naming a Simple Icons slug; absent means the monogram tile |
 | Build date | Generation time (UTC) |
 
 Phase 4 adds frontmatter (`api`, `version`, `checked`, `evidence_status`) to dossier pages that lack it, using only values already stated in each page or in the catalog.
@@ -135,7 +177,7 @@ Each phase gets its own implementation plan, written when the previous phase lan
 
 ### 5.8 Out of scope
 
-Sample marketplaces, numbers, and test runs; the live "Add a marketplace" dialog; per-user pinned items; new marketplaces or new content claims. Content changes are limited to frontmatter and data restating facts already present in the docs.
+Sample marketplaces, numbers, and test runs; the live "Add a marketplace" dialog; per-user pinned items; new marketplaces or new content claims. Content changes are limited to frontmatter and data restating facts already present in the docs, plus the `CONTRIBUTING.md` logo amendment if decision 8 is accepted.
 
 ### 5.9 Risks
 
@@ -145,6 +187,8 @@ Sample marketplaces, numbers, and test runs; the live "Add a marketplace" dialog
 | Mermaid adds a large bundle | Dynamic import inside `MermaidDiagram`, only on pages with diagrams |
 | 14 px UI text is small for long articles | Prose at 15 px (decision 5) |
 | Sidebar chips rendered as HTML in item text | Text is generated from our own catalog data, never from user input |
+| Brand owners object to logo use, or Simple Icons removes a mark | Logos are opt-in per catalog entry through the `logo` field and fall back to the monogram tile; removing one is a one-line catalog change |
+| Icon-only buttons are ambiguous | Icon-only is limited to well-known utility actions, each with a tooltip and accessible name; primary actions keep labels |
 
 ## 6. Decisions for review
 
@@ -157,3 +201,5 @@ Defaults are listed first and will be used unless changed.
 5. **Article text size:** 15 px for long-form prose and 14 px for UI. The alternative is 14 px everywhere, as in the mockup.
 6. **Homepage explorer:** retire it; guides surface in hub tabs, sidebar, and search. The alternative keeps it below the new home sections.
 7. **UI kit page:** include it as an internal reference page in phase 5. The alternative is to skip it.
+8. **Marketplace logos:** use the official Amazon and TikTok marks from Simple Icons with a trademark notice, and amend the `CONTRIBUTING.md` provider-assets rule to allow unaltered logos used only to identify a marketplace. The alternative keeps the neutral monogram tiles.
+9. **Icon-only buttons:** icon-only for secondary and utility actions, with an icon plus a short label for primary actions (section 5.1a). The alternative makes every action icon-only with tooltips.
