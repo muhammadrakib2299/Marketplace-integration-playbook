@@ -2,7 +2,7 @@
 import { computed } from 'vue'
 import { useData } from 'vitepress'
 import { ShieldCheck, SquarePen } from 'lucide-vue-next'
-import { formatIsoDate } from '../../../scripts/format-date.mjs'
+import { formatDisplayDate, formatIsoDate } from '../../../scripts/format-date.mjs'
 
 const repositoryUrl = 'https://github.com/muhammadrakib2299/Marketplace-integration-playbook'
 const { frontmatter, page } = useData()
@@ -10,6 +10,7 @@ const { frontmatter, page } = useData()
 // Only pages that declare evidence in frontmatter get a card; nothing is inferred.
 const evidence = computed(() => (typeof frontmatter.value.evidence_status === 'string' ? frontmatter.value.evidence_status : ''))
 const checked = computed(() => formatIsoDate(frontmatter.value.checked))
+const checkedText = computed(() => formatDisplayDate(frontmatter.value.checked))
 const visible = computed(() => Boolean(evidence.value || checked.value))
 // filePath is the source file, so rewritten pages (README.md → index.md) still edit the right file.
 const editUrl = computed(() => `${repositoryUrl}/edit/main/${page.value.filePath}`)
@@ -35,7 +36,7 @@ const editUrl = computed(() => `${repositoryUrl}/edit/main/${page.value.filePath
     </div>
     <p v-if="evidence" class="mip-evidence-text">{{ evidence }}</p>
     <p v-if="checked" class="mip-evidence-checked">
-      Checked <time class="mip-mono" :datetime="checked">{{ checked }}</time>
+      Checked <time :datetime="checked">{{ checkedText || checked }}</time>
     </p>
   </section>
 </template>

@@ -2,7 +2,8 @@
 import { computed } from 'vue'
 import { useData, withBase } from 'vitepress'
 import { ArrowRight, BookOpenText, Check, ExternalLink, FlaskConical, KeyRound, Minus } from 'lucide-vue-next'
-import { formatIsoDate } from '../../../scripts/format-date.mjs'
+import { formatDisplayDate, formatIsoDate } from '../../../scripts/format-date.mjs'
+import { plural } from '../../../scripts/labels.mjs'
 import { hubModel, isMarketplaceOverview, marketplaceForPath } from '../../../scripts/page-context.mjs'
 import { capabilities, coverage, marketplaces } from '../generated/catalog.mjs'
 import MarketplaceLogo from './MarketplaceLogo.vue'
@@ -17,13 +18,9 @@ const marketplace = computed(() =>
 const hub = computed(() => (marketplace.value ? hubModel(marketplace.value, { capabilities, coverage }) : null))
 
 const verified = computed(() => {
-  const iso = formatIsoDate(marketplace.value?.lastVerified)
-  if (!iso) return { iso: '', text: 'Not recorded' }
-  const format = new Intl.DateTimeFormat('en-GB', { day: 'numeric', month: 'short', year: 'numeric', timeZone: 'UTC' })
-  return { iso, text: format.format(new Date(`${iso}T00:00:00Z`)) }
+  const text = formatDisplayDate(marketplace.value?.lastVerified)
+  return text ? { iso: formatIsoDate(marketplace.value?.lastVerified), text } : { iso: '', text: 'Not recorded' }
 })
-
-const plural = (count: number, one: string, many: string) => `${count} ${count === 1 ? one : many}`
 </script>
 
 <template>

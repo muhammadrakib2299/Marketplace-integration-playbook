@@ -1,18 +1,14 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import { useData, withBase } from 'vitepress'
+import { formatDisplayDate } from '../../../scripts/format-date.mjs'
 import { marketplaces } from '../generated/catalog.mjs'
 
 const repositoryUrl = 'https://github.com/muhammadrakib2299/Marketplace-integration-playbook'
 const { theme } = useData()
 
 // "Built 10 Nov 2026" in UTC, so the server render and the browser agree.
-const builtOn = computed(() => {
-  const date = theme.value.buildDate
-  if (!date) return ''
-  const format = new Intl.DateTimeFormat('en-GB', { day: 'numeric', month: 'short', year: 'numeric', timeZone: 'UTC' })
-  return format.format(new Date(`${date}T00:00:00Z`))
-})
+const builtOn = computed(() => formatDisplayDate(theme.value.buildDate))
 
 type FooterLink = { text: string; link: string; external?: boolean }
 

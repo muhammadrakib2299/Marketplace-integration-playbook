@@ -4,7 +4,8 @@ import { withBase } from 'vitepress'
 import { ArrowDownAZ, ArrowRight, CalendarClock, Check, ChevronLeft, ChevronRight, ExternalLink, Minus, Search, X } from 'lucide-vue-next'
 import { facetOptions, filterMarketplaces, paginate, sortMarketplaces } from '../../../scripts/directory.mjs'
 import { readFilterState, writeFilterState } from '../../../scripts/filter-state.mjs'
-import { formatIsoDate } from '../../../scripts/format-date.mjs'
+import { formatDisplayDate } from '../../../scripts/format-date.mjs'
+import { noun, plural, statusName } from '../../../scripts/labels.mjs'
 import { capabilities, coverage, marketplaces as catalog, topics } from '../generated/catalog.mjs'
 import MarketplaceLogo from './MarketplaceLogo.vue'
 
@@ -32,7 +33,6 @@ const marketplaces = catalog as Marketplace[]
 const capabilityMap = capabilities as Record<string, Capability[]>
 const pagesBySlug = coverage.byMarketplace as Record<string, { apiReferencePages: number; workflowGuides: number }>
 
-const statusName = (status: string) => `${status.charAt(0).toUpperCase()}${status.slice(1)}`
 const categoryOptions = facetOptions(marketplaces, 'category', 'categoryLabel')
 const statusOptions = facetOptions(marketplaces, 'status').map((option) => ({ ...option, label: statusName(option.value) }))
 
@@ -60,13 +60,12 @@ const summary = computed(() => {
 // Keeps "&" on the line of the word before it, so wrapped column headers never start with it.
 const headerLabel = (label: string) => label.replace(/ & /g, ' & ')
 const documentedTopics = (id: string) => (capabilityMap[id] ?? []).filter((topic) => topic.guides.length > 0).length
-const verifiedOn = (value: string | null) => {
-  const iso = formatIsoDate(value)
-  if (!iso) return ''
-  return new Intl.DateTimeFormat('en-GB', { day: 'numeric', month: 'short', year: 'numeric', timeZone: 'UTC' }).format(
-    new Date(`${iso}T00:00:00Z`),
-  )
+// "Catalog verified" says what was checked: the catalog entry, not a live integration.
+const verifiedText = (value: string | null) => {
+  const date = formatDisplayDate(value)
+  return date ? `Catalog verified ${date}` : 'Catalog not yet verified'
 }
+const referencePages = (slug: string) => pagesBySlug[slug]?.apiReferencePages ?? 0
 
 function resetFilters() {
   query.value = ''
@@ -165,11 +164,10 @@ watch([query, category, status, sort, page], () => {
           </p>
           <p class="mip-dir-text">{{ marketplace.summary }}</p>
           <p class="mip-dir-facts">
-            <span><strong>{{ marketplace.apiSurfaces.length }}</strong> API surfaces</span>
-            <span><strong>{{ pagesBySlug[marketplace.slug]?.apiReferencePages ?? 0 }}</strong> reference pages</span>
-            <span><strong>{{ documentedTopics(marketplace.id) }}</strong> of {{ topics.length }} topics</span>
-            <span v-if="verifiedOn(marketplace.lastVerified)">Verified {{ verifiedOn(marketplace.lastVerified) }}</span>
-            <span v-else>Not yet verified</span>
+            <span><strong>{{ marketplace.apiSurfaces.length }}</strong> {{ noun(marketplace.apiSurfaces.length, 'API surface') }}</span>
+            <span><strong>{{ referencePages(marketplace.slug) }}</strong> {{ noun(referencePages(marketplace.slug), 'reference page') }}</span>
+            <span><strong>{{ documentedTopics(marketplace.id) }}</strong> of {{ plural(topics.length, 'topic') }}</span>
+            <span>{{ verifiedText(marketplace.lastVerified) }}</span>
           </p>
         </div>
         <div class="mip-dir-actions">

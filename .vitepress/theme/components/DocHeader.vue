@@ -2,7 +2,7 @@
 import { computed } from 'vue'
 import { useData, withBase } from 'vitepress'
 import { ExternalLink } from 'lucide-vue-next'
-import { formatIsoDate } from '../../../scripts/format-date.mjs'
+import { formatDisplayDate, formatIsoDate } from '../../../scripts/format-date.mjs'
 import { marketplaceForPath, officialReference } from '../../../scripts/page-context.mjs'
 import { marketplaces } from '../generated/catalog.mjs'
 
@@ -22,12 +22,7 @@ const version = computed(() => {
   return formatIsoDate(raw) || (raw ? String(raw) : '')
 })
 
-const checkedOn = computed(() => {
-  const iso = formatIsoDate(frontmatter.value.checked)
-  if (!iso) return ''
-  const format = new Intl.DateTimeFormat('en-GB', { day: 'numeric', month: 'short', year: 'numeric', timeZone: 'UTC' })
-  return format.format(new Date(`${iso}T00:00:00Z`))
-})
+const checkedOn = computed(() => formatDisplayDate(frontmatter.value.checked))
 </script>
 
 <template>

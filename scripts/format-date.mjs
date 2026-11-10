@@ -11,3 +11,15 @@ export function formatIsoDate(value) {
   if (typeof value !== 'string') return ''
   return isoTimestamp.test(value) ? value.slice(0, 10) : value
 }
+
+const displayFormat = new Intl.DateTimeFormat('en-GB', { day: 'numeric', month: 'short', year: 'numeric', timeZone: 'UTC' })
+
+// '2026-11-05' → '5 Nov 2026', in UTC so the server render and the browser agree.
+// Missing or malformed dates give '' instead of throwing during the build.
+export function formatDisplayDate(value) {
+  const iso = formatIsoDate(value)
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(iso)) return ''
+  const date = new Date(`${iso}T00:00:00Z`)
+  if (Number.isNaN(date.getTime()) || !date.toISOString().startsWith(iso)) return ''
+  return displayFormat.format(date)
+}

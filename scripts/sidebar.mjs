@@ -1,10 +1,9 @@
 // Builds the VitePress sidebar from catalog marketplace records (spec 5.2).
 // VitePress renders sidebar text with v-html, so every catalog value is escaped here.
+import { statusName } from './labels.mjs'
 
 const htmlEscapes = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }
 const escapeHtml = (value) => String(value).replace(/[&<>"]/g, (character) => htmlEscapes[character])
-
-const statusName = (status) => `${status.charAt(0).toUpperCase()}${status.slice(1)}`
 
 function logoTile(marketplace) {
   if (!marketplace.logo) {

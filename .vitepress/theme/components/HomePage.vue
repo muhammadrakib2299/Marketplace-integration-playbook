@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import { withBase } from 'vitepress'
+import { formatDisplayDate } from '../../../scripts/format-date.mjs'
+import { statusName } from '../../../scripts/labels.mjs'
 import { coverage, guides, marketplaces } from '../generated/catalog.mjs'
 import MarketplaceLogo from './MarketplaceLogo.vue'
 import WorkflowDemo from './WorkflowDemo.vue'
@@ -21,14 +23,11 @@ type Marketplace = {
 
 const catalog = marketplaces as Marketplace[]
 
-const formatDate = (iso: string | null) =>
-  iso
-    ? new Intl.DateTimeFormat('en-GB', { day: 'numeric', month: 'short', year: 'numeric', timeZone: 'UTC' }).format(
-        new Date(`${iso}T00:00:00Z`),
-      )
-    : 'Not yet verified'
-
-const statusName = (status: string) => `${status.charAt(0).toUpperCase()}${status.slice(1)}`
+// "Catalog verified" says what was checked: the catalog entry, not a live integration.
+const verifiedText = (value: string | null) => {
+  const date = formatDisplayDate(value)
+  return date ? `Catalog verified ${date}` : 'Catalog not yet verified'
+}
 
 // The catalog grows over time, so the homepage shows the most recently verified few and links to the directory.
 const featured = computed(() =>
@@ -108,7 +107,7 @@ const path = [
             <span class="mip-market-facts">
               <span>{{ marketplace.categoryLabel }}</span>
               <span>{{ marketplace.apis.length }} API surfaces in the catalog</span>
-              <span>Verified {{ formatDate(marketplace.lastVerified) }}</span>
+              <span>{{ verifiedText(marketplace.lastVerified) }}</span>
             </span>
           </a>
         </div>
