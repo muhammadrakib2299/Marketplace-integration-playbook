@@ -172,12 +172,23 @@ export function buildGuides(guideCatalog, marketplaces) {
 
 // A route maps to `<route>.md`, or to the folder's index.md / README.md when it
 // ends with a slash (VitePress rewrites marketplace README.md files to index.md).
+function pageFile(root, route) {
+  const path = route.replace(/^\//, '')
+  const candidates = route.endsWith('/') ? [`${path}index.md`, `${path}README.md`] : [`${path}.md`]
+  return candidates.map((candidate) => join(root, candidate)).find((candidate) => existsSync(candidate))
+}
+
 export function findMissingRoutes(root, routes) {
-  return routes.filter((route) => {
-    const path = route.replace(/^\//, '')
-    const candidates = route.endsWith('/') ? [`${path}index.md`, `${path}README.md`] : [`${path}.md`]
-    return !candidates.some((candidate) => existsSync(join(root, candidate)))
-  })
+  return routes.filter((route) => !pageFile(root, route))
+}
+
+// The YAML frontmatter of the page a route points to, or {} when it has none.
+// `yaml` follows YAML 1.2, so dates such as 2026-01-01 stay strings here.
+export function readFrontmatter(root, route) {
+  const file = pageFile(root, route)
+  if (!file) throw new Error(`No page for route ${route}`)
+  const match = /^---\r?\n([\s\S]*?)\r?\n---(?:\r?\n|$)/.exec(readFileSync(file, 'utf8'))
+  return match ? (parse(match[1]) ?? {}) : {}
 }
 
 // Counts the published pages behind the homepage coverage figures. Folders

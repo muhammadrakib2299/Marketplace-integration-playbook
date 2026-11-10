@@ -11,6 +11,7 @@ import {
   findMissingRoutes,
   loadCatalogData,
   logoTone,
+  readFrontmatter,
   repositoryRoot,
 } from '../scripts/catalog-data.mjs'
 
@@ -232,6 +233,21 @@ test('loading the catalog fails when a sidebar page links to a missing page', ()
       ),
     /\/marketplaces\/ebay\/apis\/missing/,
   )
+})
+
+test('frontmatter is read from the page a route points to', () => {
+  const frontmatter = withTempRoot(
+    { 'marketplaces/ebay/apis/orders.md': '---\nversion: 2026-01-01\nchecked: 2026-11-06\n---\n\n# Orders\n' },
+    (root) => readFrontmatter(root, '/marketplaces/ebay/apis/orders'),
+  )
+  assert.equal(frontmatter.version, '2026-01-01')
+})
+
+test('a page without frontmatter yields an empty object', () => {
+  const frontmatter = withTempRoot({ 'marketplaces/ebay/apis/feeds.md': '# Feeds\n\nNo metadata.\n' }, (root) =>
+    readFrontmatter(root, '/marketplaces/ebay/apis/feeds'),
+  )
+  assert.deepEqual(frontmatter, {})
 })
 
 test('every documented marketplace in the catalog has at least one explorer guide', () => {
