@@ -16,6 +16,8 @@ export default defineConfig({
     'SECURITY.md',
     '.github/**',
     'marketplaces/_template/**',
+    // Internal design specs and plans for the site itself; not published.
+    'docs/superpowers/**',
   ],
   rewrites: {
     'marketplaces/:marketplace/README.md': 'marketplaces/:marketplace/index.md',
