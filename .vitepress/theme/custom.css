@@ -355,13 +355,16 @@ body { min-width: 320px; }
   height: 38px;
   place-items: center;
   border-radius: 11px;
+  color: var(--vp-c-text-1);
+  background: var(--vp-c-bg-soft);
   font-size: 19px;
   font-weight: 800;
   line-height: 1;
 }
+/* Badge colours keyed by marketplace folder slug; unlisted slugs keep the neutral default above. */
 .platform-mark-amazon { color: #8a4b00; background: #fff2d9; }
-.platform-mark-tiktok { color: #172337; background: #e8edf4; }
-.dark .platform-mark-tiktok { color: #eff4fc; background: #25334a; }
+.platform-mark-tiktok-shop { color: #172337; background: #e8edf4; }
+.dark .platform-mark-tiktok-shop { color: #eff4fc; background: #25334a; }
 .status-pill { display: inline-flex; align-items: center; gap: 7px; width: fit-content; padding: 5px 9px; color: var(--vp-c-text-2); background: var(--vp-c-bg-soft); border: 1px solid var(--vp-c-divider); border-radius: 999px; font-size: 10px; font-weight: 650; }
 .status-pill > span { width: 6px; height: 6px; border-radius: 50%; background: var(--vp-c-brand-1); }
 .platform-card h3 { margin: 16px 0 7px; color: var(--vp-c-text-1); font-size: 17px; font-weight: 720; letter-spacing: -0.025em; line-height: 1.35; }

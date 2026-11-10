@@ -4,11 +4,11 @@
 
 ![Abstract illustration of marketplace channels connecting through an integration hub to warehouse and data systems](public/marketplace-integration-cover.png)
 
-A community-maintained, source-linked handbook for designing marketplace integrations. Browse the [developer-first documentation site](https://marketplace-integration-playbook.vercel.app/) or explore the source here.
+A community-maintained, source-linked handbook for designing marketplace integrations. It covers Amazon SP-API in depth and TikTok Shop Partner API at the API-family level. Browse the [developer-first documentation site](https://marketplace-integration-playbook.vercel.app/) or explore the source here.
 
 ## Start with the Amazon developer journey
 
-The current detailed marketplace guide is for Amazon SP-API. Follow the order a production integration should be designed:
+Amazon SP-API has the most detailed coverage. Follow the order a production integration should be designed:
 
 1. [Review the Amazon API directory and cross-API map](marketplaces/amazon/apis/index.md).
 2. [Register and connect a seller account](marketplaces/amazon/guides/seller-onboarding.md).
@@ -17,6 +17,10 @@ The current detailed marketplace guide is for Amazon SP-API. Follow the order a 
 5. Add [order synchronization](marketplaces/amazon/workflows/order-lifecycle.md) and [seller-fulfilled listing/inventory updates](marketplaces/amazon/workflows/inventory-and-listings.md) as separate data flows.
 
 Amazon's official SP-API Models directory listed **57 API/model-family entries in the 2026-11-05 snapshot**. That count includes vendor-only and special-purpose entries; it is not an operation count or a statement that every API applies to every seller. The site identifies which API surfaces have detailed coverage and which remain mapped but not yet reviewed operation-by-operation.
+
+## TikTok Shop Partner API
+
+The TikTok Shop guide maps the official TTS API families and covers the core seller integration path. Start with the [API directory and workflow map](marketplaces/tiktok-shop/apis/index.md), then the [development guide](marketplaces/tiktok-shop/guides/development-guide.md) and the [authorization and token lifecycle](marketplaces/tiktok-shop/apis/authorization.md). It is an official-documentation review only; no TikTok Shop app authorization, sandbox, or production call has been tested.
 
 ## Publication and evidence rules
 
@@ -28,10 +32,19 @@ Every guide should identify its source, API version, marketplace/region, access 
 
 ## Repository structure
 
-- `catalog/` contains the machine-readable marketplace index.
-- `marketplaces/amazon/` contains the current Amazon API map, guides, and workflows.
+- `catalog/marketplaces.yaml` is the machine-readable marketplace index; `catalog/guides.yaml` lists the guides shown in the homepage explorer.
+- `marketplaces/amazon/` and `marketplaces/tiktok-shop/` contain each marketplace's API map, guides, and workflows.
 - `marketplaces/_template/` is a reusable starting point for future marketplaces.
 - `docs/` contains repository-wide integration principles and lifecycle guidance.
+- `scripts/` generates the site's directory and homepage data from the catalog; `tests/` covers it.
 - `.github/workflows/` contains documentation quality checks.
 
-See [`CONTRIBUTING.md`](CONTRIBUTING.md) and [`docs/github-actions.md`](docs/github-actions.md) before contributing. Use the official provider references linked in each guide as the source of truth.
+## Add a marketplace
+
+1. Copy `marketplaces/_template/` to `marketplaces/<slug>/`. Use a lowercase, hyphenated slug; it becomes the page URL and the badge style name.
+2. Add an entry to `catalog/marketplaces.yaml`, starting from [`templates/marketplace.yaml`](templates/marketplace.yaml), with `guide: ../marketplaces/<slug>/README.md`.
+3. List the marketplace's guides in [`catalog/guides.yaml`](catalog/guides.yaml) so they appear in the homepage explorer.
+4. Add sidebar links in `.vitepress/config.ts`. Optionally add a `.platform-mark-<slug>` colour rule in `.vitepress/theme/custom.css`; without one, the badge uses a neutral style.
+5. Run `npm test` and `npm run docs:build`. The build fails if a catalog or guide link has no matching page.
+
+The marketplace directory and homepage cards are generated from the catalog, so they need no manual edits. See [`CONTRIBUTING.md`](CONTRIBUTING.md) and [`docs/github-actions.md`](docs/github-actions.md) before contributing. Use the official provider references linked in each guide as the source of truth.

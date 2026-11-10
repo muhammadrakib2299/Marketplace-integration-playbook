@@ -2,6 +2,7 @@
 import { computed, onMounted, onUnmounted, ref, watch } from 'vue'
 import { fuzzySearch } from '../../../scripts/fuzzy-search.mjs'
 import { readFilterState, writeFilterState } from '../../../scripts/filter-state.mjs'
+import { guides as catalogGuides, topics as guideTopics } from '../generated/catalog.mjs'
 
 type Marketplace = {
   name: string
@@ -20,6 +21,7 @@ type Resource = {
   kindLabel: string
   topic: string
   topicLabel: string
+  marketplaceName: string
   title: string
   summary: string
   status: string
@@ -32,108 +34,9 @@ type Resource = {
 
 const props = defineProps<{ platforms: Marketplace[] }>()
 
-const guides: Resource[] = [
-  {
-    id: 'seller-onboarding',
-    kind: 'guide',
-    kindLabel: 'Integration guide',
-    topic: 'access',
-    topicLabel: 'Seller access',
-    title: 'Connect an Amazon seller account',
-    summary: 'Follow app setup, least-privilege roles, seller consent, secure OAuth, regional routing, and verified connection states.',
-    status: 'Source-linked',
-    scope: 'Seller consent · OAuth · account access',
-    tags: ['Onboarding', 'OAuth', 'Roles', 'Regions'],
-    href: '/marketplaces/amazon/guides/seller-onboarding',
-    mark: '01',
-    markClass: 'platform-mark-guide',
-  },
-  {
-    id: 'active-listing-migration',
-    kind: 'guide',
-    kindLabel: 'Workflow guide',
-    topic: 'migration',
-    topicLabel: 'Catalog migration',
-    title: 'Migrate an existing Amazon seller catalog',
-    summary: 'Capture a seller listing baseline, keep catalog facts separate from offers, stage safe changes, and reconcile outcomes.',
-    status: 'Source-linked',
-    scope: 'Baseline · catalog · staged writes',
-    tags: ['Reports API', 'Listings Items', 'Catalog Items', 'Product types'],
-    href: '/marketplaces/amazon/workflows/active-listing-migration',
-    mark: '02',
-    markClass: 'platform-mark-guide',
-  },
-  {
-    id: 'inventory-and-listings',
-    kind: 'guide',
-    kindLabel: 'Workflow guide',
-    topic: 'inventory',
-    topicLabel: 'Listings & inventory',
-    title: 'Merchant-fulfilled listings and inventory',
-    summary: 'Keep merchant-fulfilled stock in sync with listing state; distinguish warehouse quantities from Amazon-fulfilled inventory.',
-    status: 'Source-linked',
-    scope: 'MFN quantity · SKU · reconciliation',
-    tags: ['Listings Items', 'Feeds', 'Inventory', 'FBA scope'],
-    href: '/marketplaces/amazon/workflows/inventory-and-listings',
-    mark: '03',
-    markClass: 'platform-mark-guide',
-  },
-  {
-    id: 'order-lifecycle',
-    kind: 'guide',
-    kindLabel: 'Workflow guide',
-    topic: 'orders',
-    topicLabel: 'Order synchronization',
-    title: 'Amazon order synchronization workflow',
-    summary: 'Find orders incrementally, drain pagination, upsert durably, select the correct fulfillment path, and reconcile changes.',
-    status: 'Source-linked',
-    scope: 'Orders API · ingestion · recovery',
-    tags: ['Orders API', 'Pagination', 'Warehouse', 'Notifications'],
-    href: '/marketplaces/amazon/workflows/order-lifecycle',
-    mark: '04',
-    markClass: 'platform-mark-guide',
-  },
-  {
-    id: 'notifications-integration',
-    kind: 'guide',
-    kindLabel: 'Integration guide',
-    topic: 'notifications',
-    topicLabel: 'Events & notifications',
-    title: 'Amazon SP-API Notifications integration',
-    summary: 'Use supported SQS or EventBridge destinations, reconcile subscriptions, and build idempotent consumers with recovery paths.',
-    status: 'Source-linked',
-    scope: 'Destinations · subscriptions · events',
-    tags: ['SQS', 'EventBridge', 'Idempotency', 'Reconciliation'],
-    href: '/marketplaces/amazon/guides/notifications-integration',
-    mark: '05',
-    markClass: 'platform-mark-guide',
-  },
-  {
-    id: 'development-guide',
-    kind: 'guide',
-    kindLabel: 'Integration guide',
-    topic: 'operations',
-    topicLabel: 'Operations & reliability',
-    title: 'Amazon SP-API development guide',
-    summary: 'Review current API versions, seller access, regional routing, order/listing surfaces, rate limits, retries, and safe data handling.',
-    status: 'Source-linked',
-    scope: 'API versions · operations · reliability',
-    tags: ['Authorization', 'Rate limits', 'Retries', 'Observability'],
-    href: '/marketplaces/amazon/guides/development-guide',
-    mark: '06',
-    markClass: 'platform-mark-guide',
-  },
-]
-
-const topics = [
-  { value: 'marketplace', label: 'Marketplace overview' },
-  { value: 'access', label: 'Seller access' },
-  { value: 'migration', label: 'Catalog migration' },
-  { value: 'inventory', label: 'Listings & inventory' },
-  { value: 'orders', label: 'Order synchronization' },
-  { value: 'notifications', label: 'Events & notifications' },
-  { value: 'operations', label: 'Operations & reliability' },
-]
+// Guides and their topics are maintained in catalog/guides.yaml.
+const guides = catalogGuides as Resource[]
+const topics: { id: string; label: string }[] = [{ id: 'marketplace', label: 'Marketplace overview' }, ...guideTopics]
 
 const query = ref('')
 const selectedKind = ref('all')
@@ -149,6 +52,7 @@ const resources = computed<Resource[]>(() => [
     kindLabel: 'Marketplace',
     topic: 'marketplace',
     topicLabel: 'Marketplace overview',
+    marketplaceName: platform.name,
     title: platform.name,
     summary: platform.summary,
     status: platform.status,
@@ -169,6 +73,7 @@ const filteredResources = computed(() => {
 
   return fuzzySearch(filtered, query.value, (resource) => [
       resource.title,
+      resource.marketplaceName,
       resource.kindLabel,
       resource.topicLabel,
       resource.summary,
@@ -208,7 +113,7 @@ function focusSearch(event: KeyboardEvent) {
 onMounted(() => {
   const state = readFilterState(window.location.search, defaults, {
     type: ['all', 'marketplace', 'guide'],
-    topic: topics.map((topic) => topic.value),
+    topic: topics.map((topic) => topic.id),
   })
   query.value = state.q
   selectedKind.value = state.type
@@ -243,7 +148,7 @@ watch([query, selectedKind, selectedTopic], syncUrl)
         <span>Topic</span>
         <select v-model="selectedTopic" aria-label="Filter by topic">
           <option value="all">All topics</option>
-          <option v-for="topic in topics" :key="topic.value" :value="topic.value">{{ topic.label }}</option>
+          <option v-for="topic in topics" :key="topic.id" :value="topic.id">{{ topic.label }}</option>
         </select>
       </label>
     </div>
@@ -259,7 +164,7 @@ watch([query, selectedKind, selectedTopic], syncUrl)
       <span class="active-filter-label"><UiIcon name="filter" :size="13" /> Active filters</span>
       <button v-if="query.trim()" type="button" class="filter-chip" @click="query = ''">“{{ query }}” <UiIcon name="x" :size="12" /></button>
       <button v-if="selectedKind !== 'all'" type="button" class="filter-chip" @click="selectedKind = 'all'">{{ selectedKind === 'guide' ? 'Integration guides' : 'Marketplace cards' }} <UiIcon name="x" :size="12" /></button>
-      <button v-if="selectedTopic !== 'all'" type="button" class="filter-chip" @click="selectedTopic = 'all'">{{ topics.find((topic) => topic.value === selectedTopic)?.label }} <UiIcon name="x" :size="12" /></button>
+      <button v-if="selectedTopic !== 'all'" type="button" class="filter-chip" @click="selectedTopic = 'all'">{{ topics.find((topic) => topic.id === selectedTopic)?.label }} <UiIcon name="x" :size="12" /></button>
     </div>
 
     <div v-if="filteredResources.length" class="explorer-grid">

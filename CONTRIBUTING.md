@@ -13,7 +13,7 @@ Only submit content you are authorized to publish. Do not contribute employer or
 3. Start from `marketplaces/_template/` and complete the required sections. Keep optional topics only when relevant.
 4. Add primary provider sources near the claims they support. Include page title, URL, API/version scope where known, and `last checked` date. Prefer official sources; label secondary sources as context only.
 5. Separate official statements, personally tested observations, and unverified assumptions. Say exactly what testing covered.
-6. Update `catalog/marketplaces.yaml` to match the guide. Do not claim an integration is implemented merely because a guide exists.
+6. Update `catalog/marketplaces.yaml` to match the guide, and list its guides in `catalog/guides.yaml` so they appear in the homepage explorer. Do not claim an integration is implemented merely because a guide exists.
 7. Review the diff for sensitive data, unsupported claims, broken links, duplicate instructions, and unnecessary copied documentation.
 
 ## New-entry checklist
