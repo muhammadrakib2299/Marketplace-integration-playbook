@@ -14,26 +14,7 @@ import {
   readFrontmatter,
   repositoryRoot,
 } from '../scripts/catalog-data.mjs'
-
-// A complete catalog record shaped like the entries in catalog/marketplaces.yaml.
-const marketplaceRecord = (overrides = {}) => ({
-  id: 'ebay-sell-api',
-  name: 'eBay Sell APIs',
-  category: 'marketplace',
-  regions: ['United States'],
-  api_surfaces: [{ name: 'Inventory API', version: 'v1', docs_url: 'https://developer.ebay.com/develop/api/sell' }],
-  access_model: 'seller-account',
-  status: 'research',
-  evidence: 'unverified',
-  source_urls: ['https://developer.ebay.com/'],
-  last_verified: null,
-  guide: '../marketplaces/ebay/README.md',
-  summary: 'Synthetic record used only by tests.',
-  tags: ['Listings'],
-  scope: 'Test scope',
-  notes: 'Synthetic fixture.',
-  ...overrides,
-})
+import { marketplaceRecord, ottoRecord } from './catalog-fixtures.mjs'
 
 test('repository root resolves to the checkout that holds the catalog', () => {
   assert.ok(
@@ -80,8 +61,6 @@ const guideCatalog = (guides) => ({
   ],
   guides,
 })
-const ottoRecord = (overrides = {}) =>
-  marketplaceRecord({ id: 'otto-api', name: 'OTTO Market API', guide: '../marketplaces/otto/README.md', ...overrides })
 
 function withTempRoot(files, run) {
   const root = mkdtempSync(join(tmpdir(), 'playbook-catalog-'))
