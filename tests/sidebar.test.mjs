@@ -52,7 +52,11 @@ test('a version chip appears only when the page declares a version', () => {
 
 test('the marketplace group title carries the logo, name, and status badge', () => {
   const [, marketplaceGroup] = sidebarFor([ebay({ logo: 'tiktok' })])['/marketplaces/ebay/']
-  assert.match(marketplaceGroup.text, /<span class="mip-logo" data-tone="dark" style="--mip-logo-color:#000000"[^>]*><svg[^>]*><path d="M/)
+  assert.match(
+    marketplaceGroup.text,
+    /<span class="mip-logo" data-tone="dark" style="--mip-logo-color:#000000;--mip-logo-src:url\(\/logos\/tiktok\.svg\)"[^>]*><span class="mip-logo-glyph"><\/span><\/span>/,
+  )
+  assert.doesNotMatch(marketplaceGroup.text, /<path/)
   assert.match(marketplaceGroup.text, /eBay Sell APIs/)
   assert.match(marketplaceGroup.text, /<span class="mip-badge mip-badge--documented">Documented<\/span>/)
 })
@@ -72,6 +76,22 @@ test('the directory count matches the catalog', () => {
   const [overview] = sidebarFor([ebay(), ottoRecord()])['/marketplaces/']
   assert.equal(overview.items[1].text, 'Marketplace directory<span class="mip-count">2</span>')
   assert.equal(overview.items[1].link, '/marketplaces/')
+})
+
+// The directory page itself lists every marketplace; its sidebar names only the latest few.
+test('the directory sidebar lists at most eight marketplaces, most recently verified first', () => {
+  const records = Array.from({ length: 10 }, (_, index) =>
+    ottoRecord({
+      id: `market-${index}`,
+      name: `Market ${index}`,
+      guide: `../marketplaces/market-${index}/README.md`,
+      last_verified: `2026-10-${String(10 + index).padStart(2, '0')}`,
+    }),
+  )
+  const [, recent] = sidebarFor(records)['/marketplaces/']
+  assert.equal(recent.text, 'Recently verified')
+  assert.equal(recent.items.length, 8)
+  assert.equal(recent.items[0].link, '/marketplaces/market-9/')
 })
 
 test('each marketplace gets a sidebar keyed by its route', () => {

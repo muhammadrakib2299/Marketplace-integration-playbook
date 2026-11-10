@@ -3,18 +3,16 @@ import { computed } from 'vue'
 import { useData, withBase } from 'vitepress'
 import { ExternalLink } from 'lucide-vue-next'
 import { formatDisplayDate, formatIsoDate } from '../../../scripts/format-date.mjs'
-import { marketplaceForPath, officialReference } from '../../../scripts/page-context.mjs'
-import { marketplaces } from '../generated/catalog.mjs'
 
-const { frontmatter, page } = useData()
+const { frontmatter } = useData()
 
 // API dossiers declare `api` and keep their title in frontmatter instead of an H1.
 const visible = computed(() => Boolean(frontmatter.value.api && frontmatter.value.title))
 
-const marketplace = computed(() => marketplaceForPath(page.value.relativePath, marketplaces))
-
-// Only APIs whose catalog entry records a docs_url get the link; nothing is guessed.
-const reference = computed(() => officialReference(marketplace.value, frontmatter.value.api))
+// Computed per page by pageContext() in the config's transformPageData. Only APIs whose catalog
+// entry records a docs_url get an official-reference link; nothing is guessed.
+const marketplace = computed(() => frontmatter.value.mip?.marketplace ?? null)
+const reference = computed(() => frontmatter.value.mip?.reference ?? null)
 
 // Date-like versions (version: 2026-01-01) arrive as serialized timestamps, like `checked`.
 const version = computed(() => {

@@ -11,6 +11,7 @@ import {
   countCoverage,
   findMissingRoutes,
   loadCatalogData,
+  logoAssets,
   logoTone,
   readFrontmatter,
   repositoryRoot,
@@ -256,11 +257,22 @@ test('a capability counts as documented only when the marketplace has a guide on
   )
 })
 
-test('a catalog logo slug resolves to its Simple Icons mark', () => {
+// Pages reference a small logo file instead of carrying the SVG path, so the sidebar and page data
+// stay small as the catalog grows.
+test('a catalog logo slug resolves to its Simple Icons colour and a logo file, not an inline path', () => {
   const [ebay] = buildMarketplaces({ marketplaces: [marketplaceRecord({ logo: 'tiktok' })] })
   assert.equal(ebay.logo.title, 'TikTok')
-  assert.match(ebay.logo.path, /^M/)
   assert.match(ebay.logo.hex, /^[0-9A-F]{6}$/)
+  assert.equal(ebay.logo.src, '/logos/tiktok.svg')
+  assert.equal(ebay.logo.path, undefined)
+})
+
+test('logo assets are standalone SVG files, one per logo slug', () => {
+  const assets = logoAssets({
+    marketplaces: [marketplaceRecord({ logo: 'tiktok' }), ottoRecord({ logo: 'tiktok' }), marketplaceRecord({ id: 'plain', logo: undefined })],
+  })
+  assert.deepEqual(assets.map((asset) => asset.file), ['tiktok.svg'])
+  assert.match(assets[0].svg, /^<svg xmlns="http:\/\/www\.w3\.org\/2000\/svg" viewBox="0 0 24 24"><path d="M[^"]+"\/><\/svg>$/)
 })
 
 test('an unknown logo slug is rejected with the catalog id', () => {

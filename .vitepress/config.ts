@@ -1,6 +1,7 @@
 import { defineConfigWithTheme, type DefaultTheme } from 'vitepress'
 import { findMissingRoutes, loadCatalogData, readFrontmatter, repositoryRoot } from '../scripts/catalog-data.mjs'
 import { renderMethodCode } from '../scripts/markdown-methods.mjs'
+import { pageContext } from '../scripts/page-context.mjs'
 import { footerMarketplaces, themeRoutes } from '../scripts/site-links.mjs'
 import { buildSidebar } from '../scripts/sidebar.mjs'
 
@@ -24,7 +25,7 @@ if (missingRoutes.length > 0) {
 }
 
 // Marketplace navigation comes from catalog/marketplaces.yaml (build_sequence, pages, logo).
-const { marketplaces } = loadCatalogData(repositoryRoot)
+const { marketplaces, capabilities, coverage } = loadCatalogData(repositoryRoot)
 
 type FooterLink = { text: string; link: string }
 
@@ -47,6 +48,14 @@ export default defineConfigWithTheme<
     // Internal design specs and plans for the site itself; not published.
     'docs/superpowers/**',
   ],
+  // Site data, including the sidebar, ships as one cached chunk instead of inside every HTML page.
+  metaChunk: true,
+  // Marketplace context for the layout components (hub, sequence bar, dossier header), computed per page
+  // here so the shared theme bundle does not grow with the catalog (scripts/page-context.mjs).
+  transformPageData(pageData) {
+    const context = pageContext(pageData.relativePath, pageData.frontmatter, { marketplaces, capabilities, coverage })
+    if (context) pageData.frontmatter.mip = context
+  },
   rewrites: {
     'marketplaces/:marketplace/README.md': 'marketplaces/:marketplace/index.md',
   },

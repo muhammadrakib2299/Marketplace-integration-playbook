@@ -2,14 +2,13 @@
 import { computed } from 'vue'
 import { useData, withBase } from 'vitepress'
 import { ArrowRight } from 'lucide-vue-next'
-import { marketplaceForPath, routeForPath, sequencePosition } from '../../../scripts/page-context.mjs'
-import { marketplaces } from '../generated/catalog.mjs'
 
 // "Step 3 of 6" for pages in a marketplace's build sequence (catalog build_sequence).
-const { page } = useData()
+const { frontmatter } = useData()
 
-const marketplace = computed(() => marketplaceForPath(page.value.relativePath, marketplaces))
-const position = computed(() => sequencePosition(marketplace.value, routeForPath(page.value.relativePath)))
+// Computed per page by pageContext() in the config's transformPageData.
+const marketplace = computed(() => frontmatter.value.mip?.marketplace ?? null)
+const position = computed(() => frontmatter.value.mip?.sequence ?? null)
 </script>
 
 <template>

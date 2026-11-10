@@ -144,13 +144,34 @@ export function logoTone(hex) {
 }
 
 // Logos are opt-in: the catalog names a Simple Icons slug, or the monogram is used.
-function resolveLogo(record) {
-  if (!record.logo) return null
+function simpleIcon(record) {
   const icon = Object.values(simpleIcons).find((candidate) => candidate.slug === record.logo)
   if (!icon) {
     throw new Error(`${record.id}: logo "${record.logo}" is not a Simple Icons slug in the installed simple-icons version`)
   }
-  return { title: icon.title, hex: icon.hex, path: icon.path, tone: logoTone(icon.hex) }
+  return icon
+}
+
+// The mark is served as /logos/<slug>.svg (written by the generator) and drawn as a CSS mask,
+// so pages and the sidebar carry a short URL instead of the SVG path.
+function resolveLogo(record) {
+  if (!record.logo) return null
+  const icon = simpleIcon(record)
+  return { title: icon.title, hex: icon.hex, tone: logoTone(icon.hex), src: `/logos/${icon.slug}.svg` }
+}
+
+// One standalone SVG per logo slug, for the generator to write under public/logos/.
+export function logoAssets(catalog) {
+  const assets = new Map()
+  for (const record of catalog.marketplaces) {
+    if (!record.logo || assets.has(record.logo)) continue
+    const icon = simpleIcon(record)
+    assets.set(record.logo, {
+      file: `${icon.slug}.svg`,
+      svg: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="${icon.path}"/></svg>`,
+    })
+  }
+  return [...assets.values()]
 }
 
 function navigationList(record, field) {

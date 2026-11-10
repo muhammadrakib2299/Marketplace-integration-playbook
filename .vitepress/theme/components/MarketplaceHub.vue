@@ -4,18 +4,15 @@ import { useData, withBase } from 'vitepress'
 import { ArrowRight, BookOpenText, Check, ExternalLink, FlaskConical, KeyRound, Minus } from 'lucide-vue-next'
 import { formatDisplayDate, formatIsoDate } from '../../../scripts/format-date.mjs'
 import { plural } from '../../../scripts/labels.mjs'
-import { hubModel, isMarketplaceOverview, marketplaceForPath } from '../../../scripts/page-context.mjs'
-import { capabilities, coverage, marketplaces } from '../generated/catalog.mjs'
 import MarketplaceLogo from './MarketplaceLogo.vue'
 
 // The header of a marketplace overview page (marketplaces/<slug>/README.md). Every value comes
 // from catalog/*.yaml or the published pages; gaps say "Not recorded" instead of guessing.
-const { page } = useData()
+const { frontmatter } = useData()
 
-const marketplace = computed(() =>
-  isMarketplaceOverview(page.value.relativePath) ? marketplaceForPath(page.value.relativePath, marketplaces) : null,
-)
-const hub = computed(() => (marketplace.value ? hubModel(marketplace.value, { capabilities, coverage }) : null))
+// Built for overview pages only, by pageContext() in the config's transformPageData.
+const hub = computed(() => frontmatter.value.mip?.hub ?? null)
+const marketplace = computed(() => hub.value?.marketplace ?? null)
 
 const verified = computed(() => {
   const text = formatDisplayDate(marketplace.value?.lastVerified)

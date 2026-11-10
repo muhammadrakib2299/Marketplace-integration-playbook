@@ -403,16 +403,26 @@
   background: var(--mip-surface);
 }
 
-.mip-logo svg {
+/* The mark is a mask over the brand colour, so one small file serves every size and theme. */
+.mip-logo-glyph {
   width: 13px;
   height: 13px;
-  fill: var(--mip-logo-color, var(--mip-ink));
+  background-color: var(--mip-logo-color, var(--mip-ink));
+  -webkit-mask: var(--mip-logo-src) center / contain no-repeat;
+  mask: var(--mip-logo-src) center / contain no-repeat;
 }
 
 /* Near-black marks would vanish on the dark theme, near-white ones on the light theme. */
-.dark .mip-logo[data-tone='dark'] svg,
-html:not(.dark) .mip-logo[data-tone='bright'] svg {
-  fill: var(--mip-ink);
+.dark .mip-logo[data-tone='dark'] .mip-logo-glyph,
+html:not(.dark) .mip-logo[data-tone='bright'] .mip-logo-glyph {
+  background-color: var(--mip-ink);
+}
+
+@media (forced-colors: active) {
+  .mip-logo-glyph {
+    background-color: CanvasText;
+    forced-color-adjust: none;
+  }
 }
 
 .mip-logo--mono {
@@ -428,7 +438,7 @@ html:not(.dark) .mip-logo[data-tone='bright'] svg {
   border-radius: 9px;
 }
 
-.mip-logo--md svg {
+.mip-logo--md .mip-logo-glyph {
   width: 20px;
   height: 20px;
 }
@@ -444,7 +454,7 @@ html:not(.dark) .mip-logo[data-tone='bright'] svg {
   box-shadow: var(--mip-shadow-sm);
 }
 
-.mip-logo--lg svg {
+.mip-logo--lg .mip-logo-glyph {
   width: 30px;
   height: 30px;
 }
