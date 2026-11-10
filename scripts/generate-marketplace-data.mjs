@@ -1,59 +1,13 @@
 import { mkdir, readFile, writeFile } from 'node:fs/promises'
 import { resolve } from 'node:path'
 import { parse } from 'yaml'
-import { repositoryRoot as root } from './catalog-data.mjs'
+import { buildMarketplaces, repositoryRoot as root } from './catalog-data.mjs'
 
 const catalogPath = resolve(root, 'catalog/marketplaces.yaml')
 const outputDir = resolve(root, '.vitepress/theme/generated')
 const outputPath = resolve(outputDir, 'marketplaces.mjs')
 
-const catalog = parse(await readFile(catalogPath, 'utf8'))
-if (!catalog || !Array.isArray(catalog.marketplaces)) {
-  throw new Error('catalog/marketplaces.yaml must contain a marketplaces array')
-}
-
-const categoryLabels = {
-  marketplace: 'Marketplace',
-  'social-commerce': 'Social commerce',
-}
-const statusLabels = {
-  documented: 'Documented',
-  tested: 'Tested',
-  research: 'Research',
-  blocked: 'Blocked',
-  deprecated: 'Deprecated',
-}
-
-const marketplaces = catalog.marketplaces.map((record) => {
-  const slug = record.id.replace(/-api$|-/g, '-')
-  const name = record.name.replace(/ \(SP-API\)$/, '')
-  const apis = record.api_surfaces.map((surface) => `${surface.name}${surface.version ? ` · ${surface.version}` : ''}`)
-  const categoryLabel = categoryLabels[record.category] ?? record.category.replace(/-/g, ' ')
-  const statusLabel = `${statusLabels[record.status] ?? record.status} · ${record.evidence === 'official' ? 'source-linked' : record.evidence}`
-  const isAmazon = record.id.startsWith('amazon')
-
-  return {
-    id: record.id,
-    name,
-    fullName: record.name,
-    category: record.category,
-    categoryLabel,
-    regions: record.regions,
-    access: record.access_model.replace(/-/g, ' ').replace(/\b\w/g, (letter) => letter.toUpperCase()),
-    status: record.status,
-    statusLabel,
-    evidence: record.evidence,
-    summary: record.summary,
-    tags: record.tags,
-    scope: record.scope,
-    apis,
-    guide: record.guide.replace(/^\.\./, '').replace(/README\.md$/, ''),
-    source: record.source_urls[0],
-    lastVerified: record.last_verified,
-    mark: isAmazon ? 'a' : 't',
-    markClass: isAmazon ? 'platform-mark-amazon' : 'platform-mark-tiktok',
-  }
-})
+const marketplaces = buildMarketplaces(parse(await readFile(catalogPath, 'utf8')))
 
 await mkdir(outputDir, { recursive: true })
 await writeFile(
