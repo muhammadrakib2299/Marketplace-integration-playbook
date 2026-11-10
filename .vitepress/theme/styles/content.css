@@ -303,6 +303,11 @@
   background: var(--mip-surface-2);
 }
 
+/* Links on the tinted callout backgrounds use the darker teal to stay above 4.5:1. */
+.vp-doc .custom-block a {
+  color: var(--mip-primary-ink);
+}
+
 /* ---------- Doc footer: edit link and prev/next cards ---------- */
 
 .VPDocFooter .edit-link-button {

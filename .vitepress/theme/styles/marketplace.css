@@ -824,7 +824,7 @@
 }
 
 .mip-directory .mip-matrix-no {
-  color: var(--mip-faint);
+  color: var(--mip-faint-text);
 }
 
 @container mip-directory (max-width: 640px) {

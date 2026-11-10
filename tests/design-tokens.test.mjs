@@ -14,6 +14,15 @@ const pairs = [
   ['info', 'info-soft'], ['violet', 'violet-soft'],
   // Navy chrome (top bar and footer).
   ['chrome-text', 'chrome'], ['chrome-muted', 'chrome'], ['chrome-muted', 'chrome-2'], ['chrome-text', 'chrome-2'],
+  // Links inside tinted panels (callouts, the homepage note) use primary-ink.
+  ['primary-ink', 'surface-2'], ['primary-ink', 'info-soft'], ['primary-ink', 'success-soft'],
+  ['primary-ink', 'warning-soft'], ['primary-ink', 'danger-soft'],
+]
+
+// Non-text pairs that carry meaning (WCAG 1.4.11, 3:1): focus rings and state icons.
+const nonTextPairs = [
+  ['focus', 'bg'], ['focus', 'surface'], ['focus', 'surface-2'],
+  ['focus-chrome', 'chrome'], ['focus-chrome', 'chrome-2'],
 ]
 
 function readTokenBlock(css, selector) {
@@ -36,13 +45,13 @@ function contrast(foreground, background) {
   return (lighter + 0.05) / (darker + 0.05)
 }
 
-function failingPairs(tokens) {
-  return pairs
+function failingPairs(tokens, list = pairs, minimum = 4.5) {
+  return list
     .map(([foreground, background]) => {
       assert.ok(tokens[foreground] && tokens[background], `missing --mip-${foreground} or --mip-${background}`)
       return { pair: `${foreground} on ${background}`, ratio: contrast(tokens[foreground], tokens[background]) }
     })
-    .filter(({ ratio }) => ratio < 4.5)
+    .filter(({ ratio }) => ratio < minimum)
     .map(({ pair, ratio }) => `${pair} = ${ratio.toFixed(2)}:1`)
 }
 
@@ -55,4 +64,11 @@ test('light theme text tokens meet WCAG AA', () => {
 test('dark theme text tokens meet WCAG AA', () => {
   const source = css()
   assert.deepEqual(failingPairs({ ...readTokenBlock(source, ':root'), ...readTokenBlock(source, '.dark') }), [])
+})
+
+test('focus rings stand out at 3:1 against every surface they sit on, in both themes', () => {
+  const source = css()
+  const light = readTokenBlock(source, ':root')
+  assert.deepEqual(failingPairs(light, nonTextPairs, 3), [])
+  assert.deepEqual(failingPairs({ ...light, ...readTokenBlock(source, '.dark') }, nonTextPairs, 3), [])
 })
