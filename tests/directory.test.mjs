@@ -26,6 +26,7 @@ const tiktok = entry({
   name: 'TikTok Shop',
   category: 'social-commerce',
   categoryLabel: 'Social commerce',
+  access: 'Partner Only',
   status: 'research',
   statusLabel: 'Research · unverified',
   lastVerified: '2026-11-10',
@@ -63,4 +64,19 @@ test('pagination clamps the page number and reports the visible range', () => {
   assert.equal(paginate(items, 9, 24).page, 3)
   assert.equal(paginate(items, 0, 24).page, 1)
   assert.deepEqual(paginate([], 1, 24), { items: [], page: 1, pages: 1, start: 0, end: 0, total: 0 })
+})
+
+test('a list field such as regions gives one option per value, counted once per marketplace', () => {
+  assert.deepEqual(facetOptions([zalando, amazon, tiktok], 'regions'), [
+    { value: 'Europe', label: 'Europe', count: 2 },
+    { value: 'North America', label: 'North America', count: 1 },
+  ])
+})
+
+test('access and region facets narrow the results, and an unset facet means all', () => {
+  const all = [zalando, amazon, tiktok]
+  const state = { q: '', category: 'all', status: 'all', access: 'all', region: 'all' }
+  assert.deepEqual(filterMarketplaces(all, { ...state, region: 'North America' }).map((m) => m.id), ['amazon'])
+  assert.deepEqual(filterMarketplaces(all, { ...state, access: 'Partner Only' }).map((m) => m.id), ['tiktok'])
+  assert.equal(filterMarketplaces(all, { q: '', category: 'all', status: 'all' }).length, 3)
 })

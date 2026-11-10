@@ -47,3 +47,11 @@ test('URL state restores valid filters and rejects unknown values', () => {
   })
   assert.deepEqual(state, { q: 'orders', type: 'all', topic: 'orders' })
 })
+
+test('URL state rewrites only the keys it owns and keeps other parameters', () => {
+  const defaults = { q: '', status: 'all' }
+  assert.equal(
+    writeFilterState('/marketplaces/', { q: 'orders', status: 'all' }, defaults, '', '?utm_source=mail&status=bogus&q=old'),
+    '/marketplaces/?utm_source=mail&q=orders',
+  )
+})

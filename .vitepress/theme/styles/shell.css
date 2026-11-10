@@ -675,6 +675,22 @@ html:not(.dark) .mip-logo[data-tone='bright'] .mip-logo-glyph {
   }
 }
 
+/* Buttons placed inside Markdown content keep the button look over the `.vp-doc a` link style. */
+.vp-doc a.mip-btn,
+.vp-doc a.mip-btn:hover {
+  color: var(--mip-ink);
+  font-weight: 600;
+  text-decoration: none;
+  transition-duration: var(--mip-duration-fast);
+  transition-property: background-color, border-color, color, scale;
+  transition-timing-function: ease-out;
+}
+
+.vp-doc a.mip-btn--primary,
+.vp-doc a.mip-btn--primary:hover {
+  color: var(--mip-on-primary);
+}
+
 /* ---------- Site footer (SiteFooter.vue, every page) ---------- */
 
 .mip-footer {

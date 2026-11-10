@@ -412,16 +412,16 @@
   margin: 28px 0 8px;
 }
 
+/* Search on its own row above four facet selects; one row when the column is wide enough. */
 .mip-directory .mip-dir-toolbar {
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 10px;
-  align-items: center;
 }
 
 .mip-directory .mip-dir-search {
   display: flex;
-  flex: 1 1 300px;
+  grid-column: 1 / -1;
   gap: 10px;
   align-items: center;
   height: 42px;
@@ -455,7 +455,12 @@
 }
 
 .mip-directory .mip-dir-select select {
+  overflow: hidden;
+  width: 100%;
+  min-width: 0;
   height: 42px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
   padding: 0 34px 0 12px;
   border: 1px solid var(--mip-border-strong);
   border-radius: 10px;
@@ -548,6 +553,20 @@
   color: var(--mip-primary-ink);
 }
 
+/* The list's heading, for screen-reader navigation only. VitePress's `.vp-doc h2` (position, margins)
+   outranks the generic visually-hidden utility, so the hiding is spelled out here. */
+.mip-directory .mip-dir-heading {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  border: 0;
+  white-space: nowrap;
+}
+
 /* Rich rows: identity, meta, summary, and counts on the left; actions on the right. */
 .mip-directory .mip-dir-list {
   display: grid;
@@ -626,6 +645,25 @@
   color: var(--mip-muted);
   font-size: 13px;
   line-height: 1.5;
+}
+
+/* Category, access, and regions, each led by an icon instead of middle-dot separators (spec section 7). */
+.mip-directory .mip-dir-meta {
+  gap: 4px 16px;
+  padding: 0;
+  list-style: none;
+}
+
+.mip-directory .mip-dir-meta li {
+  display: inline-flex;
+  gap: 6px;
+  align-items: center;
+  margin: 0;
+}
+
+.mip-directory .mip-dir-meta svg {
+  flex: none;
+  color: var(--mip-faint-text);
 }
 
 .mip-directory .mip-dir-text {
@@ -793,11 +831,17 @@
     justify-content: center;
   }
 
-  .mip-directory .mip-dir-select {
-    flex: 1 1 140px;
+  .mip-directory .mip-dir-toolbar {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@container mip-directory (min-width: 1040px) {
+  .mip-directory .mip-dir-toolbar {
+    grid-template-columns: minmax(260px, 2fr) repeat(4, minmax(0, 1fr));
   }
 
-  .mip-directory .mip-dir-select select {
-    width: 100%;
+  .mip-directory .mip-dir-search {
+    grid-column: auto;
   }
 }

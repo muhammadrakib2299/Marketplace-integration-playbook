@@ -1,7 +1,21 @@
 <script setup lang="ts">
 import { computed, nextTick, onMounted, ref, watch } from 'vue'
 import { withBase } from 'vitepress'
-import { ArrowDownAZ, ArrowRight, CalendarClock, Check, ChevronLeft, ChevronRight, ExternalLink, Minus, Search, X } from 'lucide-vue-next'
+import {
+  ArrowDownAZ,
+  ArrowRight,
+  CalendarClock,
+  Check,
+  ChevronLeft,
+  ChevronRight,
+  ExternalLink,
+  Globe,
+  KeyRound,
+  Minus,
+  Search,
+  Store,
+  X,
+} from 'lucide-vue-next'
 import { facetOptions, filterMarketplaces, paginate, sortMarketplaces } from '../../../scripts/directory.mjs'
 import { readFilterState, writeFilterState } from '../../../scripts/filter-state.mjs'
 import { formatDisplayDate } from '../../../scripts/format-date.mjs'
@@ -24,7 +38,7 @@ type Marketplace = {
   apiSurfaces: unknown[]
   lastVerified: string | null
   mark: string
-  logo: { hex: string; path: string; tone: string } | null
+  logo: { hex: string; tone: string; src: string } | null
 }
 type Capability = { id: string; label: string; guides: { title: string; href: string }[] }
 
@@ -35,26 +49,37 @@ const pagesBySlug = coverage.byMarketplace as Record<string, { apiReferencePages
 
 const categoryOptions = facetOptions(marketplaces, 'category', 'categoryLabel')
 const statusOptions = facetOptions(marketplaces, 'status').map((option) => ({ ...option, label: statusName(option.value) }))
+const accessOptions = facetOptions(marketplaces, 'access')
+const regionOptions = facetOptions(marketplaces, 'regions')
 
-const defaults = { q: '', category: 'all', status: 'all', sort: 'name', page: '1' }
+const defaults = { q: '', category: 'all', status: 'all', access: 'all', region: 'all', sort: 'name', page: '1' }
 const query = ref(defaults.q)
 const category = ref(defaults.category)
 const status = ref(defaults.status)
+const access = ref(defaults.access)
+const region = ref(defaults.region)
 const sort = ref(defaults.sort)
 const page = ref(1)
 const hydrated = ref(false)
 
-const results = computed(() =>
-  sortMarketplaces(filterMarketplaces(marketplaces, { q: query.value, category: category.value, status: status.value }), sort.value),
-)
+const filters = computed(() => ({
+  q: query.value,
+  category: category.value,
+  status: status.value,
+  access: access.value,
+  region: region.value,
+}))
+const results = computed(() => sortMarketplaces(filterMarketplaces(marketplaces, filters.value), sort.value))
 const current = computed(() => paginate(results.value, page.value, PAGE_SIZE))
-const hasFilters = computed(() => query.value.trim() !== '' || category.value !== 'all' || status.value !== 'all')
+const hasFilters = computed(
+  () => query.value.trim() !== '' || [category, status, access, region].some((facet) => facet.value !== 'all'),
+)
 
 const summary = computed(() => {
   const { total, start, end, pages } = current.value
-  const noun = marketplaces.length === 1 ? 'marketplace' : 'marketplaces'
-  const base = hasFilters.value ? `${total} of ${marketplaces.length} ${noun} match` : `${total} ${noun}`
-  return pages > 1 ? `${base} · showing ${start}–${end}` : base
+  const label = noun(marketplaces.length, 'marketplace')
+  const base = hasFilters.value ? `${total} of ${marketplaces.length} ${label} match` : `${total} ${label}`
+  return pages > 1 ? `${base}, showing ${start}–${end}` : base
 })
 
 // Keeps "&" on the line of the word before it, so wrapped column headers never start with it.
@@ -69,8 +94,16 @@ const referencePages = (slug: string) => pagesBySlug[slug]?.apiReferencePages ??
 
 function resetFilters() {
   query.value = ''
-  category.value = 'all'
-  status.value = 'all'
+  for (const facet of [category, status, access, region]) facet.value = 'all'
+}
+
+// Rewrites only the directory's own parameters; others in the address (such as utm_source) are kept.
+function syncUrl() {
+  const kept = new URLSearchParams(window.location.search)
+  kept.delete('coverage') // the earlier directory's name for the status filter
+  const state = { ...filters.value, q: query.value.trim(), sort: sort.value, page: String(current.value.page) }
+  const url = writeFilterState(window.location.pathname, state, defaults, window.location.hash, kept.toString())
+  window.history.replaceState(window.history.state, '', url)
 }
 
 function goTo(target: number) {
@@ -78,31 +111,40 @@ function goTo(target: number) {
   document.getElementById('marketplace-results')?.scrollIntoView({ block: 'start' })
 }
 
+const values = (options: { value: string }[]) => ['all', ...options.map((option) => option.value)]
+
 onMounted(async () => {
-  const state = readFilterState(window.location.search, defaults, {
-    category: ['all', ...categoryOptions.map((option) => option.value)],
-    status: ['all', ...statusOptions.map((option) => option.value)],
+  const params = new URLSearchParams(window.location.search)
+  // Links to the earlier directory filtered status with ?coverage=.
+  if (params.has('coverage') && !params.has('status')) params.set('status', params.get('coverage') ?? '')
+  const state = readFilterState(params.toString(), defaults, {
+    category: values(categoryOptions),
+    status: values(statusOptions),
+    access: values(accessOptions),
+    region: values(regionOptions),
     sort: ['name', 'recent'],
   })
   query.value = state.q
   category.value = state.category
   status.value = state.status
+  access.value = state.access
+  region.value = state.region
   sort.value = state.sort
   // Let the filter watchers run before restoring the page, or they would reset it to 1.
   await nextTick()
   page.value = Number.parseInt(state.page, 10) || 1
   hydrated.value = true
+  // Rewrite the address bar from the state actually applied: invalid values and ?coverage= go.
+  syncUrl()
 })
 
 // A new search, filter, or sort starts again from the first page.
-watch([query, category, status, sort], () => {
+watch([query, category, status, access, region, sort], () => {
   if (hydrated.value) page.value = 1
 })
 
-watch([query, category, status, sort, page], () => {
-  if (!hydrated.value) return
-  const state = { q: query.value.trim(), category: category.value, status: status.value, sort: sort.value, page: String(current.value.page) }
-  window.history.replaceState(window.history.state, '', writeFilterState(window.location.pathname, state, defaults, window.location.hash))
+watch([query, category, status, access, region, sort, page], () => {
+  if (hydrated.value) syncUrl()
 })
 </script>
 
@@ -132,6 +174,24 @@ watch([query, category, status, sort, page], () => {
           </option>
         </select>
       </label>
+      <label class="mip-dir-select">
+        <span class="visually-hidden">Access model</span>
+        <select v-model="access">
+          <option value="all">Any access model</option>
+          <option v-for="option in accessOptions" :key="option.value" :value="option.value">
+            {{ option.label }} ({{ option.count }})
+          </option>
+        </select>
+      </label>
+      <label class="mip-dir-select">
+        <span class="visually-hidden">Region</span>
+        <select v-model="region">
+          <option value="all">All regions</option>
+          <option v-for="option in regionOptions" :key="option.value" :value="option.value">
+            {{ option.label }} ({{ option.count }})
+          </option>
+        </select>
+      </label>
     </div>
 
     <div id="marketplace-results" class="mip-dir-status">
@@ -151,6 +211,7 @@ watch([query, category, status, sort, page], () => {
       </div>
     </div>
 
+    <h2 class="mip-dir-heading">Marketplaces</h2>
     <ul v-if="current.total" class="mip-dir-list">
       <li v-for="marketplace in current.items" :key="marketplace.id" class="mip-dir-row">
         <MarketplaceLogo :logo="marketplace.logo" :mark="marketplace.mark" size="md" />
@@ -159,9 +220,11 @@ watch([query, category, status, sort, page], () => {
             <h3><a :href="withBase(marketplace.guide)">{{ marketplace.name }}</a></h3>
             <span class="mip-badge" :class="`mip-badge--${marketplace.status}`">{{ statusName(marketplace.status) }}</span>
           </div>
-          <p class="mip-dir-meta">
-            {{ [marketplace.categoryLabel, `${marketplace.access} access`, marketplace.regions.join(', ')].join(' · ') }}
-          </p>
+          <ul class="mip-dir-meta">
+            <li><Store :size="14" :stroke-width="1.75" aria-hidden="true" /><span class="visually-hidden">Category:</span> {{ marketplace.categoryLabel }}</li>
+            <li><KeyRound :size="14" :stroke-width="1.75" aria-hidden="true" />{{ marketplace.access }} access</li>
+            <li><Globe :size="14" :stroke-width="1.75" aria-hidden="true" /><span class="visually-hidden">Regions:</span> {{ marketplace.regions.join(', ') }}</li>
+          </ul>
           <p class="mip-dir-text">{{ marketplace.summary }}</p>
           <p class="mip-dir-facts">
             <span><strong>{{ marketplace.apiSurfaces.length }}</strong> {{ noun(marketplace.apiSurfaces.length, 'API surface') }}</span>
