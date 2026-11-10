@@ -387,3 +387,58 @@
   font-family: var(--vp-font-family-mono);
   font-size: 12.5px;
 }
+
+/* ---------- HTTP method badges (scripts/markdown-methods.mjs) ---------- */
+
+.vp-doc .mip-endpoint {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  max-width: 100%;
+  vertical-align: middle;
+}
+
+.vp-doc .mip-endpoint code {
+  overflow-wrap: anywhere;
+}
+
+.mip-method {
+  display: inline-block;
+  flex: none;
+  padding: 0 7px;
+  border: 1px solid var(--mip-border);
+  border-radius: 5px;
+  background: var(--mip-surface-2);
+  color: var(--mip-muted);
+  font-family: var(--vp-font-family-mono);
+  font-size: 11.5px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  line-height: 20px;
+}
+
+.mip-method--get {
+  border-color: var(--mip-success-border);
+  background: var(--mip-success-soft);
+  color: var(--mip-success);
+}
+
+.mip-method--post {
+  border-color: var(--mip-info-border);
+  background: var(--mip-info-soft);
+  color: var(--mip-info);
+}
+
+.mip-method--put,
+.mip-method--patch {
+  border-color: var(--mip-warning-border);
+  background: var(--mip-warning-soft);
+  color: var(--mip-warning);
+}
+
+.mip-method--delete {
+  border-color: var(--mip-danger-border);
+  background: var(--mip-danger-soft);
+  color: var(--mip-danger);
+}

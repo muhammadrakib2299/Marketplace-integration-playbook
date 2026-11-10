@@ -1,5 +1,6 @@
 import { defineConfigWithTheme, type DefaultTheme } from 'vitepress'
 import { findMissingRoutes, loadCatalogData, readFrontmatter, repositoryRoot } from '../scripts/catalog-data.mjs'
+import { renderMethodCode } from '../scripts/markdown-methods.mjs'
 import { buildSidebar } from '../scripts/sidebar.mjs'
 
 const repositoryUrl = 'https://github.com/muhammadrakib2299/Marketplace-integration-playbook'
@@ -50,6 +51,10 @@ export default defineConfigWithTheme<DefaultTheme.Config & { buildDate: string }
       // Wrap tables so wide ones scroll inside a rounded frame instead of widening the page.
       md.renderer.rules.table_open = () => '<div class="mip-table"><table>\n'
       md.renderer.rules.table_close = () => '</table></div>\n'
+      // `GET /path` inline code becomes a method badge followed by the path.
+      const defaultCodeInline = md.renderer.rules.code_inline!
+      md.renderer.rules.code_inline = (tokens, idx, options, env, self) =>
+        renderMethodCode(tokens[idx].content) ?? defaultCodeInline(tokens, idx, options, env, self)
     },
   },
   themeConfig: {
