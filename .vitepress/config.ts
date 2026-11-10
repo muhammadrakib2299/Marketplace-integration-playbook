@@ -1,6 +1,7 @@
 import { defineConfigWithTheme, type DefaultTheme } from 'vitepress'
 import { findMissingRoutes, loadCatalogData, readFrontmatter, repositoryRoot } from '../scripts/catalog-data.mjs'
 import { renderMethodCode } from '../scripts/markdown-methods.mjs'
+import { footerMarketplaces, themeRoutes } from '../scripts/site-links.mjs'
 import { buildSidebar } from '../scripts/sidebar.mjs'
 
 const repositoryUrl = 'https://github.com/muhammadrakib2299/Marketplace-integration-playbook'
@@ -15,15 +16,21 @@ const docs = [
   { label: 'Vercel deployment', href: '/docs/site-deployment' },
 ]
 
-const missingDocs = findMissingRoutes(repositoryRoot, docs.map((doc) => doc.href))
-if (missingDocs.length > 0) {
-  throw new Error(`Engineering links point to pages that do not exist: ${missingDocs.join(', ')}`)
+// Engineering docs and the routes theme components link to (scripts/site-links.mjs): neither
+// VitePress's dead-link check nor lychee sees links that live outside Markdown.
+const missingRoutes = findMissingRoutes(repositoryRoot, [...docs.map((doc) => doc.href), ...themeRoutes()])
+if (missingRoutes.length > 0) {
+  throw new Error(`Theme links point to pages that do not exist: ${missingRoutes.join(', ')}`)
 }
 
 // Marketplace navigation comes from catalog/marketplaces.yaml (build_sequence, pages, logo).
 const { marketplaces } = loadCatalogData(repositoryRoot)
 
-export default defineConfigWithTheme<DefaultTheme.Config & { buildDate: string }>({
+type FooterLink = { text: string; link: string }
+
+export default defineConfigWithTheme<
+  DefaultTheme.Config & { buildDate: string; siteFooter: { marketplaces: FooterLink[]; engineering: FooterLink[] } }
+>({
   lang: 'en-US',
   // VitePress persists the user's selection in localStorage (`vitepress-theme-appearance`).
   appearance: true,
@@ -62,6 +69,11 @@ export default defineConfigWithTheme<DefaultTheme.Config & { buildDate: string }
     siteTitle: 'Playbook',
     logo: '/brand-mark.svg',
     buildDate: new Date().toISOString().slice(0, 10),
+    // A bounded footer: a few recently verified marketplaces, never the whole catalog.
+    siteFooter: {
+      marketplaces: footerMarketplaces(marketplaces),
+      engineering: docs.slice(0, 4).map((doc) => ({ text: doc.label, link: doc.href })),
+    },
     lightModeSwitchTitle: 'Switch to light mode',
     darkModeSwitchTitle: 'Switch to dark mode',
     // Test reports, Limits & quotas, and Guidelines join the nav in phase 5, when their pages exist.

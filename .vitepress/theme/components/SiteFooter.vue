@@ -2,7 +2,6 @@
 import { computed } from 'vue'
 import { useData, withBase } from 'vitepress'
 import { formatDisplayDate } from '../../../scripts/format-date.mjs'
-import { marketplaces } from '../generated/catalog.mjs'
 
 const repositoryUrl = 'https://github.com/muhammadrakib2299/Marketplace-integration-playbook'
 const { theme } = useData()
@@ -12,31 +11,23 @@ const builtOn = computed(() => formatDisplayDate(theme.value.buildDate))
 
 type FooterLink = { text: string; link: string; external?: boolean }
 
-const columns: { title: string; links: FooterLink[] }[] = [
+// Link lists come from the config (bounded and route-checked there), so the footer never grows
+// with the catalog and never sends a generic label to one marketplace's page.
+const columns = computed<{ title: string; links: FooterLink[] }[]>(() => [
   {
-    title: 'Marketplaces',
-    links: [
-      ...marketplaces.map((marketplace: { name: string; guide: string }) => ({ text: marketplace.name, link: marketplace.guide })),
-      { text: 'Marketplace directory', link: '/marketplaces/' },
-    ],
+    title: 'Recently verified',
+    links: [...(theme.value.siteFooter?.marketplaces ?? []), { text: 'All marketplaces', link: '/marketplaces/' }],
   },
-  {
-    title: 'Build',
-    links: [
-      { text: 'Seller onboarding', link: '/marketplaces/amazon/guides/seller-onboarding' },
-      { text: 'Order synchronization', link: '/marketplaces/amazon/workflows/order-lifecycle' },
-      { text: 'Development guide', link: '/marketplaces/amazon/guides/development-guide' },
-    ],
-  },
+  { title: 'Engineering', links: theme.value.siteFooter?.engineering ?? [] },
   {
     title: 'Project',
     links: [
-      { text: 'Integration principles', link: '/docs/integration-principles' },
       { text: 'Contributing', link: `${repositoryUrl}/blob/main/CONTRIBUTING.md`, external: true },
+      { text: 'Security policy', link: `${repositoryUrl}/blob/main/SECURITY.md`, external: true },
       { text: 'GitHub repository', link: repositoryUrl, external: true },
     ],
   },
-]
+])
 
 const href = (link: FooterLink) => (link.external ? link.link : withBase(link.link))
 </script>

@@ -3,6 +3,7 @@ import { computed } from 'vue'
 import { withBase } from 'vitepress'
 import { formatDisplayDate } from '../../../scripts/format-date.mjs'
 import { noun, statusName } from '../../../scripts/labels.mjs'
+import { integrationPath as path } from '../../../scripts/site-links.mjs'
 import { coverage, marketplaces } from '../generated/catalog.mjs'
 import MarketplaceLogo from './MarketplaceLogo.vue'
 import WorkflowDemo from './WorkflowDemo.vue'
@@ -42,28 +43,6 @@ const stats = [
   { value: coverage.integrationGuides, label: noun(coverage.integrationGuides, 'integration guide') },
 ]
 
-const path = [
-  {
-    title: 'Connect a seller account',
-    text: 'Register the app, request seller consent, and verify regional access before any data moves.',
-    link: '/marketplaces/amazon/guides/seller-onboarding',
-  },
-  {
-    title: 'Migrate existing listings',
-    text: 'Capture a baseline, validate product types, and stage writes you can reconcile.',
-    link: '/marketplaces/amazon/workflows/active-listing-migration',
-  },
-  {
-    title: 'Sync orders incrementally',
-    text: 'Poll by update time, drain pagination, and persist each page before advancing.',
-    link: '/marketplaces/amazon/workflows/order-lifecycle',
-  },
-  {
-    title: 'Operate reliably',
-    text: 'Plan for rate limits, retries, notifications, and safe reauthorization.',
-    link: '/marketplaces/amazon/guides/development-guide',
-  },
-]
 </script>
 
 <template>

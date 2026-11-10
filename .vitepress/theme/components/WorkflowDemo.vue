@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { onMounted, onUnmounted, ref } from 'vue'
 import { withBase } from 'vitepress'
+import { walkthroughLink } from '../../../scripts/site-links.mjs'
 
 // Sample data only. It walks through the order-sync loop described in
 // marketplaces/amazon/workflows/order-lifecycle.md; nothing here comes from a live account.
@@ -74,6 +75,6 @@ onUnmounted(() => {
         </span>
       </li>
     </ol>
-    <a class="mip-flow-link" :href="withBase('/marketplaces/amazon/workflows/order-lifecycle')">Read the order synchronization workflow</a>
+    <a class="mip-flow-link" :href="withBase(walkthroughLink)">Read the order synchronization workflow</a>
   </figure>
 </template>
