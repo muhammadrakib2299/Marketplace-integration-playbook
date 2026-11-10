@@ -75,6 +75,7 @@ export default defineConfig({
             { text: 'Feeds API', link: '/marketplaces/amazon/apis/feeds' },
             { text: 'FBA Inventory API', link: '/marketplaces/amazon/apis/fba-inventory' },
             { text: 'Notifications integration', link: '/marketplaces/amazon/guides/notifications-integration' },
+            { text: 'Changelog', link: '/marketplaces/amazon/changelog' },
           ],
         },
         {
@@ -90,6 +91,7 @@ export default defineConfig({
             { text: 'Returns and refunds', link: '/marketplaces/tiktok-shop/apis/returns-refunds' },
             { text: 'Events and reliability', link: '/marketplaces/tiktok-shop/apis/events' },
             { text: 'Get Authorized Category Assets · 202405', link: '/marketplaces/tiktok-shop/apis/authorized-category-assets' },
+            { text: 'Changelog', link: '/marketplaces/tiktok-shop/changelog' },
           ],
         },
       ],
