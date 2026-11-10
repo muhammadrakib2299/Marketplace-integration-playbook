@@ -4,7 +4,7 @@ The [GitHub Actions workflow](https://github.com/muhammadrakib2299/Marketplace-i
 
 ## Checks performed
 
-`npm test` runs the Node.js test suite in `tests/`. It covers the catalog generator (marketplace and guide validation, badge and route derivation, coverage counts, and missing-page detection) and the explorer's search and URL-filter helpers. The site build runs the same generator, so a catalog entry or guide that links to a missing page also fails the **Build VitePress site** job.
+`npm test` runs the Node.js test suite in `tests/`. It covers the catalog generator (marketplace and guide validation, badge and route derivation, coverage counts, and missing-page detection), the directory's search, filter, and URL-state helpers, the page-context and display helpers, the site links that theme components use, and the design-token contrast checks. The site build runs the same generator, so a catalog entry or guide that links to a missing page also fails the **Build VitePress site** job.
 
 `markdownlint-cli2` checks Markdown style and basic structure using the [`.markdownlint-cli2.jsonc` configuration](https://github.com/muhammadrakib2299/Marketplace-integration-playbook/blob/main/.markdownlint-cli2.jsonc). The configuration keeps the normal rules but disables strict line-length and table-column-alignment rules, which can make long technical documentation harder to maintain. It does not automatically rewrite files.
 

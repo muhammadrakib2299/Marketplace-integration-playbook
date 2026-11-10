@@ -32,11 +32,11 @@ Every guide should identify its source, API version, marketplace/region, access 
 
 ## Repository structure
 
-- `catalog/marketplaces.yaml` is the machine-readable marketplace index; `catalog/guides.yaml` lists the guides shown in the homepage explorer.
+- `catalog/marketplaces.yaml` is the machine-readable marketplace index; `catalog/guides.yaml` files each guide under an integration topic, which drives each marketplace's coverage on its overview page and in the directory.
 - `marketplaces/amazon/` and `marketplaces/tiktok-shop/` contain each marketplace's API map, guides, and workflows.
 - `marketplaces/_template/` is a reusable starting point for future marketplaces.
 - `docs/` contains repository-wide integration principles and lifecycle guidance.
-- `scripts/` generates the site's directory and homepage data from the catalog; `tests/` covers it.
+- `scripts/` generates the site's sidebar, directory, overview-page, and homepage data from the catalog; `tests/` covers it.
 - `.github/workflows/` contains documentation quality checks.
 
 ## Add a marketplace
