@@ -1,4 +1,8 @@
-# Fulfillment API
+# Fulfillment, logistics, and finance APIs
+
+This page groups three TTS API families that follow an accepted order: fulfillment, logistics, and finance. Each section is a review of the official overview only.
+
+## Fulfillment API
 
 **Coverage:** official-reference review only. No shipment was created and no carrier or FBT account was tested.
 
@@ -8,7 +12,7 @@ A fulfillment integration should keep the TikTok order, package, shipment, carri
 
 Official source: [Fulfillment API overview](https://partner.tiktokshop.com/docv2/page/fulfillment-api-overview).
 
-# Logistics API
+## Logistics API
 
 **Coverage:** official-reference review only. No warehouse or delivery-provider lookup was performed.
 
@@ -16,7 +20,7 @@ The Logistics API supports logistics context when sellers use TikTok Shop-provid
 
 Official source: [Logistics API overview](https://partner.tiktokshop.com/docv2/page/logistic-api-overview).
 
-# Finance API
+## Finance API
 
 **Coverage:** official-reference review only. No payment or settlement data was retrieved.
 
