@@ -1,13 +1,13 @@
-import { mkdir, writeFile } from 'node:fs/promises'
+import { mkdir, readFile, writeFile } from 'node:fs/promises'
 import { resolve } from 'node:path'
 import { parse } from 'yaml'
+import { repositoryRoot as root } from './catalog-data.mjs'
 
-const root = resolve(new URL('..', import.meta.url).pathname)
 const catalogPath = resolve(root, 'catalog/marketplaces.yaml')
 const outputDir = resolve(root, '.vitepress/theme/generated')
 const outputPath = resolve(outputDir, 'marketplaces.mjs')
 
-const catalog = parse(await (await import('node:fs/promises')).readFile(catalogPath, 'utf8'))
+const catalog = parse(await readFile(catalogPath, 'utf8'))
 if (!catalog || !Array.isArray(catalog.marketplaces)) {
   throw new Error('catalog/marketplaces.yaml must contain a marketplaces array')
 }
