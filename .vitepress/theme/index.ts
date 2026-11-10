@@ -1,5 +1,6 @@
 import DefaultTheme from 'vitepress/theme'
 import '@fontsource-variable/jetbrains-mono'
+import Layout from './Layout.vue'
 import MarketplaceDirectory from './components/MarketplaceDirectory.vue'
 import PlaybookExplorer from './components/PlaybookExplorer.vue'
 import PlaybookHome from './components/PlaybookHome.vue'
@@ -11,6 +12,7 @@ import './styles/base.css'
 
 export default {
   extends: DefaultTheme,
+  Layout,
   enhanceApp({ app }) {
     app.component('MarketplaceDirectory', MarketplaceDirectory)
     app.component('PlaybookExplorer', PlaybookExplorer)
