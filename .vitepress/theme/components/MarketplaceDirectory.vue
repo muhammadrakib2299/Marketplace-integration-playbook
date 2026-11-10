@@ -57,6 +57,8 @@ const summary = computed(() => {
   return pages > 1 ? `${base} · showing ${start}–${end}` : base
 })
 
+// Keeps "&" on the line of the word before it, so wrapped column headers never start with it.
+const headerLabel = (label: string) => label.replace(/ & /g, ' & ')
 const documentedTopics = (id: string) => (capabilityMap[id] ?? []).filter((topic) => topic.guides.length > 0).length
 const verifiedOn = (value: string | null) => {
   const iso = formatIsoDate(value)
@@ -131,6 +133,15 @@ watch([query, category, status, sort, page], () => {
           </option>
         </select>
       </label>
+    </div>
+
+    <div id="marketplace-results" class="mip-dir-status">
+      <div class="mip-dir-count">
+        <p aria-live="polite">{{ summary }}</p>
+        <button v-if="hasFilters" type="button" class="mip-dir-reset" @click="resetFilters">
+          <X :size="14" :stroke-width="2" aria-hidden="true" /> Clear filters
+        </button>
+      </div>
       <div class="mip-dir-sort" role="group" aria-label="Sort marketplaces">
         <button type="button" :aria-pressed="sort === 'name'" @click="sort = 'name'">
           <ArrowDownAZ :size="15" :stroke-width="2" aria-hidden="true" /> A–Z
@@ -139,13 +150,6 @@ watch([query, category, status, sort, page], () => {
           <CalendarClock :size="15" :stroke-width="2" aria-hidden="true" /> Recently verified
         </button>
       </div>
-    </div>
-
-    <div id="marketplace-results" class="mip-dir-status">
-      <p aria-live="polite">{{ summary }}</p>
-      <button v-if="hasFilters" type="button" class="mip-dir-reset" @click="resetFilters">
-        <X :size="14" :stroke-width="2" aria-hidden="true" /> Clear filters
-      </button>
     </div>
 
     <ul v-if="current.total" class="mip-dir-list">
@@ -215,7 +219,7 @@ watch([query, category, status, sort, page], () => {
           <thead>
             <tr>
               <th scope="col">Marketplace</th>
-              <th v-for="topic in topics" :key="topic.id" scope="col">{{ topic.label }}</th>
+              <th v-for="topic in topics" :key="topic.id" scope="col">{{ headerLabel(topic.label) }}</th>
             </tr>
           </thead>
           <tbody>

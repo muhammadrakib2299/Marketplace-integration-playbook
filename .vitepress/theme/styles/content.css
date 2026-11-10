@@ -154,6 +154,9 @@
 /* ---------- Tables (wrapped in .mip-table by the markdown config) ---------- */
 
 .vp-doc .mip-table {
+  /* A containing block, so absolutely positioned cell content (screen-reader text) scrolls with the
+     table instead of escaping it and widening the page on small screens. */
+  position: relative;
   margin: 20px 0;
   overflow-x: auto;
   border: 1px solid var(--mip-border);

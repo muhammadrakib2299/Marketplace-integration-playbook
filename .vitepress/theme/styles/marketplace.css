@@ -100,8 +100,14 @@
   line-height: 1.15;
 }
 
+/* Long status labels wrap inside narrow fact cells instead of spilling out. */
 .mip-hub-facts .mip-badge {
+  height: auto;
+  min-height: 22px;
   margin-left: 0;
+  padding: 2px 8px;
+  line-height: 1.35;
+  white-space: normal;
 }
 
 .mip-hub .mip-hub-gap {
@@ -507,12 +513,19 @@
 
 .mip-directory .mip-dir-status {
   display: flex;
-  gap: 12px;
+  flex-wrap: wrap;
+  gap: 10px 16px;
   align-items: center;
   justify-content: space-between;
-  min-height: 34px;
-  margin: 18px 0 10px;
+  margin: 16px 0 12px;
   scroll-margin-top: calc(var(--vp-nav-height) + 24px);
+}
+
+.mip-directory .mip-dir-count {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 14px;
+  align-items: center;
 }
 
 .mip-directory .mip-dir-status p {
@@ -700,11 +713,18 @@
 .mip-directory .mip-matrix td {
   text-align: center;
   vertical-align: middle;
-  white-space: nowrap;
 }
 
+/* Topic headers wrap onto two lines so all seven columns fit beside the marketplace names. */
 .mip-directory .mip-matrix thead th {
+  min-width: 76px;
   font-size: 12.5px;
+  line-height: 1.3;
+  vertical-align: bottom;
+}
+
+.mip-directory .mip-matrix th:first-child {
+  min-width: 140px;
 }
 
 .mip-directory .mip-matrix th:first-child {
