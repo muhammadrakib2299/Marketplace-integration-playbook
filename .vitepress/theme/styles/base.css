@@ -1,7 +1,6 @@
 /* Base layer: typography details, custom scrollbars, focus ring, and motion (spec 5.1 and 5.1c). */
 
 body {
-  font-feature-settings: 'cv11', 'ss01';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }

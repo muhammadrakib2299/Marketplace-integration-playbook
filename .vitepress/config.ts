@@ -53,6 +53,8 @@ export default defineConfigWithTheme<DefaultTheme.Config & { buildDate: string }
     },
   },
   themeConfig: {
+    // One-word brand in the top bar; the full name stays in page titles and metadata.
+    siteTitle: 'Playbook',
     logo: '/brand-mark.svg',
     buildDate: new Date().toISOString().slice(0, 10),
     lightModeSwitchTitle: 'Switch to light mode',
@@ -60,6 +62,8 @@ export default defineConfigWithTheme<DefaultTheme.Config & { buildDate: string }
     // Test reports, Limits & quotas, and Guidelines join the nav in phase 5, when their pages exist.
     nav: [
       { text: 'Directory', link: '/marketplaces/' },
+      { text: 'Amazon SP-API', link: '/marketplaces/amazon/', activeMatch: '^/marketplaces/amazon/' },
+      { text: 'TikTok Shop', link: '/marketplaces/tiktok-shop/', activeMatch: '^/marketplaces/tiktok-shop/' },
       { text: 'Engineering', items: docs.map((doc) => ({ text: doc.label, link: doc.href })) },
     ],
     sidebar: buildSidebar({
@@ -83,9 +87,6 @@ export default defineConfigWithTheme<DefaultTheme.Config & { buildDate: string }
       pattern: `${repositoryUrl}/edit/main/:path`,
       text: 'Edit this page on GitHub',
     },
-    footer: {
-      message:
-        'Marketplace names and logos are trademarks of their respective owners. This is an independent resource; no endorsement is implied.',
-    },
+    // No themeConfig.footer: SiteFooter (Layout.vue) renders the footer on every page, including the trademark notice.
   },
 })

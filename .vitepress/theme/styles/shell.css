@@ -1,16 +1,20 @@
 /*
- * Shell layer: top bar, sidebar, right rail, search palette, and mobile drawer (spec 5.2).
- * Selectors target VitePress 1.6.4 default-theme classes (pinned in package.json);
- * recheck them when upgrading VitePress.
+ * Shell layer (Harbor direction): navy top bar and footer, mist sidebar, right rail, search
+ * palette, and mobile drawer. Selectors target VitePress 1.6.4 default-theme classes (pinned in
+ * package.json); recheck them when upgrading VitePress.
  */
 
 :root,
 .dark {
-  --vp-nav-bg-color: var(--mip-surface);
+  /* Full-width app shell: VitePress centres the layout above 1440px; 100vw keeps the sidebar flush left
+     and lets the content and right rail centre in the remaining space. */
+  --vp-layout-max-width: 100vw;
+  --vp-nav-bg-color: var(--mip-chrome);
+  --vp-nav-logo-height: 30px;
   --vp-nav-screen-bg-color: var(--mip-surface);
-  --vp-sidebar-bg-color: var(--mip-surface);
+  --vp-sidebar-bg-color: var(--mip-surface-2);
   --vp-local-nav-bg-color: var(--mip-surface);
-  --vp-backdrop-bg-color: rgba(10, 14, 22, 0.45);
+  --vp-backdrop-bg-color: rgba(8, 19, 34, 0.5);
   --vp-local-search-bg: var(--mip-surface);
   --vp-local-search-result-bg: var(--mip-surface);
   --vp-local-search-result-border: var(--mip-border);
@@ -18,16 +22,14 @@
   --vp-local-search-result-selected-border: var(--mip-primary-border);
   --vp-local-search-highlight-bg: var(--mip-primary-soft);
   --vp-local-search-highlight-text: var(--mip-primary-ink);
-  /* Brand block in the top bar; wider than the sidebar so title and subtitle fit on one line each. */
-  --mip-brand-width: 344px;
 }
 
-/* ---------- Top bar (VPNavBar) ---------- */
+/* ---------- Top bar ---------- */
 
 .VPNav .VPNavBar {
-  /* VitePress makes the bar transparent at the top of some pages; the app shell keeps it solid. */
-  background-color: var(--mip-surface) !important;
-  border-bottom: 1px solid var(--mip-border);
+  /* VitePress makes the bar transparent at the top of some pages; the Harbor chrome stays solid. */
+  background-color: var(--mip-chrome) !important;
+  border-bottom: 1px solid var(--mip-chrome-line);
 }
 
 .VPNav .VPNavBar .divider {
@@ -39,74 +41,39 @@
 }
 
 .VPNavBarTitle .title {
-  display: grid;
-  grid-template-columns: 30px auto;
-  grid-template-rows: auto auto;
-  align-content: center;
-  column-gap: 10px;
-  color: var(--mip-ink);
-  font-size: 15px;
-  font-weight: 600;
-  letter-spacing: -0.01em;
-  line-height: 1.2;
+  gap: 10px;
+  color: var(--mip-chrome-text);
+  font-size: 17px;
+  font-weight: 650;
+  letter-spacing: -0.015em;
 }
 
 .VPNavBarTitle .title .logo {
-  grid-row: 1 / span 2;
-  width: 30px;
-  height: 30px;
-  margin: 0;
-}
-
-.mip-brand-subtitle {
-  grid-column: 2;
-  color: var(--mip-faint-text);
-  font-size: 11px;
-  font-weight: 500;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-}
-
-@media (max-width: 767px) {
-  .mip-brand-subtitle {
-    display: none;
-  }
-
-  .VPNavBarTitle .title {
-    font-size: 14px;
-  }
+  margin-right: 0;
+  border-radius: 8px;
 }
 
 @media (min-width: 960px) {
   .VPNav .VPNavBar.has-sidebar .title {
-    width: var(--mip-brand-width);
-    padding: 0 20px;
-  }
-
-  .VPNav .VPNavBar.has-sidebar .content {
-    padding-left: var(--mip-brand-width);
+    padding: 0 22px;
   }
 }
 
 @media (min-width: 1440px) {
   .VPNav .VPNavBar.has-sidebar .title {
-    padding-left: max(20px, calc((100% - (var(--vp-layout-max-width) - 64px)) / 2));
-    width: calc((100% - (var(--vp-layout-max-width) - 64px)) / 2 + var(--mip-brand-width));
-  }
-
-  .VPNav .VPNavBar.has-sidebar .content {
-    padding-left: calc((100vw - var(--vp-layout-max-width)) / 2 + var(--mip-brand-width));
+    width: var(--vp-sidebar-width);
+    padding-left: 22px;
   }
 }
 
-/* Nav links and dropdown buttons */
+/* Nav links and dropdown buttons on the navy bar */
 .VPNav .VPNavBarMenuLink,
 .VPNav .VPNavBarMenuGroup .button {
   height: 36px;
   margin: 0 2px;
-  padding: 0 10px;
+  padding: 0 11px;
   border-radius: 8px;
-  color: var(--mip-muted);
+  color: var(--mip-chrome-muted);
   font-size: 14px;
   font-weight: 500;
   line-height: 36px;
@@ -115,16 +82,22 @@
     color var(--mip-duration-fast) var(--mip-ease);
 }
 
-.VPNav .VPNavBarMenuLink:hover,
-.VPNav .VPNavBarMenuGroup .button:hover {
-  background-color: var(--mip-surface-2);
-  color: var(--mip-ink);
+.VPNav .VPNavBarMenuGroup .button .text {
+  color: inherit;
+}
+
+@media (hover: hover) {
+  .VPNav .VPNavBarMenuLink:hover,
+  .VPNav .VPNavBarMenuGroup .button:hover {
+    background-color: var(--mip-chrome-2);
+    color: var(--mip-chrome-text);
+  }
 }
 
 .VPNav .VPNavBarMenuLink.active,
 .VPNav .VPNavBarMenuGroup.active .button {
-  background-color: var(--mip-primary-soft);
-  color: var(--mip-primary-ink);
+  background-color: color-mix(in srgb, var(--mip-primary) 28%, var(--mip-chrome));
+  color: var(--mip-chrome-text);
 }
 
 .VPNav .VPFlyout .menu {
@@ -138,14 +111,7 @@
   border: 1px solid transparent;
   border-radius: 8px;
   background: transparent;
-  transition:
-    background-color var(--mip-duration-fast) var(--mip-ease),
-    border-color var(--mip-duration-fast) var(--mip-ease);
-}
-
-.VPNavBarAppearance .VPSwitchAppearance:hover {
-  border-color: var(--mip-border);
-  background: var(--mip-surface-2);
+  transition: background-color var(--mip-duration-fast) var(--mip-ease);
 }
 
 .VPNavBarAppearance .VPSwitchAppearance .check {
@@ -156,67 +122,95 @@
   transform: none !important;
 }
 
+.VPNavBarAppearance .VPSwitchAppearance .icon [class^='vpi-'],
+.VPNav .VPNavBarSocialLinks .VPSocialLink,
+.VPNav .VPNavBarExtra .button {
+  color: var(--mip-chrome-muted);
+}
+
 .VPNavBarAppearance .VPSwitchAppearance .icon [class^='vpi-'] {
   width: 18px;
   height: 18px;
-  color: var(--mip-muted);
 }
 
-.VPNavBarAppearance .VPSwitchAppearance:hover .icon [class^='vpi-'] {
-  color: var(--mip-ink);
+@media (hover: hover) {
+  .VPNavBarAppearance .VPSwitchAppearance:hover {
+    background: var(--mip-chrome-2);
+  }
+
+  .VPNavBarAppearance .VPSwitchAppearance:hover .icon [class^='vpi-'],
+  .VPNav .VPNavBarSocialLinks .VPSocialLink:hover {
+    color: var(--mip-chrome-text);
+  }
 }
 
-/* Search trigger styled as the mockup's search field. */
+/* Vertical separators between nav groups, recoloured for the navy bar. */
+.VPNav .VPNavBar .VPNavBarAppearance::before,
+.VPNav .VPNavBar .VPNavBarSocialLinks::before {
+  background-color: var(--mip-chrome-line);
+}
+
+.VPNav .VPNavBarHamburger .container > span {
+  background-color: var(--mip-chrome-text);
+}
+
+/* Search trigger styled as a field on the navy bar. */
 @media (min-width: 768px) {
   .VPNav .VPNavBarSearch {
     flex-grow: 1;
     justify-content: flex-start;
+    padding-left: 32px;
+  }
+
+  /* With a sidebar, the search field lines up with the content column instead. */
+  .VPNav .VPNavBar.has-sidebar .VPNavBarSearch {
     padding-left: 0;
   }
 
   .VPNav .VPNavBarSearch .DocSearch-Button {
     justify-content: space-between;
     width: 100%;
-    max-width: 460px;
-    height: 38px;
+    max-width: 380px;
+    height: 36px;
     margin: 0;
-    padding: 0 10px 0 12px;
-    border: 1px solid var(--mip-border);
-    border-radius: var(--mip-radius);
-    background: var(--mip-bg);
+    padding: 0 8px 0 11px;
+    border: 1px solid var(--mip-chrome-line);
+    border-radius: 9px;
+    background: var(--mip-chrome-2);
     transition: border-color var(--mip-duration-fast) var(--mip-ease);
   }
 
-  .VPNav .VPNavBarSearch .DocSearch-Button:hover {
-    border-color: var(--mip-border-strong);
-    background: var(--mip-bg);
-  }
-
   .VPNav .DocSearch-Button .DocSearch-Button-Placeholder {
-    padding-left: 10px;
-    color: var(--mip-faint-text);
+    padding-left: 9px;
+    color: var(--mip-chrome-muted);
     font-size: 13.5px;
     font-weight: 400;
   }
 }
 
+@media (hover: hover) and (min-width: 768px) {
+  .VPNav .VPNavBarSearch .DocSearch-Button:hover {
+    border-color: var(--mip-chrome-muted);
+    background: var(--mip-chrome-2);
+  }
+}
+
 .VPNav .DocSearch-Button .DocSearch-Search-Icon {
-  color: var(--mip-faint-text);
+  color: var(--mip-chrome-muted);
 }
 
 .VPNav .DocSearch-Button .DocSearch-Button-Key {
   min-width: 22px;
   height: 20px;
-  border: 1px solid var(--mip-border-strong);
-  border-bottom-width: 2px;
+  border: 1px solid var(--mip-chrome-line);
   border-radius: 5px;
-  background: var(--mip-surface-2);
-  color: var(--mip-muted);
+  background: transparent;
+  color: var(--mip-chrome-muted);
   font-family: var(--vp-font-family-mono);
   font-size: 11px;
 }
 
-/* ---------- Sidebar (VPSidebar) ---------- */
+/* ---------- Sidebar ---------- */
 
 .VPSidebar {
   border-right: 1px solid var(--mip-border);
@@ -227,37 +221,52 @@
   padding-top: 4px;
 }
 
-.VPSidebar .VPSidebarItem.level-0 {
-  padding-bottom: 14px;
+@media (min-width: 960px) {
+  .Layout .VPSidebar {
+    padding-right: 12px;
+    padding-left: 12px;
+  }
+
+  /* VitePress fixes groups at sidebar width - 64px; let them fill the narrower padding. */
+  .Layout .VPSidebar .group {
+    width: 100%;
+  }
 }
 
-/* Group titles: uppercase labels; marketplace titles keep the name in normal case. */
+@media (min-width: 1440px) {
+  .Layout .VPSidebar {
+    width: var(--vp-sidebar-width);
+    padding-left: 12px;
+  }
+}
+
+.VPSidebar .VPSidebarItem.level-0 {
+  padding-bottom: 16px;
+}
+
+/* Group labels in sentence case; marketplace titles carry the name, logo, and status. */
 .VPSidebar .VPSidebarItem.level-0 > .item > .text {
   display: flex;
   align-items: center;
   gap: 8px;
   padding: 6px 10px;
-  color: var(--mip-faint-text);
-  font-size: 11px;
+  color: var(--mip-muted);
+  font-size: 12.5px;
   font-weight: 600;
-  letter-spacing: 0.08em;
+  letter-spacing: 0;
   line-height: 1.4;
-  text-transform: uppercase;
 }
 
 .VPSidebar .mip-group-name {
   min-width: 0;
   color: var(--mip-ink);
-  font-size: 13.5px;
+  font-size: 14px;
   font-weight: 600;
-  letter-spacing: -0.005em;
   line-height: 1.35;
   overflow-wrap: break-word;
-  text-transform: none;
 }
 
-/* Marketplace titles: logo and name on one row, the status badge beneath the name.
-   Same selector depth as the level-0 title rule above, so this later rule wins. */
+/* Same selector depth as the label rule above, so this later rule wins. */
 .VPSidebar .VPSidebarItem > .item > .text:has(.mip-group-name) {
   display: grid;
   grid-template-areas:
@@ -282,24 +291,6 @@
   margin-left: 0;
 }
 
-@media (min-width: 960px) {
-  .Layout .VPSidebar {
-    padding-right: 12px;
-    padding-left: 12px;
-  }
-
-  /* VitePress fixes groups at sidebar width - 64px; let them fill the narrower padding. */
-  .Layout .VPSidebar .group {
-    width: 100%;
-  }
-}
-
-@media (min-width: 1440px) {
-  .Layout .VPSidebar {
-    padding-left: max(12px, calc((100% - (var(--vp-layout-max-width) - 64px)) / 2));
-  }
-}
-
 .VPSidebar .VPSidebarItem > .item > .indicator {
   display: none;
 }
@@ -309,19 +300,17 @@
   min-width: 0;
   margin: 1px 0;
   padding: 7px 10px;
-  border: 1px solid transparent;
   border-radius: 8px;
-  transition:
-    background-color var(--mip-duration-fast) var(--mip-ease),
-    border-color var(--mip-duration-fast) var(--mip-ease);
+  transition: background-color var(--mip-duration-fast) var(--mip-ease);
 }
 
-.VPSidebar .VPSidebarItem.is-link > .item > .link:hover {
-  background-color: var(--mip-surface-2);
+@media (hover: hover) {
+  .VPSidebar .VPSidebarItem.is-link > .item > .link:hover {
+    background-color: var(--mip-surface-3);
+  }
 }
 
 .VPSidebar .VPSidebarItem.is-active > .item > .link {
-  border-color: var(--mip-primary-border);
   background-color: var(--mip-primary-soft);
 }
 
@@ -332,18 +321,16 @@
   min-width: 0;
   padding: 0;
   color: var(--mip-text);
-  font-size: 13.5px;
-  font-weight: 500;
+  font-size: 14px;
+  font-weight: 450;
   line-height: 1.4;
   overflow-wrap: break-word;
 }
 
-.VPSidebar .VPSidebarItem.is-link > .item > .link:hover .text {
-  color: var(--mip-ink);
-}
-
-.VPSidebar .VPSidebarItem.is-active > .item .text {
+/* VitePress styles the active label with a deeper selector; match its depth so primary-ink wins. */
+.VPSidebar .VPSidebarItem.VPSidebarItem.is-active > .item > .link > .text {
   color: var(--mip-primary-ink);
+  font-weight: 600;
 }
 
 /* Chips, step dots, logo tiles, and status badges generated by scripts/sidebar.mjs */
@@ -352,7 +339,7 @@
   flex: none;
   margin-left: auto;
   border: 1px solid var(--mip-border);
-  background: var(--mip-surface-2);
+  background: var(--mip-surface);
   font-variant-numeric: tabular-nums;
   white-space: nowrap;
 }
@@ -361,19 +348,24 @@
   padding: 0 7px;
   border-radius: 999px;
   color: var(--mip-faint-text);
-  font-size: 11px;
+  font-size: 11.5px;
   font-weight: 500;
   line-height: 18px;
 }
 
+/* API versions are identifiers, so they stay in the mono face. */
 .mip-chip {
   padding: 0 6px;
   border-radius: var(--mip-radius-sm);
   color: var(--mip-muted);
   font-family: var(--vp-font-family-mono);
-  font-size: 10.5px;
-  font-weight: 500;
-  line-height: 17px;
+  font-size: 11px;
+  line-height: 18px;
+}
+
+.VPSidebarItem.is-active > .item .mip-chip {
+  border-color: var(--mip-primary-border);
+  color: var(--mip-primary-ink);
 }
 
 .mip-step {
@@ -384,7 +376,7 @@
   height: 20px;
   border: 1px solid var(--mip-border-strong);
   border-radius: 50%;
-  background: var(--mip-surface-2);
+  background: var(--mip-surface);
   color: var(--mip-muted);
   font-size: 11px;
   font-variant-numeric: tabular-nums;
@@ -408,7 +400,7 @@
   height: 22px;
   border: 1px solid var(--mip-border);
   border-radius: var(--mip-radius-sm);
-  background: var(--mip-surface-2);
+  background: var(--mip-surface);
 }
 
 .mip-logo svg {
@@ -427,8 +419,6 @@ html:not(.dark) .mip-logo[data-tone='bright'] svg {
   color: var(--mip-muted);
   font-size: 11px;
   font-weight: 700;
-  letter-spacing: 0;
-  text-transform: none;
 }
 
 .mip-badge {
@@ -440,11 +430,10 @@ html:not(.dark) .mip-logo[data-tone='bright'] svg {
   padding: 0 8px;
   border: 1px solid var(--mip-border);
   border-radius: 999px;
-  background: var(--mip-surface-2);
+  background: var(--mip-surface);
   color: var(--mip-muted);
-  font-size: 10.5px;
+  font-size: 11.5px;
   font-weight: 600;
-  letter-spacing: 0.04em;
   white-space: nowrap;
 }
 
@@ -475,11 +464,9 @@ html:not(.dark) .mip-logo[data-tone='bright'] svg {
 /* ---------- Right rail: outline and evidence card ---------- */
 
 .VPDocAsideOutline .outline-title {
-  color: var(--mip-faint-text);
-  font-size: 11px;
+  color: var(--mip-ink);
+  font-size: 13px;
   font-weight: 600;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
 }
 
 .VPDocAsideOutline .content {
@@ -499,7 +486,7 @@ html:not(.dark) .mip-logo[data-tone='bright'] svg {
   padding: 5px 0 5px 12px;
   border-left: 2px solid var(--mip-border);
   color: var(--mip-muted);
-  font-size: 13px;
+  font-size: 13.5px;
   font-weight: 400;
   line-height: 1.45;
   transition:
@@ -511,8 +498,10 @@ html:not(.dark) .mip-logo[data-tone='bright'] svg {
   padding-left: 24px;
 }
 
-.VPDocOutlineItem .outline-link:hover {
-  color: var(--mip-ink);
+@media (hover: hover) {
+  .VPDocOutlineItem .outline-link:hover {
+    color: var(--mip-ink);
+  }
 }
 
 .VPDocOutlineItem .outline-link.active {
@@ -523,11 +512,10 @@ html:not(.dark) .mip-logo[data-tone='bright'] svg {
 
 .mip-evidence {
   margin-top: 20px;
-  padding: 12px;
+  padding: 14px;
   border: 1px solid var(--mip-border);
   border-radius: var(--mip-radius-lg);
-  background: var(--mip-surface);
-  box-shadow: var(--mip-shadow-sm);
+  background: var(--mip-surface-2);
 }
 
 .mip-evidence-head {
@@ -542,24 +530,22 @@ html:not(.dark) .mip-logo[data-tone='bright'] svg {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  color: var(--mip-faint-text);
-  font-size: 11px;
+  color: var(--mip-ink);
+  font-size: 13px;
   font-weight: 600;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
 }
 
 .mip-evidence-text {
   margin: 0 0 8px;
   color: var(--mip-text);
-  font-size: 12.5px;
+  font-size: 13px;
   line-height: 1.5;
 }
 
 .mip-evidence-checked {
   margin: 0;
   color: var(--mip-muted);
-  font-size: 12px;
+  font-size: 12.5px;
 }
 
 .mip-evidence-checked time {
@@ -587,17 +573,110 @@ html:not(.dark) .mip-logo[data-tone='bright'] svg {
   height: 30px;
 }
 
-.mip-icon-button:hover {
-  border-color: var(--mip-border);
-  background: var(--mip-surface-2);
-  color: var(--mip-ink);
+@media (hover: hover) {
+  .mip-icon-button:hover {
+    border-color: var(--mip-border);
+    background: var(--mip-surface);
+    color: var(--mip-ink);
+  }
 }
 
-.mip-trademark-note {
-  margin: 32px 0 0;
-  color: var(--mip-faint-text);
-  font-size: 12px;
-  line-height: 1.5;
+/* ---------- Site footer (SiteFooter.vue, every page) ---------- */
+
+.mip-footer {
+  position: relative;
+  border-top: 1px solid var(--mip-chrome-line);
+  background: var(--mip-chrome);
+  color: var(--mip-chrome-muted);
+}
+
+@media (min-width: 960px) {
+  /* Pages with a sidebar: the fixed sidebar occupies the left edge, so the footer starts beside it. */
+  .VPContent.has-sidebar ~ .mip-footer {
+    padding-left: var(--vp-sidebar-width);
+  }
+}
+
+.mip-footer-inner {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 44px 32px 24px;
+}
+
+.mip-footer-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.5fr) repeat(3, minmax(0, 1fr));
+  gap: 32px;
+}
+
+.mip-footer-logo {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--mip-chrome-text);
+  font-size: 17px;
+  font-weight: 650;
+  letter-spacing: -0.015em;
+  text-decoration: none;
+}
+
+.mip-footer-logo img {
+  border-radius: 7px;
+}
+
+.mip-footer-brand p {
+  max-width: 36ch;
+  margin: 12px 0 0;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.mip-footer-heading {
+  margin-bottom: 10px;
+  color: var(--mip-chrome-text);
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.mip-footer-col a {
+  display: block;
+  padding: 4px 0;
+  color: var(--mip-chrome-muted);
+  font-size: 14px;
+  text-decoration: none;
+  transition: color var(--mip-duration-fast) var(--mip-ease);
+}
+
+@media (hover: hover) {
+  .mip-footer-col a:hover {
+    color: var(--mip-chrome-text);
+  }
+}
+
+.mip-footer-bar {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 8px 24px;
+  margin-top: 36px;
+  padding-top: 16px;
+  border-top: 1px solid var(--mip-chrome-line);
+  font-size: 13px;
+}
+
+@media (max-width: 767px) {
+  .mip-footer-inner {
+    padding: 36px 20px 20px;
+  }
+
+  .mip-footer-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 28px 20px;
+  }
+
+  .mip-footer-brand {
+    grid-column: 1 / -1;
+  }
 }
 
 /* ---------- Search palette (VPLocalSearchBox) ---------- */
@@ -607,13 +686,18 @@ html:not(.dark) .mip-logo[data-tone='bright'] svg {
   border: 1px solid var(--mip-border);
   border-radius: var(--mip-radius-lg);
   box-shadow: var(--mip-shadow-lg);
-  animation: mip-palette-in var(--mip-duration) var(--mip-ease);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .VPLocalSearchBox .shell {
+    animation: mip-palette-in var(--mip-duration) var(--mip-ease);
+  }
 }
 
 @keyframes mip-palette-in {
   from {
     opacity: 0;
-    transform: scale(0.98);
+    scale: 0.98;
   }
 }
 
@@ -636,6 +720,10 @@ html:not(.dark) .mip-logo[data-tone='bright'] svg {
   color: var(--mip-primary-ink);
 }
 
+.VPLocalSearchBox .results {
+  overscroll-behavior: contain;
+}
+
 /* ---------- Mobile: local nav, nav screen, and drawer ---------- */
 
 .VPLocalNav {
@@ -645,6 +733,11 @@ html:not(.dark) .mip-logo[data-tone='bright'] svg {
 .VPNavScreen .VPNavScreenMenuLink,
 .VPNavScreen .VPNavScreenMenuGroup {
   border-bottom-color: var(--mip-border);
+}
+
+.VPNavScreen,
+.VPSidebar {
+  overscroll-behavior: contain;
 }
 
 @media (max-width: 959px) {

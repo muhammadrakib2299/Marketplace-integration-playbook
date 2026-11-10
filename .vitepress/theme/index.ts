@@ -1,5 +1,8 @@
-import DefaultTheme from 'vitepress/theme'
-import '@fontsource-variable/jetbrains-mono'
+// The theme without VitePress's bundled Inter: the Harbor direction uses IBM Plex (self-hosted below).
+import DefaultTheme from 'vitepress/theme-without-fonts'
+import '@fontsource-variable/ibm-plex-sans'
+import '@fontsource/ibm-plex-mono/400.css'
+import '@fontsource/ibm-plex-mono/500.css'
 import Layout from './Layout.vue'
 import MarketplaceDirectory from './components/MarketplaceDirectory.vue'
 import PlaybookExplorer from './components/PlaybookExplorer.vue'

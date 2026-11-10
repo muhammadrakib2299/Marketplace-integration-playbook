@@ -1,25 +1,22 @@
 <script setup lang="ts">
-import DefaultTheme from 'vitepress/theme'
-import BuildPill from './components/BuildPill.vue'
+import DefaultTheme from 'vitepress/theme-without-fonts'
+import DocHeader from './components/DocHeader.vue'
 import EvidenceCard from './components/EvidenceCard.vue'
-import TrademarkNote from './components/TrademarkNote.vue'
+import SiteFooter from './components/SiteFooter.vue'
 
 const { Layout } = DefaultTheme
 </script>
 
 <template>
   <Layout>
-    <template #nav-bar-title-after>
-      <span class="mip-brand-subtitle">Developer handbook</span>
-    </template>
-    <template #nav-bar-content-after>
-      <BuildPill />
+    <template #doc-before>
+      <DocHeader />
     </template>
     <template #aside-outline-after>
       <EvidenceCard />
     </template>
-    <template #doc-footer-before>
-      <TrademarkNote />
+    <template #layout-bottom>
+      <SiteFooter />
     </template>
   </Layout>
 </template>

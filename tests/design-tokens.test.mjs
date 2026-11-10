@@ -12,6 +12,8 @@ const pairs = [
   ['primary', 'bg'], ['primary', 'surface'], ['primary-ink', 'primary-soft'], ['on-primary', 'primary'],
   ['success', 'success-soft'], ['warning', 'warning-soft'], ['danger', 'danger-soft'],
   ['info', 'info-soft'], ['violet', 'violet-soft'],
+  // Navy chrome (top bar and footer).
+  ['chrome-text', 'chrome'], ['chrome-muted', 'chrome'], ['chrome-muted', 'chrome-2'], ['chrome-text', 'chrome-2'],
 ]
 
 function readTokenBlock(css, selector) {

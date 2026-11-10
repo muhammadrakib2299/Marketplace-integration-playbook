@@ -8,16 +8,16 @@
   --vp-code-bg: var(--mip-surface-2);
   --vp-code-color: var(--mip-ink);
   --vp-code-link-color: var(--mip-primary);
-  /* Code blocks are dark panels in both themes, as in the mockup. */
-  --vp-code-block-bg: #0F1520;
-  --vp-code-block-color: #D5DBE5;
-  --vp-code-block-divider-color: #1F2838;
-  --vp-code-lang-color: #8B95A7;
-  --vp-code-copy-code-border-color: #2A3547;
-  --vp-code-copy-code-bg: #182131;
-  --vp-code-copy-code-hover-border-color: #3A4659;
-  --vp-code-copy-code-hover-bg: #1E2A3D;
-  --vp-code-copy-code-active-text: #D5DBE5;
+  /* Code blocks are dark panels in both themes. */
+  --vp-code-block-bg: var(--mip-code-bg);
+  --vp-code-block-color: #D6DEEB;
+  --vp-code-block-divider-color: var(--mip-code-line);
+  --vp-code-lang-color: #9DB0C4;
+  --vp-code-copy-code-border-color: var(--mip-code-line);
+  --vp-code-copy-code-bg: var(--mip-code-head);
+  --vp-code-copy-code-hover-border-color: #2B4A6B;
+  --vp-code-copy-code-hover-bg: #16304C;
+  --vp-code-copy-code-active-text: #D6DEEB;
 }
 
 /* ---------- Layout ---------- */
@@ -65,18 +65,18 @@
 }
 
 .vp-doc h1 {
-  margin: 0 0 16px;
-  font-size: 28px;
-  letter-spacing: -0.02em;
-  line-height: 1.2;
+  margin: 0 0 18px;
+  font-size: 30px;
+  letter-spacing: -0.025em;
+  line-height: 1.18;
 }
 
 .vp-doc h2 {
-  margin: 40px 0 12px;
+  margin: 44px 0 12px;
   padding-top: 0;
   border-top: 0;
-  font-size: 20px;
-  letter-spacing: -0.01em;
+  font-size: 21px;
+  letter-spacing: -0.015em;
   line-height: 1.3;
 }
 
@@ -176,11 +176,9 @@
 .vp-doc .mip-table th {
   padding-block: 10px;
   background: var(--mip-surface-2);
-  color: var(--mip-muted);
-  font-size: 11.5px;
+  color: var(--mip-ink);
+  font-size: 13px;
   font-weight: 600;
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
 }
 
 .vp-doc .mip-table tbody tr:last-child td {
@@ -201,16 +199,16 @@
   margin: 20px 0;
   padding-top: 34px;
   overflow: hidden; /* the inner <pre> scrolls, so the header strip stays put */
-  border: 1px solid #1F2838;
-  border-radius: var(--mip-radius);
+  border: 1px solid var(--mip-code-line);
+  border-radius: var(--mip-radius-lg);
 }
 
 .vp-doc div[class*='language-']::before {
   position: absolute;
   inset: 0 0 auto;
   height: 34px;
-  border-bottom: 1px solid #1F2838;
-  background: #121A27;
+  border-bottom: 1px solid var(--mip-code-line);
+  background: var(--mip-code-head);
   content: '';
 }
 
@@ -220,10 +218,9 @@
   right: auto;
   left: 14px;
   opacity: 1;
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
+  font-family: var(--vp-font-family-mono);
+  font-size: 12px;
+  font-weight: 500;
 }
 
 /* Icon-only copy button, always visible in the header strip. */
@@ -324,4 +321,55 @@
 .VPDocFooter .pager-link .title {
   color: var(--mip-primary-ink);
   font-size: 14px;
+}
+
+/* ---------- Dossier header (DocHeader.vue, pages whose frontmatter declares `api`) ---------- */
+
+.mip-doc-header {
+  margin-bottom: 28px;
+  padding-bottom: 22px;
+  border-bottom: 1px solid var(--mip-border);
+}
+
+.mip-doc-trail {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 0 0 8px;
+  color: var(--mip-muted);
+  font-size: 13.5px;
+}
+
+.mip-doc-header h1 {
+  margin: 0 0 14px;
+  color: var(--mip-ink);
+  font-size: 32px;
+  font-weight: 650;
+  letter-spacing: -0.025em;
+  line-height: 1.15;
+}
+
+.mip-doc-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.mip-meta-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 10px;
+  border: 1px solid var(--mip-border);
+  border-radius: 999px;
+  background: var(--mip-surface-2);
+  color: var(--mip-text);
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.mip-meta-chip code {
+  color: var(--mip-ink);
+  font-family: var(--vp-font-family-mono);
+  font-size: 12.5px;
 }
