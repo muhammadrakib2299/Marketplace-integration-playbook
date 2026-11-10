@@ -170,10 +170,10 @@
   .VPNav .VPNavBarSearch .DocSearch-Button {
     justify-content: space-between;
     width: 100%;
-    max-width: 380px;
-    height: 36px;
+    max-width: 560px;
+    height: 40px;
     margin: 0;
-    padding: 0 8px 0 11px;
+    padding: 0 10px 0 13px;
     border: 1px solid var(--mip-chrome-line);
     border-radius: 9px;
     background: var(--mip-chrome-2);

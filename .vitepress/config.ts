@@ -60,11 +60,11 @@ export default defineConfigWithTheme<DefaultTheme.Config & { buildDate: string }
     lightModeSwitchTitle: 'Switch to light mode',
     darkModeSwitchTitle: 'Switch to dark mode',
     // Test reports, Limits & quotas, and Guidelines join the nav in phase 5, when their pages exist.
+    // Marketplaces are never listed by name here: the catalog will grow to 100+ entries, so the
+    // directory and the per-marketplace sidebar carry them.
     nav: [
-      { text: 'Directory', link: '/marketplaces/' },
-      { text: 'Amazon SP-API', link: '/marketplaces/amazon/', activeMatch: '^/marketplaces/amazon/' },
-      { text: 'TikTok Shop', link: '/marketplaces/tiktok-shop/', activeMatch: '^/marketplaces/tiktok-shop/' },
-      { text: 'Engineering', items: docs.map((doc) => ({ text: doc.label, link: doc.href })) },
+      { text: 'Marketplaces', link: '/marketplaces/', activeMatch: '^/marketplaces/' },
+      { text: 'Engineering', activeMatch: '^/docs/', items: docs.map((doc) => ({ text: doc.label, link: doc.href })) },
     ],
     sidebar: buildSidebar({
       marketplaces,

@@ -22,12 +22,26 @@
 
 /* ---------- Layout ---------- */
 
+/* Wider pages: a 1080px content column, a 232px right rail, and tighter gutters. */
 .Layout .VPDoc.has-aside .content-container {
-  max-width: 880px;
+  max-width: 1080px;
 }
 
 .Layout .VPDoc .aside {
-  max-width: 264px; /* 232px rail + 32px gutter */
+  max-width: 256px; /* 232px rail + 24px gutter */
+  padding-left: 24px;
+}
+
+@media (min-width: 960px) {
+  .Layout .VPDoc {
+    padding-right: 24px;
+    padding-left: 24px;
+  }
+
+  .Layout .VPDoc .content {
+    padding-right: 32px;
+    padding-left: 32px;
+  }
 }
 
 /* ---------- Prose ---------- */
@@ -52,7 +66,7 @@
 .vp-doc ul,
 .vp-doc ol,
 .vp-doc blockquote {
-  max-width: 72ch;
+  max-width: 80ch;
 }
 
 .vp-doc h1,

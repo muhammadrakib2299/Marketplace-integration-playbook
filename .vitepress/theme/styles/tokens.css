@@ -134,5 +134,5 @@
   --vp-button-brand-active-text: var(--mip-on-primary);
   --vp-font-family-base: 'IBM Plex Sans Variable', 'IBM Plex Sans', ui-sans-serif, system-ui, sans-serif;
   --vp-font-family-mono: 'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-  --vp-nav-height: 60px;
+  --vp-nav-height: 64px;
 }
