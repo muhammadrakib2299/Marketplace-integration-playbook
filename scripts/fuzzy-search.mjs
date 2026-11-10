@@ -12,21 +12,31 @@ function scoreField(query, field) {
     return 120 + boundaryBonus - exactIndex - (normalizedField.length - normalizedQuery.length) * 0.05
   }
 
-  let queryIndex = 0
-  let fieldIndex = 0
-  let gaps = 0
-  let previousMatch = -1
-  while (queryIndex < normalizedQuery.length && fieldIndex < normalizedField.length) {
-    if (normalizedQuery[queryIndex] === normalizedField[fieldIndex]) {
-      if (previousMatch !== -1) gaps += fieldIndex - previousMatch - 1
-      previousMatch = fieldIndex
-      queryIndex += 1
-    }
-    fieldIndex += 1
-  }
+  const match = compactMatch(normalizedQuery, normalizedField)
+  if (!match) return -Infinity
+  return 72 - match.gaps * 2 - (match.end - normalizedQuery.length) * 0.08
+}
 
-  if (queryIndex !== normalizedQuery.length) return -Infinity
-  return 72 - gaps * 2 - (fieldIndex - normalizedQuery.length) * 0.08
+// The tightest in-order match of the query's letters, or null. A match may skip at most as many
+// characters as the query has, so typos like "amzn" still find "amazon" while letters scattered
+// across a long summary ("europe" spread over a TikTok description) do not count.
+function compactMatch(query, field) {
+  let best = null
+  for (let start = field.indexOf(query[0]); start !== -1; start = field.indexOf(query[0], start + 1)) {
+    let position = start
+    let gaps = 0
+    let index = 1
+    for (; index < query.length; index += 1) {
+      const next = field.indexOf(query[index], position + 1)
+      if (next === -1) break
+      gaps += next - position - 1
+      position = next
+    }
+    // Later starts see less of the field, so they cannot complete a match this one could not.
+    if (index < query.length) break
+    if (gaps <= query.length && (!best || gaps < best.gaps)) best = { gaps, end: position + 1 }
+  }
+  return best
 }
 
 export function fuzzyScore(query, fields) {
