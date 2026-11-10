@@ -216,3 +216,36 @@ After seeing the mockup-based shell, the owner asked for an official-API-documen
 - **Labels:** sentence case throughout, with no all-caps eyebrow labels or middle-dot meta strings.
 - **Dossier headers:** pages whose frontmatter declares `api` get a header with a breadcrumb trail, title, API, version, and checked date.
 - **Motion:** Anime.js (`animejs`, MIT) is planned for workflow walkthroughs with labelled sample data, not for generic entrance effects.
+
+## 8. Revision 2026-11-10 (later): benchmark patterns and review rules
+
+After comparing API Tracker, Postman, and the eBay developer portal, the owner asked to apply the best patterns to all pages. This revision records what shipped. It replaces the section 5.3 rows for the home page, the marketplace directory, and the marketplace hub, and adds to section 7. Section 8.6 lists the rules a whole-branch review then settled.
+
+### 8.1 Home
+
+A hero with an order-sync walkthrough labelled "Sample data"; four coverage figures that count each published page once (marketplaces, API reference pages, workflow guides, integration guides); up to six recently verified marketplace cards; the four-step integration path; and the evidence note. Not shipped from section 5.3: browse by region (the directory's region filter covers it), "recently updated" and "deprecation watch" (the catalog has no `deprecations` field yet), and test-run cards (no runs are recorded).
+
+### 8.2 Marketplace directory
+
+Search; category, status, access-model, and region filters with counts; A–Z or recently-verified sort; URL state that rewrites only the directory's own parameters (old `?coverage=` links map to `?status=`); 24 entries per page; rich rows; and a coverage-by-topic matrix. Region and access are filters rather than tabs, because filters scale to 100+ entries. The matrix replaces the grid and table toggle, and status badges with the coverage notes replace the status legend.
+
+### 8.3 Marketplace hub
+
+Each overview page opens with a header: logo, category, title, summary, "Start building" (the first build step, else the first page) and "Official docs" (catalog `docs_home`). Then a facts grid (status with evidence, access model, regions, catalog-verified date, API surfaces, reference pages, workflow guides, and sandbox or production tests, "Not recorded" until the catalog records them), "Find your starting point" cards for access, choosing an API, and testing safely, and per-topic coverage from `catalog/guides.yaml`. The README stays the overview body, with its own H1 hidden. There are no tabs: the sidebar carries the API pages, guides, and changelog, and "Limits & access" waits for `catalog/limits.yaml` (phase 5).
+
+### 8.4 Build-sequence bar
+
+Pages listed in a marketplace's `build_sequence` show "Step N of M" with numbered step links and the next step.
+
+### 8.5 API dossier header
+
+Adds to section 7: the trail is a breadcrumb landmark, and the header links the official reference when the catalog records a `docs_url` for the API the frontmatter names. Operation blocks and a schema and samples panel wait for structured specifications in the repository (phase 4).
+
+### 8.6 Rules settled by the review
+
+- **Motion:** section 5.1c stands. The walkthrough starts static, plays once when the reader presses Play, and can be stopped; under reduced motion it offers no play control.
+- **Labels:** section 7's ban on middle-dot meta strings stands. Separators are icons, rules, or commas.
+- **Scale:** no page or shared bundle carries the whole catalog. Layout components read per-page context computed at build time (`transformPageData`); logos are files drawn as CSS masks; site data is one cached chunk (`metaChunk`); the footer and the directory's sidebar list are bounded; and the catalog loads only with the homepage and the directory.
+- **Layout:** on wide screens the content column and right rail stay together (the container is capped at 1400 px), and no page scrolls sideways at any width from 320 px.
+- **Accessibility:** focus rings keep at least 3:1 contrast on every surface, including the navy chrome; icon-only controls have 36 px hit areas; links on tinted panels use `--mip-primary-ink`.
+- **Catalog validation:** dates are YYYY-MM-DD or null, catalog URLs are https, ids and folders are unique, and status uses the documented vocabulary.
