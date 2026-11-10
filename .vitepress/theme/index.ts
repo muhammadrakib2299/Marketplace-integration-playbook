@@ -7,6 +7,7 @@ import UiIcon from './components/UiIcon.vue'
 // Order matters: legacy component styles first, then the design system layers override them.
 import './custom.css'
 import './styles/tokens.css'
+import './styles/base.css'
 
 export default {
   extends: DefaultTheme,
