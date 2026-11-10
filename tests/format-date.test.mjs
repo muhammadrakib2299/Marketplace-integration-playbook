@@ -7,6 +7,11 @@ test('formatIsoDate prints YYYY-MM-DD for Date objects', () => {
   assert.equal(formatIsoDate(new Date('2026-11-06T00:00:00Z')), '2026-11-06')
 })
 
+// VitePress JSON-serialises page data, so the client receives that Date as an ISO timestamp string.
+test('formatIsoDate trims serialized ISO timestamps to the date', () => {
+  assert.equal(formatIsoDate('2026-11-06T00:00:00.000Z'), '2026-11-06')
+})
+
 test('formatIsoDate passes date strings through and blanks missing values', () => {
   assert.equal(formatIsoDate('2026-11-06'), '2026-11-06')
   assert.equal(formatIsoDate(undefined), '')
