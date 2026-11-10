@@ -50,14 +50,14 @@ The mockup's shell (top bar, 272 px sidebar, content column, 232 px right rail, 
 - Flat surfaces only: no gradients, 1 px borders, three shadow levels, radii 6, 10, and 14 px, 4 px spacing scale.
 - Custom scrollbar everywhere that scrolls (page, sidebar, outline, code blocks, wide tables, search results): 10 px track, 3 px inset pill thumb in `--mip-border-strong`, darkening on hover, transparent track; Firefox gets `scrollbar-width: thin` with the same colours. Both themes are covered.
 
-**Typography**
+#### Typography
 
 - **Families:** Inter (variable) for UI and prose; JetBrains Mono for code, operation IDs, versions, and dates. Both are self-hosted (decision 2).
 - **Scale:** H1 28/600 with −0.02em tracking, H2 20/600, H3 16/600, UI text 14/1.55, captions and labels 12–12.5. The home hero H1 is fluid, `clamp(28px, 4vw, 34px)`.
 - **Prose:** long-form articles use 15/1.65 with a 72-character maximum line length (decision 5). Headings carry more space above than below, so each section reads as one block.
 - **Details:** tabular numerals (`font-variant-numeric: tabular-nums`) for stats, counts, dates, and table columns. `text-wrap: balance` on headings and `text-wrap: pretty` on paragraphs where supported. Inter's disambiguation alternates (`cv11`, `ss01`) keep IDs such as `l`, `I`, and `1` distinct. Uppercase labels and eyebrows use +0.06–0.08em tracking at 11–11.5 px.
 
-**Section patterns**
+#### Section patterns
 
 Every page is built from a small set of section patterns from the mockup:
 
