@@ -25,10 +25,10 @@ const verified = computed(() => {
     <header class="mip-hub-head">
       <MarketplaceLogo :logo="marketplace.logo" :mark="marketplace.mark" size="lg" />
       <div class="mip-hub-heading">
-        <p class="mip-hub-eyebrow">{{ marketplace.categoryLabel }} · Integration guide</p>
+        <p class="mip-hub-eyebrow">{{ marketplace.categoryLabel }}</p>
         <h1 id="mip-hub-title">{{ marketplace.fullName }}</h1>
         <p class="mip-hub-summary">{{ marketplace.summary }}</p>
-        <div class="mip-hub-actions">
+        <div v-if="hub.start || marketplace.docsHome" class="mip-hub-actions">
           <a v-if="hub.start" class="mip-btn mip-btn--primary" :href="withBase(hub.start.href)">
             Start building
             <ArrowRight :size="16" :stroke-width="2" aria-hidden="true" />
@@ -45,7 +45,10 @@ const verified = computed(() => {
     <dl class="mip-hub-facts">
       <div>
         <dt>Status</dt>
-        <dd><span class="mip-badge" :class="`mip-badge--${marketplace.status}`">{{ marketplace.statusLabel }}</span></dd>
+        <dd>
+          <span class="mip-badge" :class="`mip-badge--${marketplace.status}`">{{ marketplace.statusName }}</span>
+          <span class="mip-hub-sub">Evidence: {{ marketplace.evidenceLabel.toLowerCase() }}</span>
+        </dd>
       </div>
       <div>
         <dt>Access model</dt>
@@ -85,7 +88,7 @@ const verified = computed(() => {
       <article class="mip-hub-card">
         <span class="mip-hub-card-icon"><KeyRound :size="18" :stroke-width="1.75" aria-hidden="true" /></span>
         <h3>What access do I need?</h3>
-        <p>Access model: {{ marketplace.access }}. Connect a seller before any data moves.</p>
+        <p>Access model: {{ marketplace.access }}. How this marketplace grants API access:</p>
         <ul v-if="hub.accessGuides.length" class="mip-hub-links">
           <li v-for="guide in hub.accessGuides" :key="guide.href">
             <a :href="withBase(guide.href)">{{ guide.title }}</a>
@@ -104,10 +107,10 @@ const verified = computed(() => {
       </article>
       <article class="mip-hub-card">
         <span class="mip-hub-card-icon"><FlaskConical :size="18" :stroke-width="1.75" aria-hidden="true" /></span>
-        <h3>Can I test without production?</h3>
+        <h3>How do I test safely?</h3>
         <p>
-          {{ hub.testsRecorded ? 'Tests are recorded in the guides.' : 'No sandbox or production tests are recorded for this marketplace.' }}
-          Plan test boundaries with:
+          {{ hub.testsRecorded ? 'This playbook records tests in the guides.' : 'This playbook records no sandbox or production tests for this marketplace.' }}
+          For the provider's own test options, see:
         </p>
         <ul v-if="hub.operationsGuides.length" class="mip-hub-links">
           <li v-for="guide in hub.operationsGuides" :key="guide.href">

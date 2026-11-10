@@ -15,7 +15,6 @@ const position = computed(() => frontmatter.value.mip?.sequence ?? null)
   <nav v-if="marketplace && position" class="mip-sequence" :aria-label="`${marketplace.name} build sequence`">
     <p class="mip-sequence-label">
       <a :href="withBase(marketplace.guide)">{{ marketplace.name }}</a>
-      <span aria-hidden="true">·</span>
       <span>Step {{ position.step }} of {{ position.total }}</span>
     </p>
     <ol class="mip-sequence-steps">

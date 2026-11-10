@@ -101,6 +101,14 @@
 }
 
 /* Long status labels wrap inside narrow fact cells instead of spilling out. */
+.mip-hub-sub {
+  display: block;
+  margin-top: 6px;
+  color: var(--mip-muted);
+  font-size: 13px;
+  font-weight: 400;
+}
+
 .mip-hub-facts .mip-badge {
   height: auto;
   min-height: 22px;
@@ -308,7 +316,7 @@
 
 .mip-sequence-label {
   display: flex;
-  gap: 6px;
+  gap: 10px;
   margin: 0;
   color: var(--mip-muted);
   font-weight: 500;
@@ -318,6 +326,12 @@
   color: var(--mip-ink);
   font-weight: 600;
   text-decoration: none;
+}
+
+/* A rule between the marketplace name and the step count, instead of a middle dot (spec section 7). */
+.mip-sequence-label span {
+  padding-left: 10px;
+  border-left: 1px solid var(--mip-border-strong);
 }
 
 .mip-sequence-label a:hover {
