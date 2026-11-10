@@ -2,7 +2,7 @@
 import { computed, onMounted, ref, watch } from 'vue'
 import { fuzzySearch } from '../../../scripts/fuzzy-search.mjs'
 import { readFilterState, writeFilterState } from '../../../scripts/filter-state.mjs'
-import { marketplaces as catalogMarketplaces } from '../generated/marketplaces.mjs'
+import { marketplaces as catalogMarketplaces } from '../generated/catalog.mjs'
 
 type Marketplace = {
   id: string

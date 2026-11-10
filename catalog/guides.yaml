@@ -1,0 +1,151 @@
+# Integration guides listed in the homepage explorer, in reading order per marketplace.
+# The generator (npm run data:generate) rejects unknown marketplaces, topics, or types,
+# and fails the build when an href has no matching Markdown page.
+schema_version: 1
+
+topics:
+  - id: access
+    label: Seller access
+  - id: migration
+    label: Catalog migration
+  - id: inventory
+    label: Listings & inventory
+  - id: orders
+    label: Order synchronization
+  - id: fulfillment
+    label: Fulfillment & returns
+  - id: notifications
+    label: Events & notifications
+  - id: operations
+    label: Operations & reliability
+
+guides:
+  - id: amazon-seller-onboarding
+    marketplace: amazon-sp-api
+    type: integration
+    topic: access
+    title: Connect an Amazon seller account
+    summary: Follow app setup, least-privilege roles, seller consent, secure OAuth, regional routing, and verified connection states.
+    scope: Seller consent · OAuth · account access
+    tags: [Onboarding, OAuth, Roles, Regions]
+    href: /marketplaces/amazon/guides/seller-onboarding
+
+  - id: amazon-active-listing-migration
+    marketplace: amazon-sp-api
+    type: workflow
+    topic: migration
+    title: Migrate an existing Amazon seller catalog
+    summary: Capture a seller listing baseline, keep catalog facts separate from offers, stage safe changes, and reconcile outcomes.
+    scope: Baseline · catalog · staged writes
+    tags: [Reports API, Listings Items, Catalog Items, Product types]
+    href: /marketplaces/amazon/workflows/active-listing-migration
+
+  - id: amazon-inventory-and-listings
+    marketplace: amazon-sp-api
+    type: workflow
+    topic: inventory
+    title: Amazon merchant-fulfilled listings and inventory
+    summary: Keep merchant-fulfilled stock in sync with listing state; distinguish warehouse quantities from Amazon-fulfilled inventory.
+    scope: MFN quantity · SKU · reconciliation
+    tags: [Listings Items, Feeds, Inventory, FBA scope]
+    href: /marketplaces/amazon/workflows/inventory-and-listings
+
+  - id: amazon-order-lifecycle
+    marketplace: amazon-sp-api
+    type: workflow
+    topic: orders
+    title: Amazon order synchronization workflow
+    summary: Find orders incrementally, drain pagination, upsert durably, select the correct fulfillment path, and reconcile changes.
+    scope: Orders API · ingestion · recovery
+    tags: [Orders API, Pagination, Warehouse, Notifications]
+    href: /marketplaces/amazon/workflows/order-lifecycle
+
+  - id: amazon-notifications-integration
+    marketplace: amazon-sp-api
+    type: integration
+    topic: notifications
+    title: Amazon SP-API Notifications integration
+    summary: Use supported SQS or EventBridge destinations, reconcile subscriptions, and build idempotent consumers with recovery paths.
+    scope: Destinations · subscriptions · events
+    tags: [SQS, EventBridge, Idempotency, Reconciliation]
+    href: /marketplaces/amazon/guides/notifications-integration
+
+  - id: amazon-development-guide
+    marketplace: amazon-sp-api
+    type: integration
+    topic: operations
+    title: Amazon SP-API development guide
+    summary: Review current API versions, seller access, regional routing, order/listing surfaces, rate limits, retries, and safe data handling.
+    scope: API versions · operations · reliability
+    tags: [Authorization, Rate limits, Retries, Observability]
+    href: /marketplaces/amazon/guides/development-guide
+
+  - id: tiktok-shop-development-guide
+    marketplace: tiktok-shop-partner-api
+    type: integration
+    topic: operations
+    title: TikTok Shop Partner API development guide
+    summary: Follow the official path from Partner Center onboarding and app scopes to authorization, signed requests, a first read call, and controlled writes.
+    scope: Onboarding · signing · first call
+    tags: [Partner Center, Scopes, Request signing, Sandbox]
+    href: /marketplaces/tiktok-shop/guides/development-guide
+
+  - id: tiktok-shop-authorization
+    marketplace: tiktok-shop-partner-api
+    type: api
+    topic: access
+    title: TikTok Shop authorization and token lifecycle
+    summary: Pick the right seller, creator, or partner authorization flow, validate state, exchange the one-time code, and refresh tokens before expiry.
+    scope: OAuth · user_type · token refresh
+    tags: [OAuth, Tokens, Scopes, Authorized shops]
+    href: /marketplaces/tiktok-shop/apis/authorization
+
+  - id: tiktok-shop-products
+    marketplace: tiktok-shop-partner-api
+    type: api
+    topic: inventory
+    title: TikTok Shop Products API
+    summary: Map categories, attributes, and media to products, track the review lifecycle, and keep approved product data separate from pending edits.
+    scope: Categories · review status · price and inventory
+    tags: [Categories, Attributes, Product review, Inventory]
+    href: /marketplaces/tiktok-shop/apis/products
+
+  - id: tiktok-shop-orders
+    marketplace: tiktok-shop-partner-api
+    type: api
+    topic: orders
+    title: TikTok Shop Order API
+    summary: Read orders incrementally, keep order, SKU, and line-item IDs, follow the documented status model, and treat webhooks as hints to re-fetch.
+    scope: Order list · detail · status model
+    tags: [Order status, Pagination, Webhooks, Line items]
+    href: /marketplaces/tiktok-shop/apis/orders
+
+  - id: tiktok-shop-fulfillment
+    marketplace: tiktok-shop-partner-api
+    type: api
+    topic: fulfillment
+    title: TikTok Shop fulfillment, logistics, and finance
+    summary: Keep orders, packages, shipments, and tracking as separate records, cache logistics lookups per market, and reconcile settlements separately.
+    scope: Shipments · logistics · settlement
+    tags: [Fulfillment, FBT, Logistics, Finance]
+    href: /marketplaces/tiktok-shop/apis/fulfillment
+
+  - id: tiktok-shop-returns-refunds
+    marketplace: tiktok-shop-partner-api
+    type: api
+    topic: fulfillment
+    title: TikTok Shop returns and refunds
+    summary: Model after-sales requests separately from order status, guard refund actions with idempotency, and reconcile the final financial state.
+    scope: After-sales · review actions · refunds
+    tags: [Returns, Refunds, Idempotency, Regional rules]
+    href: /marketplaces/tiktok-shop/apis/returns-refunds
+
+  - id: tiktok-shop-events
+    marketplace: tiktok-shop-partner-api
+    type: api
+    topic: notifications
+    title: TikTok Shop webhooks and error handling
+    summary: Verify and persist webhook deliveries, deduplicate them, fetch current state, and back off on rate limits instead of retrying permanent errors.
+    scope: Webhooks · deduplication · error codes
+    tags: [Webhooks, Deduplication, Rate limits, Error codes]
+    href: /marketplaces/tiktok-shop/apis/events

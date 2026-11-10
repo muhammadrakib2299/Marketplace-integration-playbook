@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { marketplaces as catalogMarketplaces } from '../generated/marketplaces.mjs'
+import { marketplaces as catalogMarketplaces } from '../generated/catalog.mjs'
 
 const platforms = catalogMarketplaces.map((marketplace) => ({
   name: marketplace.name,

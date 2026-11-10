@@ -1,17 +1,17 @@
-import { mkdir, readFile, writeFile } from 'node:fs/promises'
-import { resolve } from 'node:path'
-import { parse } from 'yaml'
-import { buildMarketplaces, repositoryRoot as root } from './catalog-data.mjs'
+import { mkdir, writeFile } from 'node:fs/promises'
+import { join } from 'node:path'
+import { loadCatalogData, repositoryRoot } from './catalog-data.mjs'
 
-const catalogPath = resolve(root, 'catalog/marketplaces.yaml')
-const outputDir = resolve(root, '.vitepress/theme/generated')
-const outputPath = resolve(outputDir, 'marketplaces.mjs')
+const outputDir = join(repositoryRoot, '.vitepress', 'theme', 'generated')
+const { marketplaces, topics, guides } = loadCatalogData(repositoryRoot)
 
-const marketplaces = buildMarketplaces(parse(await readFile(catalogPath, 'utf8')))
+const exports = Object.entries({ marketplaces, topics, guides })
+  .map(([name, value]) => `export const ${name} = ${JSON.stringify(value, null, 2)}\n`)
+  .join('\n')
 
 await mkdir(outputDir, { recursive: true })
 await writeFile(
-  outputPath,
-  `// Generated from catalog/marketplaces.yaml. Do not edit directly.\nexport const marketplaces = ${JSON.stringify(marketplaces, null, 2)}\n`,
+  join(outputDir, 'catalog.mjs'),
+  `// Generated from catalog/*.yaml by scripts/generate-marketplace-data.mjs. Do not edit directly.\n${exports}`,
 )
-console.log(`Generated ${marketplaces.length} marketplace records from catalog/marketplaces.yaml`)
+console.log(`Generated ${marketplaces.length} marketplaces and ${guides.length} guides from catalog/`)
