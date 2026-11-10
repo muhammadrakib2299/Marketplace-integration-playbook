@@ -119,7 +119,7 @@ const stats = [
           <h2>Documentation, not a connection</h2>
           <p>
             “Documented” means the linked official reference was reviewed for the stated scope. Nothing here claims a
-            live integration or a sandbox test, and every sample payload is labelled as sample data.
+            live integration or a sandbox test, and example payloads are illustrative, not captured from a live account.
           </p>
           <a :href="withBase('/docs/lifecycle-and-status')">How evidence status works</a>
         </div>
