@@ -10,49 +10,6 @@
   padding: 0 32px;
 }
 
-/* ---------- Buttons: one filled primary per view ---------- */
-
-.mip-btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  height: 44px;
-  padding: 0 18px;
-  border: 1px solid var(--mip-border-strong);
-  border-radius: 10px;
-  background: var(--mip-surface);
-  color: var(--mip-ink);
-  font-size: 15px;
-  font-weight: 600;
-  text-decoration: none;
-  transition-duration: var(--mip-duration-fast);
-  transition-property: background-color, border-color, color, scale;
-  transition-timing-function: ease-out;
-}
-
-.mip-btn--primary {
-  border-color: var(--mip-primary);
-  background: var(--mip-primary);
-  color: var(--mip-on-primary);
-}
-
-@media (hover: hover) {
-  .mip-btn:hover {
-    background: var(--mip-surface-2);
-  }
-
-  .mip-btn--primary:hover {
-    border-color: var(--mip-primary-ink);
-    background: var(--mip-primary-ink);
-  }
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .mip-btn:active {
-    scale: 0.96;
-  }
-}
-
 /* ---------- Hero ---------- */
 
 .mip-home-hero {
@@ -346,17 +303,6 @@
   display: flex;
   align-items: center;
   gap: 10px;
-}
-
-.mip-market-top .mip-logo {
-  width: 32px;
-  height: 32px;
-  border-radius: 8px;
-}
-
-.mip-market-top .mip-logo svg {
-  width: 18px;
-  height: 18px;
 }
 
 .mip-market-name {

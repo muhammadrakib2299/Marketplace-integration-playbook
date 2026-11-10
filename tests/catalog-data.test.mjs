@@ -177,6 +177,18 @@ test('catalog API surfaces keep their official documentation links', () => {
   assert.deepEqual(ebay.sourceUrls, ['https://developer.ebay.com/'])
 })
 
+test("a marketplace's official docs home is optional and must be an https URL", () => {
+  const [ebay, otto] = buildMarketplaces({
+    marketplaces: [marketplaceRecord({ docs_home: 'https://developer.ebay.com/develop' }), ottoRecord()],
+  })
+  assert.equal(ebay.docsHome, 'https://developer.ebay.com/develop')
+  assert.equal(otto.docsHome, null)
+  assert.throws(
+    () => buildMarketplaces({ marketplaces: [marketplaceRecord({ docs_home: 'developer.ebay.com/develop' })] }),
+    /ebay-sell-api.*docs_home/,
+  )
+})
+
 test('a capability counts as documented only when the marketplace has a guide on that topic', () => {
   const marketplaces = buildMarketplaces({ marketplaces: [marketplaceRecord(), ottoRecord()] })
   const { topics, guides } = buildGuides(

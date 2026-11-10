@@ -67,6 +67,7 @@ export function buildMarketplaces(catalog) {
         docsUrl: surface.docs_url ?? null,
       })),
       guide: `/marketplaces/${slug}/`,
+      docsHome: docsHome(record),
       source: record.source_urls[0],
       sourceUrls: record.source_urls,
       lastVerified: record.last_verified,
@@ -77,6 +78,17 @@ export function buildMarketplaces(catalog) {
       pages: navigationList(record, 'pages'),
     }
   })
+}
+
+// The provider's own developer-documentation entry point, linked as "Official docs".
+// Optional: source_urls[0] is not a substitute, because it can belong to another product
+// (TikTok's first source is TikTok for Developers, not the TikTok Shop Partner Center).
+function docsHome(record) {
+  if (record.docs_home === undefined || record.docs_home === null) return null
+  if (typeof record.docs_home !== 'string' || !record.docs_home.startsWith('https://')) {
+    throw new Error(`${record.id}: docs_home must be an https:// URL (got ${record.docs_home})`)
+  }
+  return record.docs_home
 }
 
 // Logo colours near black or white disappear on one of the two themes; the shell

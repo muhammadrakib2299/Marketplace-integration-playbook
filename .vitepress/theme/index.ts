@@ -14,6 +14,7 @@ import './styles/base.css'
 import './styles/shell.css'
 import './styles/content.css'
 import './styles/home.css'
+import './styles/marketplace.css'
 
 export default {
   extends: DefaultTheme,

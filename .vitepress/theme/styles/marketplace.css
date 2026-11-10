@@ -1,0 +1,783 @@
+/*
+ * Marketplace pages: the overview hub (MarketplaceHub.vue), the build-sequence bar (SequenceBar.vue),
+ * and the directory (MarketplaceDirectory.vue). Hub and bar sit outside .vp-doc; the directory sits
+ * inside it, so its selectors carry the .mip-directory prefix to outrank the article styles.
+ */
+
+/* ---------- Hub ---------- */
+
+.mip-hub {
+  container: mip-hub / inline-size;
+  margin-bottom: 44px;
+}
+
+/* The hub renders the page title, so the README's own H1 (kept for GitHub readers) is hidden. */
+.mip-hub ~ .main .vp-doc > div > h1:first-child {
+  display: none;
+}
+
+.mip-hub-head {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 20px;
+  align-items: start;
+}
+
+.mip-hub-eyebrow {
+  margin: 0 0 6px;
+  color: var(--mip-primary-ink);
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+}
+
+.mip-hub-heading h1 {
+  margin: 0;
+  color: var(--mip-ink);
+  font-size: 34px;
+  font-weight: 650;
+  letter-spacing: -0.03em;
+  line-height: 1.12;
+  text-wrap: balance;
+}
+
+.mip-hub-summary {
+  max-width: 72ch;
+  margin: 12px 0 0;
+  color: var(--mip-muted);
+  font-size: 16px;
+  line-height: 1.6;
+  text-wrap: pretty;
+}
+
+.mip-hub-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 22px;
+}
+
+/* Facts: a ruled grid. The 1px gaps over a border-coloured backdrop draw the cell lines. */
+.mip-hub-facts {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 1px;
+  margin: 30px 0 0;
+  overflow: hidden;
+  border: 1px solid var(--mip-border);
+  border-radius: var(--mip-radius-lg);
+  background: var(--mip-border);
+}
+
+.mip-hub-facts > div {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+  padding: 14px 16px;
+  background: var(--mip-surface);
+}
+
+.mip-hub-facts dt {
+  color: var(--mip-faint-text);
+  font-size: 12.5px;
+  font-weight: 500;
+}
+
+.mip-hub-facts dd {
+  margin: 0;
+  color: var(--mip-ink);
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1.45;
+  overflow-wrap: break-word;
+}
+
+.mip-hub-facts dd.mip-hub-num {
+  font-size: 22px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  line-height: 1.15;
+}
+
+.mip-hub-facts .mip-badge {
+  margin-left: 0;
+}
+
+.mip-hub .mip-hub-gap {
+  color: var(--mip-faint-text);
+  font-weight: 400;
+}
+
+.mip-hub-h2 {
+  margin: 40px 0 14px;
+  scroll-margin-top: calc(var(--vp-nav-height) + 24px);
+  color: var(--mip-ink);
+  font-size: 19px;
+  font-weight: 600;
+  letter-spacing: -0.015em;
+  line-height: 1.3;
+}
+
+.mip-hub-note {
+  max-width: 80ch;
+  margin: -4px 0 16px;
+  color: var(--mip-muted);
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+/* "Find your starting point": three questions every integration starts with. */
+.mip-hub-cards {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.mip-hub-card {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 20px;
+  border: 1px solid var(--mip-border);
+  border-radius: var(--mip-radius-lg);
+  background: var(--mip-surface);
+}
+
+.mip-hub-card-icon {
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  margin-bottom: 4px;
+  border-radius: 10px;
+  background: var(--mip-primary-soft);
+  color: var(--mip-primary-ink);
+}
+
+.mip-hub-card h3 {
+  margin: 0;
+  color: var(--mip-ink);
+  font-size: 15.5px;
+  font-weight: 600;
+  line-height: 1.35;
+}
+
+.mip-hub-card p {
+  margin: 0;
+  color: var(--mip-muted);
+  font-size: 14px;
+  line-height: 1.55;
+}
+
+/* Links sit at the bottom so the three cards line up. */
+.mip-hub-card .mip-hub-links,
+.mip-hub-card > .mip-hub-gap {
+  margin-top: auto;
+  padding-top: 6px;
+}
+
+.mip-hub-links {
+  display: grid;
+  gap: 6px;
+}
+
+.mip-hub-links a,
+.mip-hub-topic-body a {
+  color: var(--mip-primary);
+  font-size: 14px;
+  font-weight: 500;
+  text-decoration: underline;
+  text-decoration-color: var(--mip-primary-border);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+  transition:
+    color var(--mip-duration-fast) var(--mip-ease),
+    text-decoration-color var(--mip-duration-fast) var(--mip-ease);
+}
+
+.mip-hub-links a:hover,
+.mip-hub-topic-body a:hover {
+  color: var(--mip-primary-ink);
+  text-decoration-color: currentColor;
+}
+
+/* Coverage: one cell per guide topic; dashed cells are honest gaps. */
+.mip-hub-topics {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 10px;
+}
+
+.mip-hub-topics li {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  padding: 12px 14px;
+  border: 1px solid var(--mip-border);
+  border-radius: var(--mip-radius);
+  background: var(--mip-surface);
+}
+
+.mip-hub-topics li:not(.is-documented) {
+  border-style: dashed;
+  background: transparent;
+}
+
+.mip-hub-topic-mark {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 22px;
+  height: 22px;
+  margin-top: 1px;
+  border-radius: 999px;
+  background: var(--mip-surface-2);
+  color: var(--mip-faint-text);
+}
+
+.is-documented .mip-hub-topic-mark {
+  background: var(--mip-success-soft);
+  color: var(--mip-success);
+}
+
+.mip-hub-topic-body {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+  font-size: 13.5px;
+  line-height: 1.45;
+}
+
+.mip-hub-topic-label {
+  color: var(--mip-ink);
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.mip-hub-topic-body a {
+  font-size: 13.5px;
+}
+
+@container mip-hub (max-width: 760px) {
+  .mip-hub-facts {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .mip-hub-cards {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@container mip-hub (max-width: 520px) {
+  .mip-hub-head {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 16px;
+  }
+
+  .mip-hub-heading h1 {
+    font-size: 27px;
+  }
+
+  .mip-hub-summary {
+    font-size: 15px;
+  }
+}
+
+/* ---------- Build-sequence bar ---------- */
+
+.mip-sequence {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 18px;
+  align-items: center;
+  margin: 0 0 28px;
+  padding: 10px 14px;
+  border: 1px solid var(--mip-border);
+  border-radius: var(--mip-radius);
+  background: var(--mip-surface-2);
+  font-size: 13.5px;
+}
+
+.mip-sequence-label {
+  display: flex;
+  gap: 6px;
+  margin: 0;
+  color: var(--mip-muted);
+  font-weight: 500;
+}
+
+.mip-sequence-label a {
+  color: var(--mip-ink);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.mip-sequence-label a:hover {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.mip-sequence-steps {
+  display: flex;
+  align-items: center;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.mip-sequence-steps li {
+  display: flex;
+  align-items: center;
+}
+
+/* Connectors between steps; the run up to the current step is filled. */
+.mip-sequence-steps li + li::before {
+  width: 12px;
+  height: 2px;
+  background: var(--mip-border-strong);
+  content: '';
+}
+
+.mip-sequence-steps li.is-done + li::before {
+  background: var(--mip-primary);
+}
+
+.mip-sequence-steps a {
+  display: grid;
+  place-items: center;
+  width: 26px;
+  height: 26px;
+  border: 1.5px solid var(--mip-border-strong);
+  border-radius: 999px;
+  background: var(--mip-surface);
+  color: var(--mip-muted);
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+  font-weight: 600;
+  text-decoration: none;
+  transition:
+    border-color var(--mip-duration-fast) var(--mip-ease),
+    color var(--mip-duration-fast) var(--mip-ease);
+}
+
+.mip-sequence-steps a:hover {
+  border-color: var(--mip-primary);
+  color: var(--mip-primary-ink);
+}
+
+.mip-sequence-steps .is-done a {
+  border-color: var(--mip-primary);
+  background: var(--mip-primary-soft);
+  color: var(--mip-primary-ink);
+}
+
+.mip-sequence-steps .is-current a {
+  border-color: var(--mip-primary);
+  background: var(--mip-primary);
+  box-shadow: 0 0 0 3px var(--mip-primary-soft);
+  color: var(--mip-on-primary);
+}
+
+.mip-sequence-next {
+  display: inline-flex;
+  gap: 6px;
+  align-items: center;
+  margin-left: auto;
+  color: var(--mip-primary);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.mip-sequence-next:hover {
+  color: var(--mip-primary-ink);
+}
+
+.mip-sequence-next-label {
+  color: var(--mip-faint-text);
+  font-weight: 500;
+}
+
+/* ---------- Directory ---------- */
+
+.mip-directory {
+  container: mip-directory / inline-size;
+  margin: 28px 0 8px;
+}
+
+.mip-directory .mip-dir-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+}
+
+.mip-directory .mip-dir-search {
+  display: flex;
+  flex: 1 1 300px;
+  gap: 10px;
+  align-items: center;
+  height: 42px;
+  padding: 0 14px;
+  border: 1px solid var(--mip-border-strong);
+  border-radius: 10px;
+  background: var(--mip-surface);
+  color: var(--mip-faint-text);
+  transition: border-color var(--mip-duration-fast) var(--mip-ease);
+}
+
+.mip-directory .mip-dir-search:focus-within {
+  border-color: var(--mip-primary);
+  box-shadow: 0 0 0 3px var(--mip-primary-soft);
+}
+
+.mip-directory .mip-dir-search input {
+  flex: 1;
+  min-width: 0;
+  height: 100%;
+  border: 0;
+  outline: none;
+  background: transparent;
+  color: var(--mip-ink);
+  font: inherit;
+  font-size: 14.5px;
+}
+
+.mip-directory .mip-dir-search input::placeholder {
+  color: var(--mip-faint-text);
+}
+
+.mip-directory .mip-dir-select select {
+  height: 42px;
+  padding: 0 34px 0 12px;
+  border: 1px solid var(--mip-border-strong);
+  border-radius: 10px;
+  background:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='none' stroke='%235F7183' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m4 6 4 4 4-4'/%3E%3C/svg%3E")
+      no-repeat right 12px center,
+    var(--mip-surface);
+  color: var(--mip-ink);
+  font: inherit;
+  font-size: 14px;
+  appearance: none;
+  cursor: pointer;
+}
+
+.mip-directory .mip-dir-select select:focus-visible {
+  border-color: var(--mip-primary);
+  outline: none;
+  box-shadow: 0 0 0 3px var(--mip-primary-soft);
+}
+
+/* Segmented sort control. */
+.mip-directory .mip-dir-sort {
+  display: inline-flex;
+  padding: 3px;
+  border: 1px solid var(--mip-border-strong);
+  border-radius: 10px;
+  background: var(--mip-surface-2);
+}
+
+.mip-directory .mip-dir-sort button {
+  display: inline-flex;
+  gap: 6px;
+  align-items: center;
+  height: 34px;
+  padding: 0 12px;
+  border-radius: 7px;
+  color: var(--mip-muted);
+  font-size: 13.5px;
+  font-weight: 500;
+  transition:
+    background-color var(--mip-duration-fast) var(--mip-ease),
+    color var(--mip-duration-fast) var(--mip-ease);
+}
+
+.mip-directory .mip-dir-sort button:hover {
+  color: var(--mip-ink);
+}
+
+.mip-directory .mip-dir-sort button[aria-pressed='true'] {
+  background: var(--mip-surface);
+  box-shadow: var(--mip-shadow-sm);
+  color: var(--mip-ink);
+  font-weight: 600;
+}
+
+.mip-directory .mip-dir-status {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 34px;
+  margin: 18px 0 10px;
+  scroll-margin-top: calc(var(--vp-nav-height) + 24px);
+}
+
+.mip-directory .mip-dir-status p {
+  margin: 0;
+  color: var(--mip-muted);
+  font-size: 13.5px;
+  font-variant-numeric: tabular-nums;
+}
+
+.mip-directory .mip-dir-reset {
+  display: inline-flex;
+  gap: 6px;
+  align-items: center;
+  color: var(--mip-primary);
+  font-size: 13.5px;
+  font-weight: 600;
+}
+
+.mip-directory .mip-dir-reset:hover {
+  color: var(--mip-primary-ink);
+}
+
+/* Rich rows: identity, meta, summary, and counts on the left; actions on the right. */
+.mip-directory .mip-dir-list {
+  display: grid;
+  gap: 12px;
+  max-width: none;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.mip-directory .mip-dir-row {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  gap: 16px;
+  align-items: start;
+  margin: 0;
+  padding: 18px 20px;
+  border: 1px solid var(--mip-border);
+  border-radius: var(--mip-radius-lg);
+  background: var(--mip-surface);
+  transition:
+    border-color var(--mip-duration-fast) var(--mip-ease),
+    box-shadow var(--mip-duration-fast) var(--mip-ease);
+}
+
+@media (hover: hover) {
+  .mip-directory .mip-dir-row:hover {
+    border-color: var(--mip-primary-border);
+    box-shadow: var(--mip-shadow);
+  }
+}
+
+.mip-directory .mip-dir-main {
+  display: grid;
+  gap: 6px;
+  min-width: 0;
+}
+
+.mip-directory .mip-dir-title {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 10px;
+  align-items: center;
+}
+
+.mip-directory .mip-dir-title h3 {
+  margin: 0;
+  font-size: 16.5px;
+  letter-spacing: -0.01em;
+  line-height: 1.3;
+}
+
+.mip-directory .mip-dir-title h3 a {
+  color: var(--mip-ink);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.mip-directory .mip-dir-title h3 a:hover {
+  color: var(--mip-primary-ink);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.mip-directory .mip-dir-title .mip-badge {
+  margin-left: 0;
+}
+
+.mip-directory .mip-dir-meta,
+.mip-directory .mip-dir-facts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 14px;
+  max-width: none;
+  margin: 0;
+  color: var(--mip-muted);
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.mip-directory .mip-dir-text {
+  display: -webkit-box;
+  max-width: 90ch;
+  margin: 2px 0 4px;
+  overflow: hidden;
+  color: var(--mip-text);
+  font-size: 14px;
+  line-height: 1.55;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+
+.mip-directory .mip-dir-facts {
+  padding-top: 8px;
+  border-top: 1px solid var(--mip-border);
+  font-variant-numeric: tabular-nums;
+}
+
+.mip-directory .mip-dir-facts strong {
+  color: var(--mip-ink);
+  font-weight: 600;
+}
+
+.mip-directory .mip-dir-actions {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+
+.mip-directory .mip-dir-actions a {
+  text-decoration: none;
+}
+
+.mip-directory .mip-dir-actions .mip-icon-button {
+  border-color: var(--mip-border);
+  color: var(--mip-muted);
+}
+
+.mip-directory .mip-dir-empty {
+  display: grid;
+  gap: 6px;
+  justify-items: start;
+  padding: 28px;
+  border: 1px dashed var(--mip-border-strong);
+  border-radius: var(--mip-radius-lg);
+}
+
+.mip-directory .mip-dir-empty strong {
+  color: var(--mip-ink);
+  font-size: 15px;
+}
+
+.mip-directory .mip-dir-empty p {
+  margin: 0 0 6px;
+  color: var(--mip-muted);
+  font-size: 14px;
+}
+
+.mip-directory .mip-dir-pager {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  justify-content: center;
+  margin-top: 20px;
+  color: var(--mip-muted);
+  font-size: 13.5px;
+  font-variant-numeric: tabular-nums;
+}
+
+.mip-directory .mip-btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.mip-directory .mip-dir-note {
+  margin: -4px 0 0;
+  color: var(--mip-muted);
+  font-size: 14px;
+}
+
+/* Coverage matrix: reuses the .mip-table frame; the marketplace column stays put while topics scroll. */
+.mip-directory .mip-matrix th,
+.mip-directory .mip-matrix td {
+  text-align: center;
+  vertical-align: middle;
+  white-space: nowrap;
+}
+
+.mip-directory .mip-matrix thead th {
+  font-size: 12.5px;
+}
+
+.mip-directory .mip-matrix th:first-child {
+  position: sticky;
+  left: 0;
+  z-index: 1;
+  background: var(--mip-surface);
+  text-align: left;
+}
+
+.mip-directory .mip-matrix thead th:first-child {
+  background: var(--mip-surface-2);
+}
+
+.mip-directory .mip-matrix tbody th a {
+  color: var(--mip-ink);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.mip-directory .mip-matrix tbody th a:hover {
+  color: var(--mip-primary-ink);
+  text-decoration: underline;
+}
+
+.mip-directory .mip-matrix-yes,
+.mip-directory .mip-matrix-no {
+  display: inline-grid;
+  place-items: center;
+  width: 26px;
+  height: 26px;
+  border-radius: 999px;
+  vertical-align: middle;
+}
+
+.mip-directory .mip-matrix-yes {
+  background: var(--mip-success-soft);
+  color: var(--mip-success);
+  text-decoration: none;
+  transition: box-shadow var(--mip-duration-fast) var(--mip-ease);
+}
+
+.mip-directory .mip-matrix-yes:hover {
+  box-shadow: 0 0 0 2px var(--mip-success-border);
+}
+
+.mip-directory .mip-matrix-no {
+  color: var(--mip-faint);
+}
+
+@container mip-directory (max-width: 640px) {
+  .mip-directory .mip-dir-row {
+    grid-template-columns: auto minmax(0, 1fr);
+  }
+
+  .mip-directory .mip-dir-actions {
+    grid-column: 1 / -1;
+  }
+
+  .mip-directory .mip-dir-sort {
+    width: 100%;
+  }
+
+  .mip-directory .mip-dir-sort button {
+    flex: 1;
+    justify-content: center;
+  }
+
+  .mip-directory .mip-dir-select {
+    flex: 1 1 140px;
+  }
+
+  .mip-directory .mip-dir-select select {
+    width: 100%;
+  }
+}

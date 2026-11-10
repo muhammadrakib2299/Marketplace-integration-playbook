@@ -354,8 +354,35 @@
   font-size: 13.5px;
 }
 
-.mip-doc-header h1 {
+.mip-doc-trail a {
+  color: var(--mip-muted);
+  font-weight: 500;
+  text-decoration: none;
+}
+
+.mip-doc-trail a:hover {
+  color: var(--mip-ink);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+/* Title on the left, the official-reference action on the right; they stack when space runs out. */
+.mip-doc-title-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px 20px;
+  align-items: flex-start;
+  justify-content: space-between;
   margin: 0 0 14px;
+}
+
+.mip-doc-title-row .mip-btn {
+  flex: none;
+  margin-top: 2px;
+}
+
+.mip-doc-header h1 {
+  margin: 0;
   color: var(--mip-ink);
   font-size: 32px;
   font-weight: 650;

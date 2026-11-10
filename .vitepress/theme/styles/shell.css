@@ -421,6 +421,38 @@ html:not(.dark) .mip-logo[data-tone='bright'] svg {
   font-weight: 700;
 }
 
+/* MarketplaceLogo.vue sizes: sm (default, sidebar), md (cards and rows), lg (marketplace hub). */
+.mip-logo--md {
+  width: 36px;
+  height: 36px;
+  border-radius: 9px;
+}
+
+.mip-logo--md svg {
+  width: 20px;
+  height: 20px;
+}
+
+.mip-logo--md.mip-logo--mono {
+  font-size: 15px;
+}
+
+.mip-logo--lg {
+  width: 56px;
+  height: 56px;
+  border-radius: 14px;
+  box-shadow: var(--mip-shadow-sm);
+}
+
+.mip-logo--lg svg {
+  width: 30px;
+  height: 30px;
+}
+
+.mip-logo--lg.mip-logo--mono {
+  font-size: 24px;
+}
+
 .mip-badge {
   display: inline-flex;
   flex: none;
@@ -578,6 +610,58 @@ html:not(.dark) .mip-logo[data-tone='bright'] svg {
     border-color: var(--mip-border);
     background: var(--mip-surface);
     color: var(--mip-ink);
+  }
+}
+
+/* Text buttons: one filled primary per view; icons follow the label. */
+
+.mip-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  height: 44px;
+  padding: 0 18px;
+  border: 1px solid var(--mip-border-strong);
+  border-radius: 10px;
+  background: var(--mip-surface);
+  color: var(--mip-ink);
+  font-size: 15px;
+  font-weight: 600;
+  text-decoration: none;
+  transition-duration: var(--mip-duration-fast);
+  transition-property: background-color, border-color, color, scale;
+  transition-timing-function: ease-out;
+}
+
+.mip-btn--sm {
+  gap: 6px;
+  height: 34px;
+  padding: 0 12px;
+  border-radius: 8px;
+  font-size: 13.5px;
+}
+
+.mip-btn--primary {
+  border-color: var(--mip-primary);
+  background: var(--mip-primary);
+  color: var(--mip-on-primary);
+}
+
+@media (hover: hover) {
+  .mip-btn:hover {
+    background: var(--mip-surface-2);
+  }
+
+  .mip-btn--primary:hover {
+    border-color: var(--mip-primary-ink);
+    background: var(--mip-primary-ink);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .mip-btn:active {
+    scale: 0.96;
   }
 }
 

@@ -45,6 +45,8 @@ marketplaces:
       - https://developer-docs.amazon.com/sp-api/docs/sp-api-deprecations
     last_verified: "2026-11-05"
     guide: ../marketplaces/amazon/README.md
+    # The official developer-documentation entry point, linked as "Official docs".
+    docs_home: https://developer-docs.amazon.com/sp-api/docs/welcome
     # No logo: simple-icons (the approved logo source) does not include Amazon's mark.
     build_sequence:
       - label: API directory and map
@@ -126,6 +128,7 @@ marketplaces:
       - https://partner.tiktokshop.com/docv2/page/678e3a3978f4c20311b8b555
     last_verified: "2026-11-10"
     guide: ../marketplaces/tiktok-shop/README.md
+    docs_home: https://partner.tiktokshop.com/docv2/page/tts-api-concepts-overview
     logo: tiktok
     pages:
       - label: API directory and workflow map

@@ -2,6 +2,7 @@
 import { computed } from 'vue'
 import { withBase } from 'vitepress'
 import { coverage, guides, marketplaces } from '../generated/catalog.mjs'
+import MarketplaceLogo from './MarketplaceLogo.vue'
 import WorkflowDemo from './WorkflowDemo.vue'
 
 type Marketplace = {
@@ -99,16 +100,7 @@ const path = [
         <div class="mip-market-grid">
           <a v-for="marketplace in featured" :key="marketplace.id" class="mip-market-card" :href="withBase(marketplace.guide)">
             <span class="mip-market-top">
-              <span
-                class="mip-logo"
-                :class="{ 'mip-logo--mono': !marketplace.logo }"
-                :data-tone="marketplace.logo?.tone"
-                :style="marketplace.logo ? { '--mip-logo-color': `#${marketplace.logo.hex}` } : undefined"
-                aria-hidden="true"
-              >
-                <svg v-if="marketplace.logo" viewBox="0 0 24 24"><path :d="marketplace.logo.path" /></svg>
-                <template v-else>{{ marketplace.mark }}</template>
-              </span>
+              <MarketplaceLogo :logo="marketplace.logo" :mark="marketplace.mark" size="md" />
               <span class="mip-market-name">{{ marketplace.name }}</span>
               <span class="mip-badge" :class="`mip-badge--${marketplace.status}`">{{ statusName(marketplace.status) }}</span>
             </span>
