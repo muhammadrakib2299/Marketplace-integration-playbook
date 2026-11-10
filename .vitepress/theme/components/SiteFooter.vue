@@ -1,46 +1,33 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import { useData, withBase } from 'vitepress'
-import { marketplaces } from '../generated/catalog.mjs'
+import { formatDisplayDate } from '../../../scripts/format-date.mjs'
 
 const repositoryUrl = 'https://github.com/muhammadrakib2299/Marketplace-integration-playbook'
 const { theme } = useData()
 
 // "Built 10 Nov 2026" in UTC, so the server render and the browser agree.
-const builtOn = computed(() => {
-  const date = theme.value.buildDate
-  if (!date) return ''
-  const format = new Intl.DateTimeFormat('en-GB', { day: 'numeric', month: 'short', year: 'numeric', timeZone: 'UTC' })
-  return format.format(new Date(`${date}T00:00:00Z`))
-})
+const builtOn = computed(() => formatDisplayDate(theme.value.buildDate))
 
 type FooterLink = { text: string; link: string; external?: boolean }
 
-const columns: { title: string; links: FooterLink[] }[] = [
+// Link lists come from the config (bounded and route-checked there), so the footer never grows
+// with the catalog and never sends a generic label to one marketplace's page.
+const columns = computed<{ title: string; links: FooterLink[] }[]>(() => [
   {
-    title: 'Marketplaces',
-    links: [
-      ...marketplaces.map((marketplace: { name: string; guide: string }) => ({ text: marketplace.name, link: marketplace.guide })),
-      { text: 'Marketplace directory', link: '/marketplaces/' },
-    ],
+    title: 'Recently verified',
+    links: [...(theme.value.siteFooter?.marketplaces ?? []), { text: 'All marketplaces', link: '/marketplaces/' }],
   },
-  {
-    title: 'Build',
-    links: [
-      { text: 'Seller onboarding', link: '/marketplaces/amazon/guides/seller-onboarding' },
-      { text: 'Order synchronization', link: '/marketplaces/amazon/workflows/order-lifecycle' },
-      { text: 'Development guide', link: '/marketplaces/amazon/guides/development-guide' },
-    ],
-  },
+  { title: 'Engineering', links: theme.value.siteFooter?.engineering ?? [] },
   {
     title: 'Project',
     links: [
-      { text: 'Integration principles', link: '/docs/integration-principles' },
       { text: 'Contributing', link: `${repositoryUrl}/blob/main/CONTRIBUTING.md`, external: true },
+      { text: 'Security policy', link: `${repositoryUrl}/blob/main/SECURITY.md`, external: true },
       { text: 'GitHub repository', link: repositoryUrl, external: true },
     ],
   },
-]
+])
 
 const href = (link: FooterLink) => (link.external ? link.link : withBase(link.link))
 </script>

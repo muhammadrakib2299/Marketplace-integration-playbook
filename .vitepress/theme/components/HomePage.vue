@@ -1,7 +1,10 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import { withBase } from 'vitepress'
-import { coverage, guides, marketplaces } from '../generated/catalog.mjs'
+import { formatDisplayDate } from '../../../scripts/format-date.mjs'
+import { noun, statusName } from '../../../scripts/labels.mjs'
+import { integrationPath as path } from '../../../scripts/site-links.mjs'
+import { coverage, marketplaces } from '../generated/catalog.mjs'
 import MarketplaceLogo from './MarketplaceLogo.vue'
 import WorkflowDemo from './WorkflowDemo.vue'
 
@@ -21,49 +24,25 @@ type Marketplace = {
 
 const catalog = marketplaces as Marketplace[]
 
-const formatDate = (iso: string | null) =>
-  iso
-    ? new Intl.DateTimeFormat('en-GB', { day: 'numeric', month: 'short', year: 'numeric', timeZone: 'UTC' }).format(
-        new Date(`${iso}T00:00:00Z`),
-      )
-    : 'Not yet verified'
-
-const statusName = (status: string) => `${status.charAt(0).toUpperCase()}${status.slice(1)}`
+// "Catalog verified" says what was checked: the catalog entry, not a live integration.
+const verifiedText = (value: string | null) => {
+  const date = formatDisplayDate(value)
+  return date ? `Catalog verified ${date}` : 'Catalog not yet verified'
+}
 
 // The catalog grows over time, so the homepage shows the most recently verified few and links to the directory.
 const featured = computed(() =>
   [...catalog].sort((a, b) => String(b.lastVerified ?? '').localeCompare(String(a.lastVerified ?? ''))).slice(0, 6),
 )
 
+// Each published page is counted once, by its folder (apis/, workflows/, guides/).
 const stats = [
-  { value: catalog.length, label: catalog.length === 1 ? 'marketplace' : 'marketplaces' },
-  { value: coverage.apiReferencePages, label: 'API reference pages' },
-  { value: coverage.workflowGuides, label: 'workflow guides' },
-  { value: guides.length, label: 'integration guides' },
+  { value: catalog.length, label: noun(catalog.length, 'marketplace') },
+  { value: coverage.apiReferencePages, label: noun(coverage.apiReferencePages, 'API reference page') },
+  { value: coverage.workflowGuides, label: noun(coverage.workflowGuides, 'workflow guide') },
+  { value: coverage.integrationGuides, label: noun(coverage.integrationGuides, 'integration guide') },
 ]
 
-const path = [
-  {
-    title: 'Connect a seller account',
-    text: 'Register the app, request seller consent, and verify regional access before any data moves.',
-    link: '/marketplaces/amazon/guides/seller-onboarding',
-  },
-  {
-    title: 'Migrate existing listings',
-    text: 'Capture a baseline, validate product types, and stage writes you can reconcile.',
-    link: '/marketplaces/amazon/workflows/active-listing-migration',
-  },
-  {
-    title: 'Sync orders incrementally',
-    text: 'Poll by update time, drain pagination, and persist each page before advancing.',
-    link: '/marketplaces/amazon/workflows/order-lifecycle',
-  },
-  {
-    title: 'Operate reliably',
-    text: 'Plan for rate limits, retries, notifications, and safe reauthorization.',
-    link: '/marketplaces/amazon/guides/development-guide',
-  },
-]
 </script>
 
 <template>
@@ -108,7 +87,7 @@ const path = [
             <span class="mip-market-facts">
               <span>{{ marketplace.categoryLabel }}</span>
               <span>{{ marketplace.apis.length }} API surfaces in the catalog</span>
-              <span>Verified {{ formatDate(marketplace.lastVerified) }}</span>
+              <span>{{ verifiedText(marketplace.lastVerified) }}</span>
             </span>
           </a>
         </div>
@@ -140,7 +119,7 @@ const path = [
           <h2>Documentation, not a connection</h2>
           <p>
             “Documented” means the linked official reference was reviewed for the stated scope. Nothing here claims a
-            live integration or a sandbox test, and every sample payload is labelled as sample data.
+            live integration or a sandbox test, and example payloads are illustrative, not captured from a live account.
           </p>
           <a :href="withBase('/docs/lifecycle-and-status')">How evidence status works</a>
         </div>

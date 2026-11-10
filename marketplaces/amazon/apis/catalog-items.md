@@ -128,7 +128,7 @@ Keyword search uses the same operation but a different parameter set:
 GET /catalog/2022-04-01/items?marketplaceIds=ATVPDKIKX0DER&keywords=example%20product&pageSize=10
 ```
 
-A response shape with a subsequent page can look like this:
+A response shape with a subsequent page can look like this (illustrative sample data, not a captured response):
 
 ```json
 {

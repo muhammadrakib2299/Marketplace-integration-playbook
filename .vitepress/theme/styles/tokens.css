@@ -6,6 +6,8 @@
  * --mip-primary is the accent (signal teal); the name is kept so existing rules keep working.
  */
 :root {
+  /* Native controls (selects, scrollbars, search clear buttons) follow the theme. */
+  color-scheme: light;
   --mip-bg: #FFFFFF;
   --mip-surface: #FFFFFF;
   --mip-surface-2: #F3F6F9;
@@ -24,6 +26,10 @@
   --mip-primary-soft: #E3F4F4;
   --mip-primary-border: #A9D8DA;
   --mip-on-primary: #FFFFFF;
+
+  /* Focus rings: teal on light surfaces, light teal on the navy chrome (both at least 3:1). */
+  --mip-focus: #0B7A83;
+  --mip-focus-chrome: #6FD3DA;
 
   /* Navy chrome: top bar and footer. */
   --mip-chrome: #0F2742;
@@ -66,6 +72,7 @@
 }
 
 .dark {
+  color-scheme: dark;
   --mip-bg: #0B1626;
   --mip-surface: #0F1E31;
   --mip-surface-2: #132539;
@@ -84,6 +91,9 @@
   --mip-primary-soft: #0E3036;
   --mip-primary-border: #1D5A61;
   --mip-on-primary: #062126;
+
+  --mip-focus: #4FC7CF;
+  --mip-focus-chrome: #6FD3DA;
 
   --mip-chrome: #081322;
   --mip-chrome-2: #0F2036;

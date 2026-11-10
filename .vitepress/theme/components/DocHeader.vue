@@ -2,19 +2,17 @@
 import { computed } from 'vue'
 import { useData, withBase } from 'vitepress'
 import { ExternalLink } from 'lucide-vue-next'
-import { formatIsoDate } from '../../../scripts/format-date.mjs'
-import { marketplaceForPath, officialReference } from '../../../scripts/page-context.mjs'
-import { marketplaces } from '../generated/catalog.mjs'
+import { formatDisplayDate, formatIsoDate } from '../../../scripts/format-date.mjs'
 
-const { frontmatter, page } = useData()
+const { frontmatter } = useData()
 
 // API dossiers declare `api` and keep their title in frontmatter instead of an H1.
 const visible = computed(() => Boolean(frontmatter.value.api && frontmatter.value.title))
 
-const marketplace = computed(() => marketplaceForPath(page.value.relativePath, marketplaces))
-
-// Only APIs whose catalog entry records a docs_url get the link; nothing is guessed.
-const reference = computed(() => officialReference(marketplace.value, frontmatter.value.api))
+// Computed per page by pageContext() in the config's transformPageData. Only APIs whose catalog
+// entry records a docs_url get an official-reference link; nothing is guessed.
+const marketplace = computed(() => frontmatter.value.mip?.marketplace ?? null)
+const reference = computed(() => frontmatter.value.mip?.reference ?? null)
 
 // Date-like versions (version: 2026-01-01) arrive as serialized timestamps, like `checked`.
 const version = computed(() => {
@@ -22,23 +20,17 @@ const version = computed(() => {
   return formatIsoDate(raw) || (raw ? String(raw) : '')
 })
 
-const checkedOn = computed(() => {
-  const iso = formatIsoDate(frontmatter.value.checked)
-  if (!iso) return ''
-  const format = new Intl.DateTimeFormat('en-GB', { day: 'numeric', month: 'short', year: 'numeric', timeZone: 'UTC' })
-  return format.format(new Date(`${iso}T00:00:00Z`))
-})
+const checkedOn = computed(() => formatDisplayDate(frontmatter.value.checked))
 </script>
 
 <template>
   <header v-if="visible" class="mip-doc-header">
-    <p class="mip-doc-trail">
-      <template v-if="marketplace">
-        <a :href="withBase(marketplace.guide)">{{ marketplace.name }}</a>
-        <span aria-hidden="true">/</span>
-      </template>
-      <span>API reference</span>
-    </p>
+    <nav class="mip-doc-trail" aria-label="Breadcrumb">
+      <ol>
+        <li v-if="marketplace"><a :href="withBase(marketplace.guide)">{{ marketplace.name }}</a></li>
+        <li>API reference</li>
+      </ol>
+    </nav>
     <div class="mip-doc-title-row">
       <h1>{{ frontmatter.title }}</h1>
       <a v-if="reference" class="mip-btn mip-btn--sm" :href="reference" target="_blank" rel="noreferrer">

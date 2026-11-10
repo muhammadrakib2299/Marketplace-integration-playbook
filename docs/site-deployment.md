@@ -18,7 +18,7 @@ npm run docs:build
 npm run docs:preview
 ```
 
-VitePress's built-in local search indexes the pages included in the site at build time. It does not require an external search service or API key. Add new marketplace guides as Markdown under `marketplaces/<slug>/` and add their sidebar links to `.vitepress/config.ts`. The marketplace directory and the homepage cards and explorer are generated from `catalog/marketplaces.yaml` and `catalog/guides.yaml` by `npm run data:generate`, which runs before `docs:dev` and `docs:build` and fails when a catalog link has no matching page. The `_template` directory is intentionally excluded from the public site.
+VitePress's built-in local search indexes the pages included in the site at build time. It does not require an external search service or API key. Add new marketplace guides as Markdown under `marketplaces/<slug>/` and list them in the marketplace's catalog entry (`build_sequence` and `pages` in `catalog/marketplaces.yaml`). The sidebar, the marketplace directory, each marketplace's overview header, and the homepage cards are generated from `catalog/marketplaces.yaml` and `catalog/guides.yaml` by `npm run data:generate`, which runs before `docs:dev` and `docs:build` and fails when a catalog link has no matching page. The `_template` directory is intentionally excluded from the public site.
 
 ## Vercel settings
 

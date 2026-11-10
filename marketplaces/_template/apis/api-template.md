@@ -9,6 +9,8 @@
 | Evidence status | [Official / Tested / Unverified] |
 | Last checked | YYYY-MM-DD |
 
+For an operation-level dossier, replace this H1 with dossier frontmatter (`title`, `api`, `version`, `checked`, `evidence_status`), as described under "API dossier pages" in CONTRIBUTING.md.
+
 This is an original summary, not a copy of the provider's reference. Do not publish restricted docs, credentials, customer data, or payloads copied without redistribution permission.
 
 ## Purpose and capabilities

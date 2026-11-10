@@ -11,6 +11,7 @@ import {
   countCoverage,
   findMissingRoutes,
   loadCatalogData,
+  logoAssets,
   logoTone,
   readFrontmatter,
   repositoryRoot,
@@ -27,7 +28,6 @@ test('repository root resolves to the checkout that holds the catalog', () => {
 test('a marketplace badge is derived from its own catalog entry, not an Amazon/TikTok switch', () => {
   const [ebay] = buildMarketplaces({ marketplaces: [marketplaceRecord()] })
   assert.equal(ebay.mark, 'e')
-  assert.equal(ebay.markClass, 'platform-mark-ebay')
 })
 
 test('a catalog guide path becomes the marketplace site route', () => {
@@ -145,7 +145,7 @@ test('loading the catalog fails when an explorer guide links to a missing page',
   )
 })
 
-test('coverage counts API pages and workflows across marketplaces, skipping index pages and the template', () => {
+test('coverage counts API pages, workflows, and integration guides once each, skipping index pages and the template', () => {
   const coverage = withTempRoot(
     {
       'marketplaces/ebay/apis/index.md': '# APIs\n',
@@ -162,9 +162,10 @@ test('coverage counts API pages and workflows across marketplaces, skipping inde
   assert.deepEqual(coverage, {
     apiReferencePages: 3,
     workflowGuides: 1,
+    integrationGuides: 1,
     byMarketplace: {
-      ebay: { apiReferencePages: 2, workflowGuides: 1 },
-      otto: { apiReferencePages: 1, workflowGuides: 0 },
+      ebay: { apiReferencePages: 2, workflowGuides: 1, integrationGuides: 0 },
+      otto: { apiReferencePages: 1, workflowGuides: 0, integrationGuides: 1 },
     },
   })
 })
@@ -189,6 +190,53 @@ test("a marketplace's official docs home is optional and must be an https URL", 
   )
 })
 
+test('last_verified must be a real YYYY-MM-DD date or null', () => {
+  assert.equal(buildMarketplaces({ marketplaces: [marketplaceRecord({ last_verified: '2026-11-05' })] })[0].lastVerified, '2026-11-05')
+  assert.equal(buildMarketplaces({ marketplaces: [marketplaceRecord({ last_verified: null })] })[0].lastVerified, null)
+  for (const bad of ['2026-11-5', '2026-13-01', 'last week']) {
+    assert.throws(
+      () => buildMarketplaces({ marketplaces: [marketplaceRecord({ last_verified: bad })] }),
+      /ebay-sell-api.*last_verified/,
+      `expected ${bad} to be rejected`,
+    )
+  }
+})
+
+test('an API surface docs_url, when present, must be an https URL', () => {
+  const surface = (docs_url) => ({ api_surfaces: [{ name: 'Inventory API', version: 'v1', docs_url }] })
+  assert.equal(buildMarketplaces({ marketplaces: [marketplaceRecord(surface(undefined))] })[0].apiSurfaces[0].docsUrl, null)
+  assert.throws(
+    () => buildMarketplaces({ marketplaces: [marketplaceRecord(surface('javascript:alert(1)'))] }),
+    /ebay-sell-api.*api_surfaces\[0\]\.docs_url/,
+  )
+})
+
+test('catalog ids and marketplace folders must be unique', () => {
+  assert.throws(() => buildMarketplaces({ marketplaces: [marketplaceRecord(), marketplaceRecord()] }), /duplicate.*ebay-sell-api/)
+  assert.throws(
+    () => buildMarketplaces({ marketplaces: [marketplaceRecord(), ottoRecord({ guide: '../marketplaces/ebay/README.md' })] }),
+    /otto-api.*marketplaces\/ebay\//,
+  )
+})
+
+test('a status outside the documented vocabulary is rejected', () => {
+  assert.throws(() => buildMarketplaces({ marketplaces: [marketplaceRecord({ status: 'live' })] }), /ebay-sell-api.*status "live"/)
+})
+
+test('every suggested category has a sentence-case label', () => {
+  const labels = ['marketplace-operator', 'aggregator', 'carrier', 'warehouse'].map(
+    (category) => buildMarketplaces({ marketplaces: [marketplaceRecord({ category })] })[0].categoryLabel,
+  )
+  assert.deepEqual(labels, ['Marketplace operator', 'Aggregator', 'Carrier', 'Warehouse'])
+  assert.equal(buildMarketplaces({ marketplaces: [marketplaceRecord({ category: 'b2b-portal' })] })[0].categoryLabel, 'B2b portal')
+})
+
+test('a marketplace carries its status and evidence as separate labels', () => {
+  const [ebay] = buildMarketplaces({ marketplaces: [marketplaceRecord({ status: 'documented', evidence: 'official' })] })
+  assert.equal(ebay.statusName, 'Documented')
+  assert.equal(ebay.evidenceLabel, 'Source-linked')
+})
+
 test('a capability counts as documented only when the marketplace has a guide on that topic', () => {
   const marketplaces = buildMarketplaces({ marketplaces: [marketplaceRecord(), ottoRecord()] })
   const { topics, guides } = buildGuides(
@@ -209,11 +257,22 @@ test('a capability counts as documented only when the marketplace has a guide on
   )
 })
 
-test('a catalog logo slug resolves to its Simple Icons mark', () => {
+// Pages reference a small logo file instead of carrying the SVG path, so the sidebar and page data
+// stay small as the catalog grows.
+test('a catalog logo slug resolves to its Simple Icons colour and a logo file, not an inline path', () => {
   const [ebay] = buildMarketplaces({ marketplaces: [marketplaceRecord({ logo: 'tiktok' })] })
   assert.equal(ebay.logo.title, 'TikTok')
-  assert.match(ebay.logo.path, /^M/)
   assert.match(ebay.logo.hex, /^[0-9A-F]{6}$/)
+  assert.equal(ebay.logo.src, '/logos/tiktok.svg')
+  assert.equal(ebay.logo.path, undefined)
+})
+
+test('logo assets are standalone SVG files, one per logo slug', () => {
+  const assets = logoAssets({
+    marketplaces: [marketplaceRecord({ logo: 'tiktok' }), ottoRecord({ logo: 'tiktok' }), marketplaceRecord({ id: 'plain', logo: undefined })],
+  })
+  assert.deepEqual(assets.map((asset) => asset.file), ['tiktok.svg'])
+  assert.match(assets[0].svg, /^<svg xmlns="http:\/\/www\.w3\.org\/2000\/svg" viewBox="0 0 24 24"><path d="M[^"]+"\/><\/svg>$/)
 })
 
 test('an unknown logo slug is rejected with the catalog id', () => {

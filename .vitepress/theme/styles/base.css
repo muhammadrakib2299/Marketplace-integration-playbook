@@ -1,6 +1,14 @@
 /* Base layer: typography details, custom scrollbars, focus ring, and motion (spec 5.1 and 5.1c). */
 
+/* Anchor jumps glide; the reduced-motion rule at the end of this file switches it off. */
+html {
+  scroll-behavior: smooth;
+}
+
+/* VitePress sets body { min-width: 320px }. At 320 CSS px (a 1280 px screen zoomed to 400 %, WCAG
+   1.4.10) a classic 10 px scrollbar leaves 310 px, so that minimum scrolled every page sideways. */
 body {
+  min-width: 0;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -65,11 +73,26 @@ p {
   }
 }
 
-/* Focus ring: visible on keyboard focus, fading in from the offset. */
-:focus-visible {
-  outline: 2px solid var(--mip-primary);
+/* Focus ring: visible on keyboard focus, fading in from the offset. `button:focus-visible` matches
+   VitePress's own rule (outline: 4px auto), which would otherwise replace the ring on every button. */
+:focus-visible,
+button:focus-visible {
+  outline: 2px solid var(--mip-focus);
   outline-offset: 2px;
   animation: mip-focus-in var(--mip-duration-fast) var(--mip-ease);
+}
+
+/* On the navy top bar and footer the teal ring falls under 3:1, so it lightens there. */
+.VPNavBar :focus-visible,
+.VPNavBar button:focus-visible,
+.mip-footer :focus-visible {
+  outline-color: var(--mip-focus-chrome);
+}
+
+/* VitePress styles the search button's focus itself (`.DocSearch-Button:focus`, 5px auto). */
+.VPNav .DocSearch-Button:focus-visible {
+  outline: 2px solid var(--mip-focus-chrome);
+  outline-offset: 2px;
 }
 
 @keyframes mip-focus-in {

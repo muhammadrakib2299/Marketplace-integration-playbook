@@ -1,19 +1,19 @@
 // Builds the VitePress sidebar from catalog marketplace records (spec 5.2).
 // VitePress renders sidebar text with v-html, so every catalog value is escaped here.
+import { sortMarketplaces } from './directory.mjs'
+import { statusName } from './labels.mjs'
 
 const htmlEscapes = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }
 const escapeHtml = (value) => String(value).replace(/[&<>"]/g, (character) => htmlEscapes[character])
-
-const statusName = (status) => `${status.charAt(0).toUpperCase()}${status.slice(1)}`
 
 function logoTile(marketplace) {
   if (!marketplace.logo) {
     return `<span class="mip-logo mip-logo--mono" aria-hidden="true">${escapeHtml(marketplace.mark)}</span>`
   }
-  const { hex, path, tone } = marketplace.logo
+  const { hex, src, tone } = marketplace.logo
   return (
-    `<span class="mip-logo" data-tone="${escapeHtml(tone)}" style="--mip-logo-color:#${escapeHtml(hex)}" aria-hidden="true">` +
-    `<svg viewBox="0 0 24 24" focusable="false"><path d="${escapeHtml(path)}"/></svg></span>`
+    `<span class="mip-logo" data-tone="${escapeHtml(tone)}" style="--mip-logo-color:#${escapeHtml(hex)};--mip-logo-src:url(${escapeHtml(src)})" aria-hidden="true">` +
+    `<span class="mip-logo-glyph"></span></span>`
   )
 }
 
@@ -64,17 +64,20 @@ function marketplaceGroups(marketplace, versionOf) {
   return groups
 }
 
-export function buildSidebar({ marketplaces, versionOf, docs }) {
+export function buildSidebar({ marketplaces, versionOf, docs, recentLimit = 8 }) {
   const overview = overviewGroup(marketplaces, docs)
   return {
     ...Object.fromEntries(
       marketplaces.map((marketplace) => [marketplace.guide, [overview, ...marketplaceGroups(marketplace, versionOf)]]),
     ),
+    // The directory page lists every marketplace, so its sidebar names only the latest few.
     '/marketplaces/': [
       overview,
       {
-        text: 'Marketplaces',
-        items: marketplaces.map((marketplace) => ({ text: marketplaceTitle(marketplace), link: marketplace.guide })),
+        text: 'Recently verified',
+        items: sortMarketplaces(marketplaces, 'recent')
+          .slice(0, recentLimit)
+          .map((marketplace) => ({ text: marketplaceTitle(marketplace), link: marketplace.guide })),
       },
     ],
     '/docs/': [overview, { text: 'Engineering', items: docs.map((doc) => ({ text: escapeHtml(doc.label), link: doc.href })) }],

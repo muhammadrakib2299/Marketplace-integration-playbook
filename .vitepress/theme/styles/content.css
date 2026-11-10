@@ -32,6 +32,16 @@
   padding-left: 24px;
 }
 
+/* On wide screens the content column and the right rail stay together and centre as one group beside
+   the sidebar (spec section 7). Without a cap VitePress stretches .content to fill the width, so the
+   1080px column centres alone and the rail drifts to the window edge (a 471px gap at 2560px).
+   1400px = column 1080 + content gutters 2 x 32 + rail 256. */
+@media (min-width: 1280px) {
+  .Layout .VPDoc.has-aside .container {
+    max-width: 1400px;
+  }
+}
+
 @media (min-width: 960px) {
   .Layout .VPDoc {
     padding-right: 24px;
@@ -154,6 +164,9 @@
 /* ---------- Tables (wrapped in .mip-table by the markdown config) ---------- */
 
 .vp-doc .mip-table {
+  /* A containing block, so absolutely positioned cell content (screen-reader text) scrolls with the
+     table instead of escaping it and widening the page on small screens. */
+  position: relative;
   margin: 20px 0;
   overflow-x: auto;
   border: 1px solid var(--mip-border);
@@ -211,7 +224,7 @@
 
 .vp-doc div[class*='language-'] {
   margin: 20px 0;
-  padding-top: 34px;
+  padding-top: 36px;
   overflow: hidden; /* the inner <pre> scrolls, so the header strip stays put */
   border: 1px solid var(--mip-code-line);
   border-radius: var(--mip-radius-lg);
@@ -220,7 +233,7 @@
 .vp-doc div[class*='language-']::before {
   position: absolute;
   inset: 0 0 auto;
-  height: 34px;
+  height: 36px;
   border-bottom: 1px solid var(--mip-code-line);
   background: var(--mip-code-head);
   content: '';
@@ -228,7 +241,7 @@
 
 .vp-doc div[class*='language-'] > span.lang,
 .vp-doc div[class*='language-']:hover > span.lang {
-  top: 8px;
+  top: 9px;
   right: auto;
   left: 14px;
   opacity: 1;
@@ -239,13 +252,21 @@
 
 /* Icon-only copy button, always visible in the header strip. */
 .vp-doc div[class*='language-'] > button.copy {
-  top: 3px;
+  top: 4px;
   right: 6px;
   width: 28px;
   height: 28px;
   border-radius: 6px;
   background-size: 14px;
   opacity: 1;
+}
+
+/* A 36 px hit area around the 28 px button (spec 5.1a); ::before is VitePress's "Copied" label.
+   The inset counts from inside the 1 px border. */
+.vp-doc div[class*='language-'] > button.copy::after {
+  position: absolute;
+  inset: -5px;
+  content: '';
 }
 
 .vp-doc div[class*='language-'] pre {
@@ -300,6 +321,11 @@
   background: var(--mip-surface-2);
 }
 
+/* Links on the tinted callout backgrounds use the darker teal to stay above 4.5:1. */
+.vp-doc .custom-block a {
+  color: var(--mip-primary-ink);
+}
+
 /* ---------- Doc footer: edit link and prev/next cards ---------- */
 
 .VPDocFooter .edit-link-button {
@@ -346,12 +372,31 @@
 }
 
 .mip-doc-trail {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
   margin: 0 0 8px;
   color: var(--mip-muted);
   font-size: 13.5px;
+}
+
+.mip-doc-trail ol {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* The separator is decoration: the empty alternative text keeps screen readers from reading it. */
+.mip-doc-trail li + li::before {
+  margin-right: 6px;
+  color: var(--mip-faint-text);
+  content: '/' / '';
+}
+
+/* A dossier's title comes from frontmatter (DocHeader.vue). If the Markdown also starts with an H1,
+   hide it so the page never shows two (see CONTRIBUTING.md, "API dossier pages"). */
+.mip-doc-header ~ .main .vp-doc > div > h1:first-child {
+  display: none;
 }
 
 .mip-doc-trail a {
@@ -440,7 +485,7 @@
   color: var(--mip-muted);
   font-family: var(--vp-font-family-mono);
   font-size: 11.5px;
-  font-weight: 600;
+  font-weight: 500; /* IBM Plex Mono is loaded at 400 and 500 only, so 600 would be faux bold. */
   letter-spacing: 0.02em;
   line-height: 20px;
 }

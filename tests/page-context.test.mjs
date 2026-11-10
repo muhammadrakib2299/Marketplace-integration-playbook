@@ -5,6 +5,7 @@ import {
   isMarketplaceOverview,
   marketplaceForPath,
   officialReference,
+  pageContext,
   routeForPath,
   sequencePosition,
 } from '../scripts/page-context.mjs'
@@ -118,4 +119,32 @@ test("a page's place in its marketplace build sequence is found by route", () =>
   assert.deepEqual(sequencePosition(ebay, '/marketplaces/ebay/guides/seller-access').next, ebay.buildSequence[1])
   assert.equal(sequencePosition(ebay, '/marketplaces/ebay/changelog'), null)
   assert.equal(sequencePosition(null, '/marketplaces/ebay/workflows/orders'), null)
+})
+
+const catalogData = { marketplaces: [ebay, otto], capabilities, coverage }
+
+test('a page outside a marketplace folder gets no page context', () => {
+  assert.equal(pageContext('docs/glossary.md', {}, catalogData), null)
+  assert.equal(pageContext('marketplaces/index.md', {}, catalogData), null)
+})
+
+test('only the overview page carries the hub, and the hub omits navigation lists it does not show', () => {
+  const overview = pageContext('marketplaces/ebay/index.md', {}, catalogData)
+  assert.equal(overview.hub.marketplace.name, ebay.name)
+  assert.deepEqual(overview.hub.start, ebay.buildSequence[0])
+  assert.equal(overview.hub.marketplace.pages, undefined)
+  assert.equal(pageContext('marketplaces/ebay/apis/orders.md', {}, catalogData).hub, null)
+})
+
+test('a build-sequence page carries its step, and every marketplace page names its marketplace', () => {
+  const step = pageContext('marketplaces/ebay/workflows/orders.md', {}, catalogData)
+  assert.deepEqual(step.marketplace, { name: ebay.name, guide: '/marketplaces/ebay/' })
+  assert.equal(step.sequence.step, 2)
+  assert.equal(pageContext('marketplaces/ebay/changelog.md', {}, catalogData).sequence, null)
+})
+
+test('an API dossier gets the official reference for the API its frontmatter names', () => {
+  const dossier = pageContext('marketplaces/ebay/apis/inventory.md', { api: 'Inventory API' }, catalogData)
+  assert.equal(dossier.reference, 'https://developer.ebay.com/develop/api/sell/inventory')
+  assert.equal(pageContext('marketplaces/ebay/apis/other.md', {}, catalogData).reference, null)
 })

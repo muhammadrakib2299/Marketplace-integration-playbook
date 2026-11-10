@@ -100,8 +100,22 @@
   line-height: 1.15;
 }
 
+/* Long status labels wrap inside narrow fact cells instead of spilling out. */
+.mip-hub-sub {
+  display: block;
+  margin-top: 6px;
+  color: var(--mip-muted);
+  font-size: 13px;
+  font-weight: 400;
+}
+
 .mip-hub-facts .mip-badge {
+  height: auto;
+  min-height: 22px;
   margin-left: 0;
+  padding: 2px 8px;
+  line-height: 1.35;
+  white-space: normal;
 }
 
 .mip-hub .mip-hub-gap {
@@ -302,7 +316,7 @@
 
 .mip-sequence-label {
   display: flex;
-  gap: 6px;
+  gap: 10px;
   margin: 0;
   color: var(--mip-muted);
   font-weight: 500;
@@ -312,6 +326,12 @@
   color: var(--mip-ink);
   font-weight: 600;
   text-decoration: none;
+}
+
+/* A rule between the marketplace name and the step count, instead of a middle dot (spec section 7). */
+.mip-sequence-label span {
+  padding-left: 10px;
+  border-left: 1px solid var(--mip-border-strong);
 }
 
 .mip-sequence-label a:hover {
@@ -345,6 +365,7 @@
 }
 
 .mip-sequence-steps a {
+  position: relative;
   display: grid;
   place-items: center;
   width: 26px;
@@ -360,6 +381,15 @@
   transition:
     border-color var(--mip-duration-fast) var(--mip-ease),
     color var(--mip-duration-fast) var(--mip-ease);
+}
+
+/* A 36 px hit area around each 26 px step (spec 5.1a); the inset counts from inside the 1.5 px
+   border. Neighbouring areas stay 2 px apart. */
+.mip-sequence-steps a::after {
+  position: absolute;
+  inset: -6.5px;
+  border-radius: 999px;
+  content: '';
 }
 
 .mip-sequence-steps a:hover {
@@ -406,16 +436,16 @@
   margin: 28px 0 8px;
 }
 
+/* Search on its own row above four facet selects; one row when the column is wide enough. */
 .mip-directory .mip-dir-toolbar {
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 10px;
-  align-items: center;
 }
 
 .mip-directory .mip-dir-search {
   display: flex;
-  flex: 1 1 300px;
+  grid-column: 1 / -1;
   gap: 10px;
   align-items: center;
   height: 42px;
@@ -449,7 +479,12 @@
 }
 
 .mip-directory .mip-dir-select select {
+  overflow: hidden;
+  width: 100%;
+  min-width: 0;
   height: 42px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
   padding: 0 34px 0 12px;
   border: 1px solid var(--mip-border-strong);
   border-radius: 10px;
@@ -507,12 +542,19 @@
 
 .mip-directory .mip-dir-status {
   display: flex;
-  gap: 12px;
+  flex-wrap: wrap;
+  gap: 10px 16px;
   align-items: center;
   justify-content: space-between;
-  min-height: 34px;
-  margin: 18px 0 10px;
+  margin: 16px 0 12px;
   scroll-margin-top: calc(var(--vp-nav-height) + 24px);
+}
+
+.mip-directory .mip-dir-count {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 14px;
+  align-items: center;
 }
 
 .mip-directory .mip-dir-status p {
@@ -533,6 +575,20 @@
 
 .mip-directory .mip-dir-reset:hover {
   color: var(--mip-primary-ink);
+}
+
+/* The list's heading, for screen-reader navigation only. VitePress's `.vp-doc h2` (position, margins)
+   outranks the generic visually-hidden utility, so the hiding is spelled out here. */
+.mip-directory .mip-dir-heading {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  border: 0;
+  white-space: nowrap;
 }
 
 /* Rich rows: identity, meta, summary, and counts on the left; actions on the right. */
@@ -613,6 +669,25 @@
   color: var(--mip-muted);
   font-size: 13px;
   line-height: 1.5;
+}
+
+/* Category, access, and regions, each led by an icon instead of middle-dot separators (spec section 7). */
+.mip-directory .mip-dir-meta {
+  gap: 4px 16px;
+  padding: 0;
+  list-style: none;
+}
+
+.mip-directory .mip-dir-meta li {
+  display: inline-flex;
+  gap: 6px;
+  align-items: center;
+  margin: 0;
+}
+
+.mip-directory .mip-dir-meta svg {
+  flex: none;
+  color: var(--mip-faint-text);
 }
 
 .mip-directory .mip-dir-text {
@@ -700,11 +775,18 @@
 .mip-directory .mip-matrix td {
   text-align: center;
   vertical-align: middle;
-  white-space: nowrap;
 }
 
+/* Topic headers wrap onto two lines so all seven columns fit beside the marketplace names. */
 .mip-directory .mip-matrix thead th {
+  min-width: 76px;
   font-size: 12.5px;
+  line-height: 1.3;
+  vertical-align: bottom;
+}
+
+.mip-directory .mip-matrix th:first-child {
+  min-width: 140px;
 }
 
 .mip-directory .mip-matrix th:first-child {
@@ -752,7 +834,7 @@
 }
 
 .mip-directory .mip-matrix-no {
-  color: var(--mip-faint);
+  color: var(--mip-faint-text);
 }
 
 @container mip-directory (max-width: 640px) {
@@ -773,11 +855,17 @@
     justify-content: center;
   }
 
-  .mip-directory .mip-dir-select {
-    flex: 1 1 140px;
+  .mip-directory .mip-dir-toolbar {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@container mip-directory (min-width: 1040px) {
+  .mip-directory .mip-dir-toolbar {
+    grid-template-columns: minmax(260px, 2fr) repeat(4, minmax(0, 1fr));
   }
 
-  .mip-directory .mip-dir-select select {
-    width: 100%;
+  .mip-directory .mip-dir-search {
+    grid-column: auto;
   }
 }

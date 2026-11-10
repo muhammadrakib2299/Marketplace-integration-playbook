@@ -13,8 +13,27 @@ Only submit content you are authorized to publish. Do not contribute employer or
 3. Start from `marketplaces/_template/` and complete the required sections. Keep optional topics only when relevant.
 4. Add primary provider sources near the claims they support. Include page title, URL, API/version scope where known, and `last checked` date. Prefer official sources; label secondary sources as context only.
 5. Separate official statements, personally tested observations, and unverified assumptions. Say exactly what testing covered.
-6. Update `catalog/marketplaces.yaml` to match the guide, and list its guides in `catalog/guides.yaml` so they appear in the homepage explorer. Do not claim an integration is implemented merely because a guide exists.
+6. Update `catalog/marketplaces.yaml` to match the guide, and list its guides in `catalog/guides.yaml` under the right topic, so they count toward the marketplace's coverage on its overview page and in the directory. Do not claim an integration is implemented merely because a guide exists.
 7. Review the diff for sensitive data, unsupported claims, broken links, duplicate instructions, and unnecessary copied documentation.
+
+## API dossier pages
+
+An operation-level API page (a dossier) starts with frontmatter instead of a Markdown H1:
+
+```yaml
+---
+title: Amazon Orders API dossier
+api: Orders API
+version: 2026-01-01
+checked: 2026-11-06
+evidence_status: Official reference and versioned model reviewed; no sandbox or live account tests performed
+---
+```
+
+- `title` and `api` together turn on the dossier header, which renders `title` as the page's H1. Do not also start the page with a `# Heading`; the site hides a leading Markdown H1 on dossiers so a page never shows two.
+- `api` must match an `api_surfaces[].name` in the marketplace's catalog entry for the header to link that surface's official reference (`docs_url`).
+- `version` and `checked` appear as chips in the header; `checked` and `evidence_status` also fill the evidence card in the right rail.
+- Pages without this frontmatter keep their own Markdown H1 and get no dossier header.
 
 ## New-entry checklist
 

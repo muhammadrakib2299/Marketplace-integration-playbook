@@ -56,3 +56,23 @@ export function hubModel(marketplace, { capabilities, coverage }) {
     testsRecorded: marketplace.status === 'tested' || marketplace.evidence === 'tested',
   }
 }
+
+// The marketplace fields the hub header shows; navigation lists and search text stay out of page data.
+const hubFields = ['id', 'name', 'fullName', 'categoryLabel', 'summary', 'status', 'statusName', 'evidenceLabel',
+  'access', 'regions', 'lastVerified', 'docsHome', 'logo', 'mark']
+const hubMarketplace = (marketplace) => Object.fromEntries(hubFields.map((field) => [field, marketplace[field]]))
+
+// Everything the layout components need for one page, computed at build time by the config's
+// transformPageData, so the shared theme bundle never carries the catalog. null outside marketplaces/.
+export function pageContext(relativePath, frontmatter, { marketplaces, capabilities, coverage }) {
+  const marketplace = marketplaceForPath(relativePath, marketplaces)
+  if (!marketplace) return null
+  return {
+    marketplace: { name: marketplace.name, guide: marketplace.guide },
+    hub: isMarketplaceOverview(relativePath)
+      ? { marketplace: hubMarketplace(marketplace), ...hubModel(marketplace, { capabilities, coverage }) }
+      : null,
+    sequence: sequencePosition(marketplace, routeForPath(relativePath)),
+    reference: frontmatter?.api ? officialReference(marketplace, frontmatter.api) : null,
+  }
+}

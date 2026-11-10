@@ -32,19 +32,19 @@ Every guide should identify its source, API version, marketplace/region, access 
 
 ## Repository structure
 
-- `catalog/marketplaces.yaml` is the machine-readable marketplace index; `catalog/guides.yaml` lists the guides shown in the homepage explorer.
+- `catalog/marketplaces.yaml` is the machine-readable marketplace index; `catalog/guides.yaml` files each guide under an integration topic, which drives each marketplace's coverage on its overview page and in the directory.
 - `marketplaces/amazon/` and `marketplaces/tiktok-shop/` contain each marketplace's API map, guides, and workflows.
 - `marketplaces/_template/` is a reusable starting point for future marketplaces.
 - `docs/` contains repository-wide integration principles and lifecycle guidance.
-- `scripts/` generates the site's directory and homepage data from the catalog; `tests/` covers it.
+- `scripts/` generates the site's sidebar, directory, overview-page, and homepage data from the catalog; `tests/` covers it.
 - `.github/workflows/` contains documentation quality checks.
 
 ## Add a marketplace
 
-1. Copy `marketplaces/_template/` to `marketplaces/<slug>/`. Use a lowercase, hyphenated slug; it becomes the page URL and the badge style name.
+1. Copy `marketplaces/_template/` to `marketplaces/<slug>/`. Use a lowercase, hyphenated slug; it becomes the page URL.
 2. Add an entry to `catalog/marketplaces.yaml`, starting from [`templates/marketplace.yaml`](templates/marketplace.yaml), with `guide: ../marketplaces/<slug>/README.md`.
-3. List the marketplace's guides in [`catalog/guides.yaml`](catalog/guides.yaml) so they appear in the homepage explorer.
-4. Add the sidebar links to the catalog entry: `build_sequence` for numbered steps and `pages` for the rest. Optionally add a `logo` (a Simple Icons slug); without one, the marketplace shows a monogram badge, which an optional `.platform-mark-<slug>` colour rule in `.vitepress/theme/custom.css` can tint.
+3. List the marketplace's guides in [`catalog/guides.yaml`](catalog/guides.yaml) so they count toward the marketplace's topic coverage on its overview page and in the directory.
+4. Add the sidebar links to the catalog entry: `build_sequence` for numbered steps and `pages` for the rest. Optionally add a `logo` (a Simple Icons slug; without one, the marketplace shows a monogram) and a `docs_home` link to the provider's official developer documentation.
 5. Run `npm test` and `npm run docs:build`. The build fails if a catalog or guide link has no matching page.
 
 The marketplace directory and homepage cards are generated from the catalog, so they need no manual edits. See [`CONTRIBUTING.md`](CONTRIBUTING.md) and [`docs/github-actions.md`](docs/github-actions.md) before contributing. Use the official provider references linked in each guide as the source of truth.

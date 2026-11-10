@@ -9,8 +9,11 @@ export function readFilterState(search, defaults, allowed = {}) {
   )
 }
 
-export function writeFilterState(pathname, state, defaults, hash = '') {
-  const params = new URLSearchParams()
+// Writes the non-default filter values into the URL. Parameters the state does not own (any key not
+// in `defaults`, such as utm_source) are kept from `currentSearch`; owned keys are always rewritten.
+export function writeFilterState(pathname, state, defaults, hash = '', currentSearch = '') {
+  const params = new URLSearchParams(currentSearch)
+  Object.keys(defaults).forEach((key) => params.delete(key))
   Object.entries(state).forEach(([key, value]) => {
     if (value !== undefined && value !== null && value !== '' && value !== defaults[key]) {
       params.set(key, String(value))

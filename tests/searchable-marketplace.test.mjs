@@ -19,6 +19,17 @@ test('fuzzy search matches API tags, not only titles', () => {
   assert.deepEqual(result.map((item) => item.id), ['tiktok'])
 })
 
+test('fuzzy search ignores letters scattered across long text', () => {
+  const entries = [
+    {
+      id: 'tiktok',
+      text: 'Source-linked API map covering products, orders, fulfillment, logistics, returns, finance, authorization, events, and partner category assets.',
+    },
+    { id: 'zalando', text: 'Partner API for merchants selling in Europe.' },
+  ]
+  assert.deepEqual(fuzzySearch(entries, 'europe', (item) => [item.text]).map((item) => item.id), ['zalando'])
+})
+
 test('fuzzy search preserves catalog order when the query is empty', () => {
   assert.deepEqual(fuzzySearch(records, '', (item) => [item.name]).map((item) => item.id), ['amazon', 'tiktok', 'stripe'])
 })
@@ -35,4 +46,12 @@ test('URL state restores valid filters and rejects unknown values', () => {
     topic: ['all', 'orders'],
   })
   assert.deepEqual(state, { q: 'orders', type: 'all', topic: 'orders' })
+})
+
+test('URL state rewrites only the keys it owns and keeps other parameters', () => {
+  const defaults = { q: '', status: 'all' }
+  assert.equal(
+    writeFilterState('/marketplaces/', { q: 'orders', status: 'all' }, defaults, '', '?utm_source=mail&status=bogus&q=old'),
+    '/marketplaces/?utm_source=mail&q=orders',
+  )
 })

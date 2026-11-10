@@ -156,6 +156,14 @@
 
 /* Search trigger styled as a field on the navy bar. */
 @media (min-width: 768px) {
+  /* min-width: 0 lets the field shrink below its placeholder's width, so the bar never pushes the
+     page sideways at tablet widths (768-960 px); the placeholder ends in an ellipsis instead. */
+  .VPNav .VPNavBar .content,
+  .VPNav .VPNavBarSearch,
+  .VPNav .VPNavBarSearch #local-search {
+    min-width: 0;
+  }
+
   .VPNav .VPNavBarSearch {
     flex-grow: 1;
     justify-content: flex-start;
@@ -170,6 +178,7 @@
   .VPNav .VPNavBarSearch .DocSearch-Button {
     justify-content: space-between;
     width: 100%;
+    min-width: 0;
     max-width: 560px;
     height: 40px;
     margin: 0;
@@ -180,11 +189,25 @@
     transition: border-color var(--mip-duration-fast) var(--mip-ease);
   }
 
+  .VPNav .DocSearch-Button .DocSearch-Button-Container {
+    min-width: 0;
+  }
+
   .VPNav .DocSearch-Button .DocSearch-Button-Placeholder {
+    overflow: hidden;
+    min-width: 0;
     padding-left: 9px;
     color: var(--mip-chrome-muted);
     font-size: 13.5px;
     font-weight: 400;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 959px) {
+  .VPNav .VPNavBarSearch {
+    padding-left: 16px;
   }
 }
 
@@ -403,16 +426,26 @@
   background: var(--mip-surface);
 }
 
-.mip-logo svg {
+/* The mark is a mask over the brand colour, so one small file serves every size and theme. */
+.mip-logo-glyph {
   width: 13px;
   height: 13px;
-  fill: var(--mip-logo-color, var(--mip-ink));
+  background-color: var(--mip-logo-color, var(--mip-ink));
+  -webkit-mask: var(--mip-logo-src) center / contain no-repeat;
+  mask: var(--mip-logo-src) center / contain no-repeat;
 }
 
 /* Near-black marks would vanish on the dark theme, near-white ones on the light theme. */
-.dark .mip-logo[data-tone='dark'] svg,
-html:not(.dark) .mip-logo[data-tone='bright'] svg {
-  fill: var(--mip-ink);
+.dark .mip-logo[data-tone='dark'] .mip-logo-glyph,
+html:not(.dark) .mip-logo[data-tone='bright'] .mip-logo-glyph {
+  background-color: var(--mip-ink);
+}
+
+@media (forced-colors: active) {
+  .mip-logo-glyph {
+    background-color: CanvasText;
+    forced-color-adjust: none;
+  }
 }
 
 .mip-logo--mono {
@@ -428,7 +461,7 @@ html:not(.dark) .mip-logo[data-tone='bright'] svg {
   border-radius: 9px;
 }
 
-.mip-logo--md svg {
+.mip-logo--md .mip-logo-glyph {
   width: 20px;
   height: 20px;
 }
@@ -444,7 +477,7 @@ html:not(.dark) .mip-logo[data-tone='bright'] svg {
   box-shadow: var(--mip-shadow-sm);
 }
 
-.mip-logo--lg svg {
+.mip-logo--lg .mip-logo-glyph {
   width: 30px;
   height: 30px;
 }
@@ -601,8 +634,16 @@ html:not(.dark) .mip-logo[data-tone='bright'] svg {
 }
 
 .mip-icon-button--compact {
+  position: relative;
   width: 30px;
   height: 30px;
+}
+
+/* A 36 px hit area (spec 5.1a) around the 30 px button; the inset counts from inside its 1 px border. */
+.mip-icon-button--compact::after {
+  position: absolute;
+  inset: -4px;
+  content: '';
 }
 
 @media (hover: hover) {
@@ -663,6 +704,22 @@ html:not(.dark) .mip-logo[data-tone='bright'] svg {
   .mip-btn:active {
     scale: 0.96;
   }
+}
+
+/* Buttons placed inside Markdown content keep the button look over the `.vp-doc a` link style. */
+.vp-doc a.mip-btn,
+.vp-doc a.mip-btn:hover {
+  color: var(--mip-ink);
+  font-weight: 600;
+  text-decoration: none;
+  transition-duration: var(--mip-duration-fast);
+  transition-property: background-color, border-color, color, scale;
+  transition-timing-function: ease-out;
+}
+
+.vp-doc a.mip-btn--primary,
+.vp-doc a.mip-btn--primary:hover {
+  color: var(--mip-on-primary);
 }
 
 /* ---------- Site footer (SiteFooter.vue, every page) ---------- */

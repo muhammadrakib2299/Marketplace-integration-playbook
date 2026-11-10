@@ -1,4 +1,5 @@
-# Integration guides listed in the homepage explorer, in reading order per marketplace.
+# Integration guides by topic, in reading order per marketplace. They drive each marketplace's
+# coverage on its overview page and in the directory's coverage matrix.
 # The generator (npm run data:generate) rejects unknown marketplaces, topics, or types,
 # and fails the build when an href has no matching Markdown page.
 schema_version: 1

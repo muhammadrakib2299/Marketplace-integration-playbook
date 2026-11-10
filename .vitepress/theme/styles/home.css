@@ -76,7 +76,7 @@
   letter-spacing: -0.02em;
 }
 
-/* ---------- Workflow walkthrough (Anime.js drives the packet and samples) ---------- */
+/* ---------- Workflow walkthrough: static by default; Anime.js plays it once on request ---------- */
 
 .mip-flow {
   margin: 0;
@@ -101,6 +101,35 @@
   font-weight: 600;
 }
 
+.mip-flow-tools {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.mip-flow-play {
+  display: inline-flex;
+  gap: 6px;
+  align-items: center;
+  height: 32px;
+  padding: 0 12px;
+  border: 1px solid var(--mip-border-strong);
+  border-radius: 999px;
+  background: var(--mip-surface);
+  color: var(--mip-ink);
+  font-size: 13px;
+  font-weight: 600;
+  transition: background-color var(--mip-duration-fast) var(--mip-ease);
+}
+
+@media (hover: hover) {
+  .mip-flow-play:hover {
+    background: var(--mip-surface-2);
+  }
+}
+
 .mip-flow-tag {
   padding: 2px 10px;
   border: 1px dashed var(--mip-border-strong);
@@ -109,8 +138,12 @@
   font-size: 12.5px;
 }
 
-.mip-flow-steps {
+/* The rail and the moving packet sit beside the list, not inside it (an <ol> holds only <li>). */
+.mip-flow-track {
   position: relative;
+}
+
+.mip-flow-steps {
   display: grid;
   gap: 14px;
   margin: 0;
@@ -189,7 +222,7 @@
   font-size: 13.5px;
 }
 
-/* While the walkthrough runs, samples appear as their step is reached. */
+/* While the walkthrough plays, samples appear as their step is reached. */
 .mip-flow.is-animated .mip-flow-sample {
   transition-duration: 300ms;
   transition-property: opacity, translate;
@@ -201,19 +234,18 @@
   translate: -6px 0;
 }
 
+/* Samples wrap rather than truncate: on phones the changing watermark time is the point of the demo. */
 .mip-flow-sample {
   justify-self: start;
   max-width: 100%;
   margin-top: 4px;
   padding: 4px 8px;
-  overflow: hidden;
   border-radius: var(--mip-radius-sm);
   background: var(--mip-code-bg);
   color: #D6DEEB;
   font-family: var(--vp-font-family-mono);
   font-size: 12.5px;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  overflow-wrap: anywhere;
 }
 
 .mip-flow-link {
@@ -270,6 +302,11 @@
   text-decoration: underline;
   text-decoration-color: var(--mip-primary-border);
   text-underline-offset: 3px;
+}
+
+/* The note sits on a tinted panel, where primary teal drops under 4.5:1. */
+.mip-home-note a {
+  color: var(--mip-primary-ink);
 }
 
 /* Marketplace cards */

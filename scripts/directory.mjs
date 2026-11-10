@@ -4,14 +4,19 @@ import { fuzzySearch } from './fuzzy-search.mjs'
 
 const byLabel = (a, b) => a.label.localeCompare(b.label, 'en', { sensitivity: 'base' })
 
-// [{ value, label, count }] for one catalog field, e.g. category with its display label.
+// [{ value, label, count }] for one catalog field, e.g. category with its display label. A list field
+// (regions) gives one option per value, counted once per marketplace and labelled by the value itself.
 export function facetOptions(marketplaces, key, labelKey = key) {
   const options = new Map()
   for (const marketplace of marketplaces) {
-    const value = marketplace[key]
-    const option = options.get(value) ?? { value, label: marketplace[labelKey], count: 0 }
-    option.count += 1
-    options.set(value, option)
+    const field = marketplace[key]
+    const values = Array.isArray(field) ? [...new Set(field)] : [field]
+    for (const value of values) {
+      const label = Array.isArray(field) ? value : marketplace[labelKey]
+      const option = options.get(value) ?? { value, label, count: 0 }
+      option.count += 1
+      options.set(value, option)
+    }
   }
   return [...options.values()].sort(byLabel)
 }
@@ -28,14 +33,18 @@ const searchFields = (marketplace) => [
   marketplace.apis.join(' '),
 ]
 
-// state: { q, category, status }; 'all' disables a facet.
+const unset = (value) => value === undefined || value === 'all'
+
+// state: { q, category, status, access, region }; 'all' (or a missing key) disables a facet.
 export function filterMarketplaces(marketplaces, state) {
   const faceted = marketplaces.filter(
     (marketplace) =>
-      (state.category === 'all' || marketplace.category === state.category) &&
-      (state.status === 'all' || marketplace.status === state.status),
+      (unset(state.category) || marketplace.category === state.category) &&
+      (unset(state.status) || marketplace.status === state.status) &&
+      (unset(state.access) || marketplace.access === state.access) &&
+      (unset(state.region) || marketplace.regions.includes(state.region)),
   )
-  return fuzzySearch(faceted, state.q, searchFields)
+  return fuzzySearch(faceted, state.q ?? '', searchFields)
 }
 
 const byName = (a, b) => a.name.localeCompare(b.name, 'en', { sensitivity: 'base' })
