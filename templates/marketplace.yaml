@@ -16,3 +16,14 @@
   last_verified: null # YYYY-MM-DD; use null when not checked
   guide: ../marketplaces/marketplace-slug/README.md
   notes: Short, cautious scope note. Do not include unsupported API or auth claims.
+  # Optional: a Simple Icons slug (https://simpleicons.org) for the marketplace's own mark.
+  # Omit it when the brand is not in the installed simple-icons package; a monogram is shown instead.
+  logo: marketplace-slug
+  # Optional: numbered steps shown first in the sidebar, in reading order.
+  build_sequence:
+    - label: Connect a seller account
+      href: /marketplaces/marketplace-slug/guides/authentication
+  # Optional: further sidebar links (API pages, guides, changelog). Every href must have a page.
+  pages:
+    - label: Changelog
+      href: /marketplaces/marketplace-slug/changelog

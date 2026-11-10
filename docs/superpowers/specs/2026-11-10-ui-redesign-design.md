@@ -79,7 +79,7 @@ Sections are separated by 32 px. Cards use 20 px padding and 16 px grid gaps.
 
 ### 5.1b Marketplace logos
 
-- Marketplace marks use the official brand icons from the Simple Icons set (`simple-icons`, CC0-1.0; Amazon and TikTok are both available). They render unaltered, in the brand's own colour or monochrome, on a neutral tile.
+- Marketplace marks use the official brand icons from the Simple Icons set (`simple-icons`, CC0-1.0). They render unaltered, in the brand's own colour or monochrome, on a neutral tile. The pinned release (16.37.0) includes TikTok's mark but not Amazon's, so Amazon keeps the monogram tile. (Corrected 2026-11-10: an earlier draft said both were available, based on a stale CDN copy.)
 - Marketplaces without an available icon keep the neutral monogram tile. The catalog gains an optional `logo` field naming the Simple Icons slug, so no marketplace is mapped to a logo by guesswork.
 - A footer line states that marketplace names and logos are trademarks of their owners and that their use does not imply endorsement, matching the site's existing independence disclaimer.
 - This conflicts with the current rule in `CONTRIBUTING.md` against provider assets without redistribution permission. Shipping logos requires the owner to accept nominative logo use and amend that rule, or to keep monograms (decision 8).

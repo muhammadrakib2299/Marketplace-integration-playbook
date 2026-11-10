@@ -4,7 +4,7 @@ Thanks for helping make this playbook accurate and useful. Small, well-sourced u
 
 ## Before you contribute
 
-Only submit content you are authorized to publish. Do not contribute employer or client confidential information, internal implementation details, proprietary source code, credentials, personal data, private API documentation, or copied provider text/assets without redistribution permission. Do not test APIs using accounts or systems without authorization. Use synthetic identifiers and payloads in examples.
+Only submit content you are authorized to publish. Do not contribute employer or client confidential information, internal implementation details, proprietary source code, credentials, personal data, private API documentation, or copied provider text/assets without redistribution permission. The one exception is a marketplace's own logo from the Simple Icons set (the `simple-icons` package), referenced unaltered through the catalog `logo` field and used only to identify that marketplace. Do not test APIs using accounts or systems without authorization. Use synthetic identifiers and payloads in examples.
 
 ## Add or update an entry
 

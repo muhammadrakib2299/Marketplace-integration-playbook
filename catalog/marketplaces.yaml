@@ -45,6 +45,43 @@ marketplaces:
       - https://developer-docs.amazon.com/sp-api/docs/sp-api-deprecations
     last_verified: "2026-11-05"
     guide: ../marketplaces/amazon/README.md
+    # No logo: simple-icons (the approved logo source) does not include Amazon's mark.
+    build_sequence:
+      - label: API directory and map
+        href: /marketplaces/amazon/apis/
+      - label: Connect a seller account
+        href: /marketplaces/amazon/guides/seller-onboarding
+      - label: Migrate active listings
+        href: /marketplaces/amazon/workflows/active-listing-migration
+      - label: Development guide
+        href: /marketplaces/amazon/guides/development-guide
+      - label: Order synchronization
+        href: /marketplaces/amazon/workflows/order-lifecycle
+      - label: Seller-fulfilled listings
+        href: /marketplaces/amazon/workflows/inventory-and-listings
+    pages:
+      - label: Catalog Items API
+        href: /marketplaces/amazon/apis/catalog-items
+      - label: Catalog Items operations
+        href: /marketplaces/amazon/apis/catalog-items-reference
+      - label: Seller vs. Vendor APIs
+        href: /marketplaces/amazon/apis/seller-vendor-comparison
+      - label: Listings Items API
+        href: /marketplaces/amazon/apis/listings-items
+      - label: Orders API
+        href: /marketplaces/amazon/apis/orders
+      - label: Reports API
+        href: /marketplaces/amazon/apis/reports
+      - label: Finances API
+        href: /marketplaces/amazon/apis/finances
+      - label: Feeds API
+        href: /marketplaces/amazon/apis/feeds
+      - label: FBA Inventory API
+        href: /marketplaces/amazon/apis/fba-inventory
+      - label: Notifications integration
+        href: /marketplaces/amazon/guides/notifications-integration
+      - label: Changelog
+        href: /marketplaces/amazon/changelog
     summary: "Seller authorization, listing migration, catalog enrichment, orders, and selected operational API surfaces. No sandbox or production tests are claimed."
     tags:
       - Seller account
@@ -89,6 +126,28 @@ marketplaces:
       - https://partner.tiktokshop.com/docv2/page/678e3a3978f4c20311b8b555
     last_verified: "2026-11-10"
     guide: ../marketplaces/tiktok-shop/README.md
+    logo: tiktok
+    pages:
+      - label: API directory and workflow map
+        href: /marketplaces/tiktok-shop/apis/
+      - label: Development guide
+        href: /marketplaces/tiktok-shop/guides/development-guide
+      - label: Authorization and tokens
+        href: /marketplaces/tiktok-shop/apis/authorization
+      - label: Products API
+        href: /marketplaces/tiktok-shop/apis/products
+      - label: Order API
+        href: /marketplaces/tiktok-shop/apis/orders
+      - label: Fulfillment, logistics, and finance
+        href: /marketplaces/tiktok-shop/apis/fulfillment
+      - label: Returns and refunds
+        href: /marketplaces/tiktok-shop/apis/returns-refunds
+      - label: Events and reliability
+        href: /marketplaces/tiktok-shop/apis/events
+      - label: Get Authorized Category Assets · 202405
+        href: /marketplaces/tiktok-shop/apis/authorized-category-assets
+      - label: Changelog
+        href: /marketplaces/tiktok-shop/changelog
     summary: "Source-linked API map covering products, orders, fulfillment, logistics, returns, finance, authorization, events, and partner category assets."
     tags:
       - Seller authorization

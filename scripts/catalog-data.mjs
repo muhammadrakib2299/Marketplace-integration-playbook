@@ -1,6 +1,7 @@
 import { existsSync, readdirSync, readFileSync } from 'node:fs'
 import { join } from 'node:path'
 import { fileURLToPath } from 'node:url'
+import * as simpleIcons from 'simple-icons'
 import { parse } from 'yaml'
 
 // Absolute path of the repository checkout (the directory above scripts/).
@@ -46,6 +47,7 @@ export function buildMarketplaces(catalog) {
 
     return {
       id: record.id,
+      slug,
       name,
       fullName: record.name,
       category: record.category,
@@ -64,7 +66,47 @@ export function buildMarketplaces(catalog) {
       lastVerified: record.last_verified,
       mark: name.charAt(0).toLowerCase(),
       markClass: `platform-mark-${slug}`,
+      logo: resolveLogo(record),
+      buildSequence: navigationList(record, 'build_sequence'),
+      pages: navigationList(record, 'pages'),
     }
+  })
+}
+
+// Logo colours near black or white disappear on one of the two themes; the shell
+// swaps those to the ink colour (see the .mip-logo rules in shell.css).
+export function logoTone(hex) {
+  const [red, green, blue] = [0, 2, 4].map((offset) => {
+    const channel = parseInt(hex.slice(offset, offset + 2), 16) / 255
+    return channel <= 0.04045 ? channel / 12.92 : ((channel + 0.055) / 1.055) ** 2.4
+  })
+  const luminance = 0.2126 * red + 0.7152 * green + 0.0722 * blue
+  if (luminance < 0.1) return 'dark'
+  if (luminance > 0.8) return 'bright'
+  return 'mid'
+}
+
+// Logos are opt-in: the catalog names a Simple Icons slug, or the monogram is used.
+function resolveLogo(record) {
+  if (!record.logo) return null
+  const icon = Object.values(simpleIcons).find((candidate) => candidate.slug === record.logo)
+  if (!icon) {
+    throw new Error(`${record.id}: logo "${record.logo}" is not a Simple Icons slug in the installed simple-icons version`)
+  }
+  return { title: icon.title, hex: icon.hex, path: icon.path, tone: logoTone(icon.hex) }
+}
+
+function navigationList(record, field) {
+  const items = record[field] ?? []
+  if (!Array.isArray(items)) {
+    throw new Error(`${record.id}: ${field} must be a list of { label, href } entries`)
+  }
+  return items.map((item, index) => {
+    const label = typeof item?.label === 'string' ? item.label.trim() : ''
+    if (!label || typeof item?.href !== 'string' || !item.href.startsWith('/')) {
+      throw new Error(`${record.id}: ${field}[${index}] needs a non-empty label and an href starting with /`)
+    }
+    return { label, href: item.href }
   })
 }
 
@@ -162,7 +204,11 @@ export function loadCatalogData(root = repositoryRoot) {
   const { topics, guides } = buildGuides(readCatalog('guides.yaml'), marketplaces)
 
   const missing = findMissingRoutes(root, [
-    ...marketplaces.map((marketplace) => marketplace.guide),
+    ...marketplaces.flatMap((marketplace) => [
+      marketplace.guide,
+      ...marketplace.buildSequence.map((step) => step.href),
+      ...marketplace.pages.map((page) => page.href),
+    ]),
     ...guides.map((guide) => guide.href),
   ])
   if (missing.length > 0) {

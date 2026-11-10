@@ -10,6 +10,7 @@ import {
   countCoverage,
   findMissingRoutes,
   loadCatalogData,
+  logoTone,
   repositoryRoot,
 } from '../scripts/catalog-data.mjs'
 
@@ -178,6 +179,59 @@ test('coverage counts API pages and workflows across marketplaces, skipping inde
     (root) => countCoverage(root),
   )
   assert.deepEqual(coverage, { apiReferencePages: 3, workflowGuides: 1 })
+})
+
+test('a catalog logo slug resolves to its Simple Icons mark', () => {
+  const [ebay] = buildMarketplaces({ marketplaces: [marketplaceRecord({ logo: 'tiktok' })] })
+  assert.equal(ebay.logo.title, 'TikTok')
+  assert.match(ebay.logo.path, /^M/)
+  assert.match(ebay.logo.hex, /^[0-9A-F]{6}$/)
+})
+
+test('an unknown logo slug is rejected with the catalog id', () => {
+  assert.throws(
+    () => buildMarketplaces({ marketplaces: [marketplaceRecord({ logo: 'not-a-brand' })] }),
+    /ebay-sell-api.*logo "not-a-brand"/,
+  )
+})
+
+test('a marketplace without a logo keeps the monogram', () => {
+  const [ebay] = buildMarketplaces({ marketplaces: [marketplaceRecord()] })
+  assert.equal(ebay.logo, null)
+  assert.equal(ebay.mark, 'e')
+})
+
+test('logo tone flags near-black and near-white brand colours', () => {
+  assert.equal(logoTone('000000'), 'dark')
+  assert.equal(logoTone('FFFFFF'), 'bright')
+  assert.equal(logoTone('FF9900'), 'mid')
+})
+
+test('build sequence entries need a label and a link', () => {
+  assert.throws(
+    () =>
+      buildMarketplaces({
+        marketplaces: [marketplaceRecord({ build_sequence: [{ href: '/marketplaces/ebay/guides/seller-access' }] })],
+      }),
+    /ebay-sell-api.*build_sequence/,
+  )
+})
+
+test('loading the catalog fails when a sidebar page links to a missing page', () => {
+  assert.throws(
+    () =>
+      withTempRoot(
+        {
+          'marketplaces/ebay/README.md': '# eBay\n',
+          'catalog/marketplaces.yaml': stringify({
+            marketplaces: [marketplaceRecord({ pages: [{ label: 'Orders', href: '/marketplaces/ebay/apis/missing' }] })],
+          }),
+          'catalog/guides.yaml': stringify(guideCatalog([])),
+        },
+        (root) => loadCatalogData(root),
+      ),
+    /\/marketplaces\/ebay\/apis\/missing/,
+  )
 })
 
 test('every documented marketplace in the catalog has at least one explorer guide', () => {
