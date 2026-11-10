@@ -1,0 +1,108 @@
+/* Base layer: typography details, custom scrollbars, focus ring, and motion (spec 5.1 and 5.1c). */
+
+body {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  color: var(--mip-ink);
+  text-wrap: balance;
+}
+
+p {
+  text-wrap: pretty;
+}
+
+.mip-tabular {
+  font-variant-numeric: tabular-nums;
+}
+
+.mip-mono {
+  font-family: var(--vp-font-family-mono);
+  font-size: 12.5px;
+  font-variant-numeric: tabular-nums;
+}
+
+::selection {
+  color: var(--mip-ink);
+  background: var(--mip-primary-soft);
+}
+
+/* Custom scrollbars: a 10px track with a 3px-inset pill thumb. */
+*::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+*::-webkit-scrollbar-track,
+*::-webkit-scrollbar-corner {
+  background: transparent;
+}
+
+*::-webkit-scrollbar-thumb {
+  background: var(--mip-border-strong);
+  background-clip: padding-box;
+  border: 3px solid transparent;
+  border-radius: 999px;
+}
+
+*::-webkit-scrollbar-thumb:hover {
+  background-color: var(--mip-faint);
+}
+
+/* Firefox has no ::-webkit-scrollbar. Chromium ignores the pill styles above once the standard
+   properties are set, so they apply only where the webkit pseudo-elements are unsupported. */
+@supports not selector(::-webkit-scrollbar) {
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: var(--mip-border-strong) transparent;
+  }
+}
+
+/* Focus ring: visible on keyboard focus, fading in from the offset. */
+:focus-visible {
+  outline: 2px solid var(--mip-primary);
+  outline-offset: 2px;
+  animation: mip-focus-in var(--mip-duration-fast) var(--mip-ease);
+}
+
+@keyframes mip-focus-in {
+  from {
+    outline-color: transparent;
+    outline-offset: 4px;
+  }
+}
+
+/* Page content fades up 4px when a page is rendered. */
+@keyframes mip-fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.vp-doc > div {
+  animation: mip-fade-up var(--mip-duration) var(--mip-ease) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  ::before,
+  ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

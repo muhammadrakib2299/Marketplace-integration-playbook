@@ -79,7 +79,7 @@ Sections are separated by 32 px. Cards use 20 px padding and 16 px grid gaps.
 
 ### 5.1b Marketplace logos
 
-- Marketplace marks use the official brand icons from the Simple Icons set (`simple-icons`, CC0-1.0; Amazon and TikTok are both available). They render unaltered, in the brand's own colour or monochrome, on a neutral tile.
+- Marketplace marks use the official brand icons from the Simple Icons set (`simple-icons`, CC0-1.0). They render unaltered, in the brand's own colour or monochrome, on a neutral tile. The pinned release (16.37.0) includes TikTok's mark but not Amazon's, so Amazon keeps the monogram tile. (Corrected 2026-11-10: an earlier draft said both were available, based on a stale CDN copy.)
 - Marketplaces without an available icon keep the neutral monogram tile. The catalog gains an optional `logo` field naming the Simple Icons slug, so no marketplace is mapped to a logo by guesswork.
 - A footer line states that marketplace names and logos are trademarks of their owners and that their use does not imply endorsement, matching the site's existing independence disclaimer.
 - This conflicts with the current rule in `CONTRIBUTING.md` against provider assets without redistribution permission. Shipping logos requires the owner to accept nominative logo use and amend that rule, or to keep monograms (decision 8).
@@ -203,3 +203,16 @@ Defaults are listed first and will be used unless changed.
 7. **UI kit page:** include it as an internal reference page in phase 5. The alternative is to skip it.
 8. **Marketplace logos:** use the official Amazon and TikTok marks from Simple Icons with a trademark notice, and amend the `CONTRIBUTING.md` provider-assets rule to allow unaltered logos used only to identify a marketplace. The alternative keeps the neutral monogram tiles.
 9. **Icon-only buttons:** icon-only for secondary and utility actions, with an icon plus a short label for primary actions (section 5.1a). The alternative makes every action icon-only with tooltips.
+
+## 7. Revision 2026-11-10: Harbor direction
+
+After seeing the mockup-based shell, the owner asked for an official-API-documentation feel and chose direction A, "Harbor", from three compared directions. This revision supersedes the mockup colour and type values in sections 5.1 and decision 2.
+
+- **Palette:** navy chrome `#0F2742` for the top bar and footer, a white reading page, mist `#F3F6F9` sidebar, ink `#102033` text, and signal-teal `#0B7A83` accent. Code panels use `#0B1A2B`. Every text pair is still checked against WCAG AA in both themes.
+- **Type:** IBM Plex Sans and IBM Plex Mono, self-hosted through `@fontsource`. VitePress's bundled Inter is no longer shipped.
+- **Brand:** a one-word "Playbook" with a connected-nodes mark in the top bar. The full name stays in page titles and metadata.
+- **Footer:** a site footer on every page, carrying navigation, the trademark notice, and the build date. It replaces the VitePress footer, the trademark note, and the top-bar build pill.
+- **Layout:** full-width shell, with the sidebar flush left and the content and right rail centred beside it.
+- **Labels:** sentence case throughout, with no all-caps eyebrow labels or middle-dot meta strings.
+- **Dossier headers:** pages whose frontmatter declares `api` get a header with a breadcrumb trail, title, API, version, and checked date.
+- **Motion:** Anime.js (`animejs`, MIT) is planned for workflow walkthroughs with labelled sample data, not for generic entrance effects.

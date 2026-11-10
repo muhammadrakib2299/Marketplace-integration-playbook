@@ -1,180 +1,245 @@
 <script setup lang="ts">
-import { computed, onMounted, ref, watch } from 'vue'
-import { fuzzySearch } from '../../../scripts/fuzzy-search.mjs'
+import { computed, nextTick, onMounted, ref, watch } from 'vue'
+import { withBase } from 'vitepress'
+import { ArrowDownAZ, ArrowRight, CalendarClock, Check, ChevronLeft, ChevronRight, ExternalLink, Minus, Search, X } from 'lucide-vue-next'
+import { facetOptions, filterMarketplaces, paginate, sortMarketplaces } from '../../../scripts/directory.mjs'
 import { readFilterState, writeFilterState } from '../../../scripts/filter-state.mjs'
-import { marketplaces as catalogMarketplaces } from '../generated/catalog.mjs'
+import { formatIsoDate } from '../../../scripts/format-date.mjs'
+import { capabilities, coverage, marketplaces as catalog, topics } from '../generated/catalog.mjs'
+import MarketplaceLogo from './MarketplaceLogo.vue'
 
 type Marketplace = {
   id: string
+  slug: string
   name: string
-  category: string
   categoryLabel: string
-  regions: string[]
   access: string
   status: string
-  statusLabel: string
+  regions: string[]
   summary: string
   tags: string[]
-  scope: string
-  apis: string[]
   guide: string
-  source: string
-  lastVerified: string
+  docsHome: string | null
+  apiSurfaces: unknown[]
+  lastVerified: string | null
+  mark: string
+  logo: { hex: string; path: string; tone: string } | null
 }
+type Capability = { id: string; label: string; guides: { title: string; href: string }[] }
 
-const marketplaces = catalogMarketplaces as Marketplace[]
-const query = ref('')
-const selectedCategory = ref('all')
-const selectedAccess = ref('all')
-const selectedCoverage = ref('all')
-const selectedRegion = ref('all')
+const PAGE_SIZE = 24
+const marketplaces = catalog as Marketplace[]
+const capabilityMap = capabilities as Record<string, Capability[]>
+const pagesBySlug = coverage.byMarketplace as Record<string, { apiReferencePages: number; workflowGuides: number }>
+
+const statusName = (status: string) => `${status.charAt(0).toUpperCase()}${status.slice(1)}`
+const categoryOptions = facetOptions(marketplaces, 'category', 'categoryLabel')
+const statusOptions = facetOptions(marketplaces, 'status').map((option) => ({ ...option, label: statusName(option.value) }))
+
+const defaults = { q: '', category: 'all', status: 'all', sort: 'name', page: '1' }
+const query = ref(defaults.q)
+const category = ref(defaults.category)
+const status = ref(defaults.status)
+const sort = ref(defaults.sort)
+const page = ref(1)
 const hydrated = ref(false)
-const defaults = { q: '', category: 'all', access: 'all', coverage: 'all', region: 'all' }
-const options = {
-  categories: [...new Set(marketplaces.map((item) => item.category))],
-  access: [...new Set(marketplaces.map((item) => item.access))],
-  coverage: [...new Set(marketplaces.map((item) => item.status))],
-  regions: [...new Set(marketplaces.flatMap((item) => item.regions))],
-}
 
-const filteredMarketplaces = computed(() => {
-  const filtered = marketplaces.filter((item) =>
-    (selectedCategory.value === 'all' || item.category === selectedCategory.value) &&
-    (selectedAccess.value === 'all' || item.access === selectedAccess.value) &&
-    (selectedCoverage.value === 'all' || item.status === selectedCoverage.value) &&
-    (selectedRegion.value === 'all' || item.regions.includes(selectedRegion.value)),
-  )
-  return fuzzySearch(filtered, query.value, (item) => [
-    item.name,
-    item.fullName,
-    item.categoryLabel,
-    item.regions.join(' '),
-    item.access,
-    item.statusLabel,
-    item.summary,
-    item.tags.join(' '),
-    item.apis.join(' '),
-  ])
+const results = computed(() =>
+  sortMarketplaces(filterMarketplaces(marketplaces, { q: query.value, category: category.value, status: status.value }), sort.value),
+)
+const current = computed(() => paginate(results.value, page.value, PAGE_SIZE))
+const hasFilters = computed(() => query.value.trim() !== '' || category.value !== 'all' || status.value !== 'all')
+
+const summary = computed(() => {
+  const { total, start, end, pages } = current.value
+  const noun = marketplaces.length === 1 ? 'marketplace' : 'marketplaces'
+  const base = hasFilters.value ? `${total} of ${marketplaces.length} ${noun} match` : `${total} ${noun}`
+  return pages > 1 ? `${base} · showing ${start}–${end}` : base
 })
 
-const hasFilters = computed(
-  () => query.value.trim() !== '' || selectedCategory.value !== 'all' || selectedAccess.value !== 'all' || selectedCoverage.value !== 'all' || selectedRegion.value !== 'all',
-)
-
-function syncUrl() {
-  if (!hydrated.value) return
-  const nextUrl = writeFilterState(window.location.pathname, {
-    q: query.value.trim(),
-    category: selectedCategory.value,
-    access: selectedAccess.value,
-    coverage: selectedCoverage.value,
-    region: selectedRegion.value,
-  }, defaults, window.location.hash)
-  window.history.replaceState({}, '', nextUrl)
+const documentedTopics = (id: string) => (capabilityMap[id] ?? []).filter((topic) => topic.guides.length > 0).length
+const verifiedOn = (value: string | null) => {
+  const iso = formatIsoDate(value)
+  if (!iso) return ''
+  return new Intl.DateTimeFormat('en-GB', { day: 'numeric', month: 'short', year: 'numeric', timeZone: 'UTC' }).format(
+    new Date(`${iso}T00:00:00Z`),
+  )
 }
 
 function resetFilters() {
   query.value = ''
-  selectedCategory.value = 'all'
-  selectedAccess.value = 'all'
-  selectedCoverage.value = 'all'
-  selectedRegion.value = 'all'
+  category.value = 'all'
+  status.value = 'all'
 }
 
-onMounted(() => {
+function goTo(target: number) {
+  page.value = target
+  document.getElementById('marketplace-results')?.scrollIntoView({ block: 'start' })
+}
+
+onMounted(async () => {
   const state = readFilterState(window.location.search, defaults, {
-    category: ['all', ...options.categories],
-    access: ['all', ...options.access],
-    coverage: ['all', ...options.coverage],
-    region: ['all', ...options.regions],
+    category: ['all', ...categoryOptions.map((option) => option.value)],
+    status: ['all', ...statusOptions.map((option) => option.value)],
+    sort: ['name', 'recent'],
   })
   query.value = state.q
-  selectedCategory.value = state.category
-  selectedAccess.value = state.access
-  selectedCoverage.value = state.coverage
-  selectedRegion.value = state.region
+  category.value = state.category
+  status.value = state.status
+  sort.value = state.sort
+  // Let the filter watchers run before restoring the page, or they would reset it to 1.
+  await nextTick()
+  page.value = Number.parseInt(state.page, 10) || 1
   hydrated.value = true
 })
 
-watch([query, selectedCategory, selectedAccess, selectedCoverage, selectedRegion], syncUrl)
+// A new search, filter, or sort starts again from the first page.
+watch([query, category, status, sort], () => {
+  if (hydrated.value) page.value = 1
+})
+
+watch([query, category, status, sort, page], () => {
+  if (!hydrated.value) return
+  const state = { q: query.value.trim(), category: category.value, status: status.value, sort: sort.value, page: String(current.value.page) }
+  window.history.replaceState(window.history.state, '', writeFilterState(window.location.pathname, state, defaults, window.location.hash))
+})
 </script>
 
 <template>
-  <section class="marketplace-explorer" aria-labelledby="marketplace-explorer-title">
-    <div class="marketplace-explorer-heading">
-      <div>
-        <h2 id="marketplace-explorer-title">Find an integration guide</h2>
-        <p>Search platforms, regions, API names, access models, or coverage status.</p>
-      </div>
-      <span class="explorer-count" aria-live="polite">{{ filteredMarketplaces.length }} of {{ marketplaces.length }} platforms</span>
-    </div>
-    <div class="marketplace-filters" role="search">
-      <label class="marketplace-search">
-        <span class="sr-only">Search marketplaces and API guides</span>
-        <UiIcon name="search" :size="17" />
-        <input v-model="query" type="search" placeholder="Search marketplaces, APIs, or regions" autocomplete="off" />
+  <section class="mip-directory" aria-label="Marketplace directory">
+    <div class="mip-dir-toolbar" role="search">
+      <label class="mip-dir-search">
+        <Search :size="17" :stroke-width="2" aria-hidden="true" />
+        <span class="visually-hidden">Search marketplaces</span>
+        <input v-model="query" type="search" placeholder="Search by name, API, region, or tag" autocomplete="off" spellcheck="false" />
       </label>
-      <label class="marketplace-filter">
-        <span>Category</span>
-        <select v-model="selectedCategory" aria-label="Filter by category">
+      <label class="mip-dir-select">
+        <span class="visually-hidden">Category</span>
+        <select v-model="category">
           <option value="all">All categories</option>
-          <option v-for="category in options.categories" :key="category" :value="category">{{ marketplaces.find((item) => item.category === category)?.categoryLabel }}</option>
+          <option v-for="option in categoryOptions" :key="option.value" :value="option.value">
+            {{ option.label }} ({{ option.count }})
+          </option>
         </select>
       </label>
-      <label class="marketplace-filter">
-        <span>Access</span>
-        <select v-model="selectedAccess" aria-label="Filter by access model">
-          <option value="all">All access models</option>
-          <option v-for="access in options.access" :key="access" :value="access">{{ access }}</option>
+      <label class="mip-dir-select">
+        <span class="visually-hidden">Status</span>
+        <select v-model="status">
+          <option value="all">Any status</option>
+          <option v-for="option in statusOptions" :key="option.value" :value="option.value">
+            {{ option.label }} ({{ option.count }})
+          </option>
         </select>
       </label>
-      <label class="marketplace-filter">
-        <span>Coverage</span>
-        <select v-model="selectedCoverage" aria-label="Filter by documentation status">
-          <option value="all">All coverage</option>
-          <option v-for="coverage in options.coverage" :key="coverage" :value="coverage">{{ coverage }}</option>
-        </select>
-      </label>
-      <label class="marketplace-filter">
-        <span>Region</span>
-        <select v-model="selectedRegion" aria-label="Filter by region">
-          <option value="all">All regions</option>
-          <option v-for="region in options.regions" :key="region" :value="region">{{ region }}</option>
-        </select>
-      </label>
-      <button v-if="hasFilters" class="marketplace-reset" type="button" @click="resetFilters"><UiIcon name="x" :size="14" /> Clear filters</button>
+      <div class="mip-dir-sort" role="group" aria-label="Sort marketplaces">
+        <button type="button" :aria-pressed="sort === 'name'" @click="sort = 'name'">
+          <ArrowDownAZ :size="15" :stroke-width="2" aria-hidden="true" /> A–Z
+        </button>
+        <button type="button" :aria-pressed="sort === 'recent'" @click="sort = 'recent'">
+          <CalendarClock :size="15" :stroke-width="2" aria-hidden="true" /> Recently verified
+        </button>
+      </div>
     </div>
-    <div v-if="hasFilters" class="directory-active-filters" aria-label="Active directory filters">
-      <span><UiIcon name="filter" :size="13" /> Active filters</span>
-      <button v-if="query.trim()" type="button" @click="query = ''">“{{ query }}” <UiIcon name="x" :size="12" /></button>
-      <button v-if="selectedCategory !== 'all'" type="button" @click="selectedCategory = 'all'">{{ marketplaces.find((item) => item.category === selectedCategory)?.categoryLabel }} <UiIcon name="x" :size="12" /></button>
-      <button v-if="selectedAccess !== 'all'" type="button" @click="selectedAccess = 'all'">{{ selectedAccess }} <UiIcon name="x" :size="12" /></button>
-      <button v-if="selectedCoverage !== 'all'" type="button" @click="selectedCoverage = 'all'">{{ selectedCoverage }} <UiIcon name="x" :size="12" /></button>
-      <button v-if="selectedRegion !== 'all'" type="button" @click="selectedRegion = 'all'">{{ selectedRegion }} <UiIcon name="x" :size="12" /></button>
+
+    <div id="marketplace-results" class="mip-dir-status">
+      <p aria-live="polite">{{ summary }}</p>
+      <button v-if="hasFilters" type="button" class="mip-dir-reset" @click="resetFilters">
+        <X :size="14" :stroke-width="2" aria-hidden="true" /> Clear filters
+      </button>
     </div>
-    <div v-if="filteredMarketplaces.length" class="marketplace-results">
-      <article v-for="marketplace in filteredMarketplaces" :key="marketplace.id" class="marketplace-result">
-        <div class="marketplace-result-topline">
-          <span class="marketplace-category">{{ marketplace.categoryLabel }}</span>
-          <span class="marketplace-status">{{ marketplace.statusLabel }}</span>
+
+    <ul v-if="current.total" class="mip-dir-list">
+      <li v-for="marketplace in current.items" :key="marketplace.id" class="mip-dir-row">
+        <MarketplaceLogo :logo="marketplace.logo" :mark="marketplace.mark" size="md" />
+        <div class="mip-dir-main">
+          <div class="mip-dir-title">
+            <h3><a :href="withBase(marketplace.guide)">{{ marketplace.name }}</a></h3>
+            <span class="mip-badge" :class="`mip-badge--${marketplace.status}`">{{ statusName(marketplace.status) }}</span>
+          </div>
+          <p class="mip-dir-meta">
+            {{ [marketplace.categoryLabel, `${marketplace.access} access`, marketplace.regions.join(', ')].join(' · ') }}
+          </p>
+          <p class="mip-dir-text">{{ marketplace.summary }}</p>
+          <p class="mip-dir-facts">
+            <span><strong>{{ marketplace.apiSurfaces.length }}</strong> API surfaces</span>
+            <span><strong>{{ pagesBySlug[marketplace.slug]?.apiReferencePages ?? 0 }}</strong> reference pages</span>
+            <span><strong>{{ documentedTopics(marketplace.id) }}</strong> of {{ topics.length }} topics</span>
+            <span v-if="verifiedOn(marketplace.lastVerified)">Verified {{ verifiedOn(marketplace.lastVerified) }}</span>
+            <span v-else>Not yet verified</span>
+          </p>
         </div>
-        <h3><a :href="marketplace.guide">{{ marketplace.name }}</a></h3>
-        <p>{{ marketplace.summary }}</p>
-        <dl class="marketplace-meta">
-          <div><dt>Access</dt><dd>{{ marketplace.access }}</dd></div>
-          <div><dt>Regions</dt><dd>{{ marketplace.regions.join(', ') }}</dd></div>
-        </dl>
-        <div class="marketplace-api-list" aria-label="Covered APIs"><span v-for="api in marketplace.apis" :key="api">{{ api }}</span></div>
-        <div class="marketplace-result-links">
-          <a class="marketplace-guide-link" :href="marketplace.guide">Open guide <UiIcon name="arrow-right" :size="14" /></a>
-          <a class="marketplace-source-link" :href="marketplace.source" target="_blank" rel="noreferrer">Official docs <UiIcon name="external" :size="14" /></a>
+        <div class="mip-dir-actions">
+          <a class="mip-btn mip-btn--sm" :href="withBase(marketplace.guide)">
+            Open guide <ArrowRight :size="14" :stroke-width="2" aria-hidden="true" />
+            <span class="visually-hidden">: {{ marketplace.name }}</span>
+          </a>
+          <a
+            v-if="marketplace.docsHome"
+            class="mip-icon-button"
+            :href="marketplace.docsHome"
+            target="_blank"
+            rel="noreferrer"
+            :aria-label="`${marketplace.name} official docs (opens in a new tab)`"
+            title="Official docs"
+          >
+            <ExternalLink :size="16" :stroke-width="2" aria-hidden="true" />
+          </a>
         </div>
-      </article>
+      </li>
+    </ul>
+
+    <div v-else class="mip-dir-empty" role="status">
+      <strong>No marketplaces match</strong>
+      <p>Try a broader search, or clear the filters.</p>
+      <button type="button" class="mip-btn mip-btn--sm" @click="resetFilters">Clear filters</button>
     </div>
-    <div v-else class="marketplace-empty" role="status">
-      <strong>No matching guides</strong>
-      <p>Try a broader search or clear one or more filters.</p>
-      <button type="button" class="marketplace-reset" @click="resetFilters"><UiIcon name="refresh" :size="14" /> Clear filters</button>
-    </div>
+
+    <nav v-if="current.pages > 1" class="mip-dir-pager" aria-label="Directory pages">
+      <button type="button" class="mip-btn mip-btn--sm" :disabled="current.page <= 1" @click="goTo(current.page - 1)">
+        <ChevronLeft :size="15" :stroke-width="2" aria-hidden="true" /> Previous
+      </button>
+      <span>Page {{ current.page }} of {{ current.pages }}</span>
+      <button type="button" class="mip-btn mip-btn--sm" :disabled="current.page >= current.pages" @click="goTo(current.page + 1)">
+        Next <ChevronRight :size="15" :stroke-width="2" aria-hidden="true" />
+      </button>
+    </nav>
+
+    <template v-if="current.total">
+      <h2 id="coverage-by-topic">Coverage by topic</h2>
+      <p class="mip-dir-note">
+        Which integration topics have a guide, for the marketplaces listed above. A tick links to the guide; it means the
+        official documentation was reviewed, not that the integration was tested.
+      </p>
+      <div class="mip-table mip-matrix">
+        <table>
+          <thead>
+            <tr>
+              <th scope="col">Marketplace</th>
+              <th v-for="topic in topics" :key="topic.id" scope="col">{{ topic.label }}</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="marketplace in current.items" :key="marketplace.id">
+              <th scope="row"><a :href="withBase(marketplace.guide)">{{ marketplace.name }}</a></th>
+              <td v-for="capability in capabilityMap[marketplace.id] ?? []" :key="capability.id">
+                <a
+                  v-if="capability.guides.length"
+                  class="mip-matrix-yes"
+                  :href="withBase(capability.guides[0].href)"
+                  :title="capability.guides.map((guide) => guide.title).join('\n')"
+                >
+                  <Check :size="15" :stroke-width="2.25" aria-hidden="true" />
+                  <span class="visually-hidden">{{ capability.label }}: {{ capability.guides[0].title }}</span>
+                </a>
+                <span v-else class="mip-matrix-no">
+                  <Minus :size="15" :stroke-width="2" aria-hidden="true" />
+                  <span class="visually-hidden">{{ capability.label }}: not yet documented</span>
+                </span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </template>
   </section>
 </template>

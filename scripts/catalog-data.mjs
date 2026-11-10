@@ -1,6 +1,7 @@
 import { existsSync, readdirSync, readFileSync } from 'node:fs'
 import { join } from 'node:path'
 import { fileURLToPath } from 'node:url'
+import * as simpleIcons from 'simple-icons'
 import { parse } from 'yaml'
 
 // Absolute path of the repository checkout (the directory above scripts/).
@@ -46,6 +47,7 @@ export function buildMarketplaces(catalog) {
 
     return {
       id: record.id,
+      slug,
       name,
       fullName: record.name,
       category: record.category,
@@ -59,12 +61,70 @@ export function buildMarketplaces(catalog) {
       tags: record.tags,
       scope: record.scope,
       apis,
+      apiSurfaces: record.api_surfaces.map((surface) => ({
+        name: surface.name,
+        version: surface.version ?? null,
+        docsUrl: surface.docs_url ?? null,
+      })),
       guide: `/marketplaces/${slug}/`,
+      docsHome: docsHome(record),
       source: record.source_urls[0],
+      sourceUrls: record.source_urls,
       lastVerified: record.last_verified,
       mark: name.charAt(0).toLowerCase(),
       markClass: `platform-mark-${slug}`,
+      logo: resolveLogo(record),
+      buildSequence: navigationList(record, 'build_sequence'),
+      pages: navigationList(record, 'pages'),
     }
+  })
+}
+
+// The provider's own developer-documentation entry point, linked as "Official docs".
+// Optional: source_urls[0] is not a substitute, because it can belong to another product
+// (TikTok's first source is TikTok for Developers, not the TikTok Shop Partner Center).
+function docsHome(record) {
+  if (record.docs_home === undefined || record.docs_home === null) return null
+  if (typeof record.docs_home !== 'string' || !record.docs_home.startsWith('https://')) {
+    throw new Error(`${record.id}: docs_home must be an https:// URL (got ${record.docs_home})`)
+  }
+  return record.docs_home
+}
+
+// Logo colours near black or white disappear on one of the two themes; the shell
+// swaps those to the ink colour (see the .mip-logo rules in shell.css).
+export function logoTone(hex) {
+  const [red, green, blue] = [0, 2, 4].map((offset) => {
+    const channel = parseInt(hex.slice(offset, offset + 2), 16) / 255
+    return channel <= 0.04045 ? channel / 12.92 : ((channel + 0.055) / 1.055) ** 2.4
+  })
+  const luminance = 0.2126 * red + 0.7152 * green + 0.0722 * blue
+  if (luminance < 0.1) return 'dark'
+  if (luminance > 0.8) return 'bright'
+  return 'mid'
+}
+
+// Logos are opt-in: the catalog names a Simple Icons slug, or the monogram is used.
+function resolveLogo(record) {
+  if (!record.logo) return null
+  const icon = Object.values(simpleIcons).find((candidate) => candidate.slug === record.logo)
+  if (!icon) {
+    throw new Error(`${record.id}: logo "${record.logo}" is not a Simple Icons slug in the installed simple-icons version`)
+  }
+  return { title: icon.title, hex: icon.hex, path: icon.path, tone: logoTone(icon.hex) }
+}
+
+function navigationList(record, field) {
+  const items = record[field] ?? []
+  if (!Array.isArray(items)) {
+    throw new Error(`${record.id}: ${field} must be a list of { label, href } entries`)
+  }
+  return items.map((item, index) => {
+    const label = typeof item?.label === 'string' ? item.label.trim() : ''
+    if (!label || typeof item?.href !== 'string' || !item.href.startsWith('/')) {
+      throw new Error(`${record.id}: ${field}[${index}] needs a non-empty label and an href starting with /`)
+    }
+    return { label, href: item.href }
   })
 }
 
@@ -130,12 +190,40 @@ export function buildGuides(guideCatalog, marketplaces) {
 
 // A route maps to `<route>.md`, or to the folder's index.md / README.md when it
 // ends with a slash (VitePress rewrites marketplace README.md files to index.md).
+function pageFile(root, route) {
+  const path = route.replace(/^\//, '')
+  const candidates = route.endsWith('/') ? [`${path}index.md`, `${path}README.md`] : [`${path}.md`]
+  return candidates.map((candidate) => join(root, candidate)).find((candidate) => existsSync(candidate))
+}
+
 export function findMissingRoutes(root, routes) {
-  return routes.filter((route) => {
-    const path = route.replace(/^\//, '')
-    const candidates = route.endsWith('/') ? [`${path}index.md`, `${path}README.md`] : [`${path}.md`]
-    return !candidates.some((candidate) => existsSync(join(root, candidate)))
-  })
+  return routes.filter((route) => !pageFile(root, route))
+}
+
+// The YAML frontmatter of the page a route points to, or {} when it has none.
+// `yaml` follows YAML 1.2, so dates such as 2026-01-01 stay strings here.
+export function readFrontmatter(root, route) {
+  const file = pageFile(root, route)
+  if (!file) throw new Error(`No page for route ${route}`)
+  const match = /^---\r?\n([\s\S]*?)\r?\n---(?:\r?\n|$)/.exec(readFileSync(file, 'utf8'))
+  return match ? (parse(match[1]) ?? {}) : {}
+}
+
+// Per marketplace, which guide topics this playbook documents. A capability is "documented"
+// only when a guide on that topic exists; nothing is inferred from the API alone.
+export function buildCapabilities(marketplaces, guides, topics) {
+  return Object.fromEntries(
+    marketplaces.map((marketplace) => [
+      marketplace.id,
+      topics.map((topic) => ({
+        id: topic.id,
+        label: topic.label,
+        guides: guides
+          .filter((guide) => guide.marketplace === marketplace.id && guide.topic === topic.id)
+          .map((guide) => ({ title: guide.title, href: guide.href })),
+      })),
+    ]),
+  )
 }
 
 // Counts the published pages behind the homepage coverage figures. Folders
@@ -145,15 +233,23 @@ export function countCoverage(root = repositoryRoot) {
   const pagesIn = (dir) =>
     existsSync(dir) ? readdirSync(dir).filter((file) => file.endsWith('.md') && file !== 'index.md').length : 0
 
-  return readdirSync(marketplacesDir, { withFileTypes: true })
-    .filter((entry) => entry.isDirectory() && !entry.name.startsWith('_'))
-    .reduce(
-      (totals, folder) => ({
-        apiReferencePages: totals.apiReferencePages + pagesIn(join(marketplacesDir, folder.name, 'apis')),
-        workflowGuides: totals.workflowGuides + pagesIn(join(marketplacesDir, folder.name, 'workflows')),
-      }),
-      { apiReferencePages: 0, workflowGuides: 0 },
-    )
+  const byMarketplace = Object.fromEntries(
+    readdirSync(marketplacesDir, { withFileTypes: true })
+      .filter((entry) => entry.isDirectory() && !entry.name.startsWith('_'))
+      .map((folder) => [
+        folder.name,
+        {
+          apiReferencePages: pagesIn(join(marketplacesDir, folder.name, 'apis')),
+          workflowGuides: pagesIn(join(marketplacesDir, folder.name, 'workflows')),
+        },
+      ]),
+  )
+  const counts = Object.values(byMarketplace)
+  return {
+    apiReferencePages: counts.reduce((total, count) => total + count.apiReferencePages, 0),
+    workflowGuides: counts.reduce((total, count) => total + count.workflowGuides, 0),
+    byMarketplace,
+  }
 }
 
 export function loadCatalogData(root = repositoryRoot) {
@@ -162,12 +258,22 @@ export function loadCatalogData(root = repositoryRoot) {
   const { topics, guides } = buildGuides(readCatalog('guides.yaml'), marketplaces)
 
   const missing = findMissingRoutes(root, [
-    ...marketplaces.map((marketplace) => marketplace.guide),
+    ...marketplaces.flatMap((marketplace) => [
+      marketplace.guide,
+      ...marketplace.buildSequence.map((step) => step.href),
+      ...marketplace.pages.map((page) => page.href),
+    ]),
     ...guides.map((guide) => guide.href),
   ])
   if (missing.length > 0) {
     throw new Error(`Catalog links point to pages that do not exist: ${missing.join(', ')}`)
   }
 
-  return { marketplaces, topics, guides, coverage: countCoverage(root) }
+  return {
+    marketplaces,
+    topics,
+    guides,
+    capabilities: buildCapabilities(marketplaces, guides, topics),
+    coverage: countCoverage(root),
+  }
 }

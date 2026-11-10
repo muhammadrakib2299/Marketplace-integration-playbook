@@ -1,0 +1,138 @@
+/*
+ * Design tokens: the "Harbor" direction chosen by the owner on 2026-11-10
+ * (navy chrome around a white reading column, signal-teal accent, IBM Plex type).
+ * Colours are 6-digit hex literals so tests/design-tokens.test.mjs can check WCAG AA contrast.
+ * --mip-faint is decorative only (borders, icons); text uses --mip-faint-text.
+ * --mip-primary is the accent (signal teal); the name is kept so existing rules keep working.
+ */
+:root {
+  --mip-bg: #FFFFFF;
+  --mip-surface: #FFFFFF;
+  --mip-surface-2: #F3F6F9;
+  --mip-surface-3: #E8EEF3;
+  --mip-border: #DCE3EA;
+  --mip-border-strong: #C5D0DB;
+
+  --mip-ink: #102033;
+  --mip-text: #24364A;
+  --mip-muted: #556677;
+  --mip-faint: #8A9AAB;
+  --mip-faint-text: #5F7183;
+
+  --mip-primary: #0B7A83;
+  --mip-primary-ink: #075E66;
+  --mip-primary-soft: #E3F4F4;
+  --mip-primary-border: #A9D8DA;
+  --mip-on-primary: #FFFFFF;
+
+  /* Navy chrome: top bar and footer. */
+  --mip-chrome: #0F2742;
+  --mip-chrome-2: #17324F;
+  --mip-chrome-line: #1F3A5A;
+  --mip-chrome-text: #E6EEF6;
+  --mip-chrome-muted: #A9BBCD;
+
+  /* Code panels stay dark in both themes. */
+  --mip-code-bg: #0B1A2B;
+  --mip-code-head: #10243A;
+  --mip-code-line: #1C3550;
+
+  --mip-success: #0F7B5F;
+  --mip-success-soft: #E3F5EE;
+  --mip-success-border: #9FD9C2;
+  --mip-warning: #A65C09;
+  --mip-warning-soft: #FBF1DF;
+  --mip-warning-border: #F0CF95;
+  --mip-danger: #C0303A;
+  --mip-danger-soft: #FBE7E9;
+  --mip-danger-border: #F0B3B9;
+  --mip-info: #2F6FAD;
+  --mip-info-soft: #E7F0FA;
+  --mip-info-border: #B5D0EC;
+  --mip-violet: #6B4FD8;
+  --mip-violet-soft: #EEEAFB;
+  --mip-violet-border: #CCC1F3;
+
+  --mip-radius-sm: 6px;
+  --mip-radius: 10px;
+  --mip-radius-lg: 14px;
+  --mip-shadow-sm: 0 1px 2px rgba(16, 32, 51, 0.06);
+  --mip-shadow: 0 4px 16px rgba(16, 32, 51, 0.08);
+  --mip-shadow-lg: 0 16px 40px rgba(16, 32, 51, 0.14);
+
+  --mip-ease: cubic-bezier(0.2, 0.7, 0.2, 1);
+  --mip-duration-fast: 150ms;
+  --mip-duration: 220ms;
+}
+
+.dark {
+  --mip-bg: #0B1626;
+  --mip-surface: #0F1E31;
+  --mip-surface-2: #132539;
+  --mip-surface-3: #1A2F47;
+  --mip-border: #1F3550;
+  --mip-border-strong: #2B4563;
+
+  --mip-ink: #EEF4F9;
+  --mip-text: #C9D6E3;
+  --mip-muted: #93A7BC;
+  --mip-faint: #5E7690;
+  --mip-faint-text: #8EA2B7;
+
+  --mip-primary: #4FC7CF;
+  --mip-primary-ink: #7FD9DF;
+  --mip-primary-soft: #0E3036;
+  --mip-primary-border: #1D5A61;
+  --mip-on-primary: #062126;
+
+  --mip-chrome: #081322;
+  --mip-chrome-2: #0F2036;
+  --mip-chrome-line: #1A2D45;
+  --mip-chrome-text: #E6EEF6;
+  --mip-chrome-muted: #A9BBCD;
+
+  --mip-success: #4FD1A5;
+  --mip-success-soft: #0F2B23;
+  --mip-success-border: #1E5240;
+  --mip-warning: #F2B35B;
+  --mip-warning-soft: #2E2110;
+  --mip-warning-border: #5C4420;
+  --mip-danger: #F58A91;
+  --mip-danger-soft: #331418;
+  --mip-danger-border: #5E2229;
+  --mip-info: #7EB4F0;
+  --mip-info-soft: #132235;
+  --mip-info-border: #234363;
+  --mip-violet: #B29CFF;
+  --mip-violet-soft: #1F1A3A;
+  --mip-violet-border: #3A2F6E;
+
+  --mip-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
+  --mip-shadow: 0 6px 18px rgba(0, 0, 0, 0.45);
+  --mip-shadow-lg: 0 18px 48px rgba(0, 0, 0, 0.6);
+}
+
+/* VitePress default-theme variables, pointed at the tokens so built-in components inherit them. */
+:root,
+.dark {
+  --vp-c-bg: var(--mip-bg);
+  --vp-c-bg-alt: var(--mip-surface-2);
+  --vp-c-bg-elv: var(--mip-surface);
+  --vp-c-bg-soft: var(--mip-surface-2);
+  --vp-c-text-1: var(--mip-text);
+  --vp-c-text-2: var(--mip-muted);
+  --vp-c-text-3: var(--mip-faint-text);
+  --vp-c-divider: var(--mip-border);
+  --vp-c-gutter: var(--mip-border);
+  --vp-c-border: var(--mip-border-strong);
+  --vp-c-brand-1: var(--mip-primary);
+  --vp-c-brand-2: var(--mip-primary-ink);
+  --vp-c-brand-3: var(--mip-primary);
+  --vp-c-brand-soft: var(--mip-primary-soft);
+  --vp-button-brand-text: var(--mip-on-primary);
+  --vp-button-brand-hover-text: var(--mip-on-primary);
+  --vp-button-brand-active-text: var(--mip-on-primary);
+  --vp-font-family-base: 'IBM Plex Sans Variable', 'IBM Plex Sans', ui-sans-serif, system-ui, sans-serif;
+  --vp-font-family-mono: 'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  --vp-nav-height: 64px;
+}

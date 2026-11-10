@@ -1,0 +1,831 @@
+/*
+ * Shell layer (Harbor direction): navy top bar and footer, mist sidebar, right rail, search
+ * palette, and mobile drawer. Selectors target VitePress 1.6.4 default-theme classes (pinned in
+ * package.json); recheck them when upgrading VitePress.
+ */
+
+:root,
+.dark {
+  /* Full-width app shell: VitePress centres the layout above 1440px; 100vw keeps the sidebar flush left
+     and lets the content and right rail centre in the remaining space. */
+  --vp-layout-max-width: 100vw;
+  --vp-nav-bg-color: var(--mip-chrome);
+  --vp-nav-logo-height: 30px;
+  --vp-nav-screen-bg-color: var(--mip-surface);
+  --vp-sidebar-bg-color: var(--mip-surface-2);
+  --vp-local-nav-bg-color: var(--mip-surface);
+  --vp-backdrop-bg-color: rgba(8, 19, 34, 0.5);
+  --vp-local-search-bg: var(--mip-surface);
+  --vp-local-search-result-bg: var(--mip-surface);
+  --vp-local-search-result-border: var(--mip-border);
+  --vp-local-search-result-selected-bg: var(--mip-primary-soft);
+  --vp-local-search-result-selected-border: var(--mip-primary-border);
+  --vp-local-search-highlight-bg: var(--mip-primary-soft);
+  --vp-local-search-highlight-text: var(--mip-primary-ink);
+}
+
+/* ---------- Top bar ---------- */
+
+.VPNav .VPNavBar {
+  /* VitePress makes the bar transparent at the top of some pages; the Harbor chrome stays solid. */
+  background-color: var(--mip-chrome) !important;
+  border-bottom: 1px solid var(--mip-chrome-line);
+}
+
+.VPNav .VPNavBar .divider {
+  display: none;
+}
+
+.VPNav .VPNavBar .content-body {
+  background-color: transparent !important;
+}
+
+.VPNavBarTitle .title {
+  gap: 10px;
+  color: var(--mip-chrome-text);
+  font-size: 17px;
+  font-weight: 650;
+  letter-spacing: -0.015em;
+}
+
+.VPNavBarTitle .title .logo {
+  margin-right: 0;
+  border-radius: 8px;
+}
+
+@media (min-width: 960px) {
+  .VPNav .VPNavBar.has-sidebar .title {
+    padding: 0 22px;
+  }
+}
+
+@media (min-width: 1440px) {
+  .VPNav .VPNavBar.has-sidebar .title {
+    width: var(--vp-sidebar-width);
+    padding-left: 22px;
+  }
+}
+
+/* Nav links and dropdown buttons on the navy bar */
+.VPNav .VPNavBarMenuLink,
+.VPNav .VPNavBarMenuGroup .button {
+  height: 36px;
+  margin: 0 2px;
+  padding: 0 11px;
+  border-radius: 8px;
+  color: var(--mip-chrome-muted);
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 36px;
+  transition:
+    background-color var(--mip-duration-fast) var(--mip-ease),
+    color var(--mip-duration-fast) var(--mip-ease);
+}
+
+.VPNav .VPNavBarMenuGroup .button .text {
+  color: inherit;
+}
+
+@media (hover: hover) {
+  .VPNav .VPNavBarMenuLink:hover,
+  .VPNav .VPNavBarMenuGroup .button:hover {
+    background-color: var(--mip-chrome-2);
+    color: var(--mip-chrome-text);
+  }
+}
+
+.VPNav .VPNavBarMenuLink.active,
+.VPNav .VPNavBarMenuGroup.active .button {
+  background-color: color-mix(in srgb, var(--mip-primary) 28%, var(--mip-chrome));
+  color: var(--mip-chrome-text);
+}
+
+.VPNav .VPFlyout .menu {
+  border-radius: var(--mip-radius);
+}
+
+/* Theme toggle as an icon-only button (spec 5.1a); VitePress supplies its title and switch role. */
+.VPNavBarAppearance .VPSwitchAppearance {
+  width: 36px;
+  height: 36px;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  background: transparent;
+  transition: background-color var(--mip-duration-fast) var(--mip-ease);
+}
+
+.VPNavBarAppearance .VPSwitchAppearance .check {
+  top: 8px;
+  left: 8px;
+  background: transparent;
+  box-shadow: none;
+  transform: none !important;
+}
+
+.VPNavBarAppearance .VPSwitchAppearance .icon [class^='vpi-'],
+.VPNav .VPNavBarSocialLinks .VPSocialLink,
+.VPNav .VPNavBarExtra .button {
+  color: var(--mip-chrome-muted);
+}
+
+.VPNavBarAppearance .VPSwitchAppearance .icon [class^='vpi-'] {
+  width: 18px;
+  height: 18px;
+}
+
+@media (hover: hover) {
+  .VPNavBarAppearance .VPSwitchAppearance:hover {
+    background: var(--mip-chrome-2);
+  }
+
+  .VPNavBarAppearance .VPSwitchAppearance:hover .icon [class^='vpi-'],
+  .VPNav .VPNavBarSocialLinks .VPSocialLink:hover {
+    color: var(--mip-chrome-text);
+  }
+}
+
+/* Vertical separators between nav groups, recoloured for the navy bar. */
+.VPNav .VPNavBar .VPNavBarAppearance::before,
+.VPNav .VPNavBar .VPNavBarSocialLinks::before {
+  background-color: var(--mip-chrome-line);
+}
+
+.VPNav .VPNavBarHamburger .container > span {
+  background-color: var(--mip-chrome-text);
+}
+
+/* Search trigger styled as a field on the navy bar. */
+@media (min-width: 768px) {
+  .VPNav .VPNavBarSearch {
+    flex-grow: 1;
+    justify-content: flex-start;
+    padding-left: 32px;
+  }
+
+  /* With a sidebar, the search field lines up with the content column instead. */
+  .VPNav .VPNavBar.has-sidebar .VPNavBarSearch {
+    padding-left: 0;
+  }
+
+  .VPNav .VPNavBarSearch .DocSearch-Button {
+    justify-content: space-between;
+    width: 100%;
+    max-width: 560px;
+    height: 40px;
+    margin: 0;
+    padding: 0 10px 0 13px;
+    border: 1px solid var(--mip-chrome-line);
+    border-radius: 9px;
+    background: var(--mip-chrome-2);
+    transition: border-color var(--mip-duration-fast) var(--mip-ease);
+  }
+
+  .VPNav .DocSearch-Button .DocSearch-Button-Placeholder {
+    padding-left: 9px;
+    color: var(--mip-chrome-muted);
+    font-size: 13.5px;
+    font-weight: 400;
+  }
+}
+
+@media (hover: hover) and (min-width: 768px) {
+  .VPNav .VPNavBarSearch .DocSearch-Button:hover {
+    border-color: var(--mip-chrome-muted);
+    background: var(--mip-chrome-2);
+  }
+}
+
+.VPNav .DocSearch-Button .DocSearch-Search-Icon {
+  color: var(--mip-chrome-muted);
+}
+
+.VPNav .DocSearch-Button .DocSearch-Button-Key {
+  min-width: 22px;
+  height: 20px;
+  border: 1px solid var(--mip-chrome-line);
+  border-radius: 5px;
+  background: transparent;
+  color: var(--mip-chrome-muted);
+  font-family: var(--vp-font-family-mono);
+  font-size: 11px;
+}
+
+/* ---------- Sidebar ---------- */
+
+.VPSidebar {
+  border-right: 1px solid var(--mip-border);
+}
+
+.VPSidebar .group + .group {
+  border-top: 0;
+  padding-top: 4px;
+}
+
+@media (min-width: 960px) {
+  .Layout .VPSidebar {
+    padding-right: 12px;
+    padding-left: 12px;
+  }
+
+  /* VitePress fixes groups at sidebar width - 64px; let them fill the narrower padding. */
+  .Layout .VPSidebar .group {
+    width: 100%;
+  }
+}
+
+@media (min-width: 1440px) {
+  .Layout .VPSidebar {
+    width: var(--vp-sidebar-width);
+    padding-left: 12px;
+  }
+}
+
+.VPSidebar .VPSidebarItem.level-0 {
+  padding-bottom: 16px;
+}
+
+/* Group labels in sentence case; marketplace titles carry the name, logo, and status. */
+.VPSidebar .VPSidebarItem.level-0 > .item > .text {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 10px;
+  color: var(--mip-muted);
+  font-size: 12.5px;
+  font-weight: 600;
+  letter-spacing: 0;
+  line-height: 1.4;
+}
+
+.VPSidebar .mip-group-name {
+  min-width: 0;
+  color: var(--mip-ink);
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.35;
+  overflow-wrap: break-word;
+}
+
+/* Same selector depth as the label rule above, so this later rule wins. */
+.VPSidebar .VPSidebarItem > .item > .text:has(.mip-group-name) {
+  display: grid;
+  grid-template-areas:
+    'logo name'
+    '. badge';
+  grid-template-columns: 22px minmax(0, 1fr);
+  align-items: center;
+  gap: 4px 10px;
+}
+
+.VPSidebar .text:has(.mip-group-name) .mip-logo {
+  grid-area: logo;
+}
+
+.VPSidebar .text:has(.mip-group-name) .mip-group-name {
+  grid-area: name;
+}
+
+.VPSidebar .text:has(.mip-group-name) .mip-badge {
+  grid-area: badge;
+  justify-self: start;
+  margin-left: 0;
+}
+
+.VPSidebar .VPSidebarItem > .item > .indicator {
+  display: none;
+}
+
+.VPSidebar .VPSidebarItem.is-link > .item > .link {
+  flex-grow: 1;
+  min-width: 0;
+  margin: 1px 0;
+  padding: 7px 10px;
+  border-radius: 8px;
+  transition: background-color var(--mip-duration-fast) var(--mip-ease);
+}
+
+@media (hover: hover) {
+  .VPSidebar .VPSidebarItem.is-link > .item > .link:hover {
+    background-color: var(--mip-surface-3);
+  }
+}
+
+.VPSidebar .VPSidebarItem.is-active > .item > .link {
+  background-color: var(--mip-primary-soft);
+}
+
+.VPSidebar .VPSidebarItem:not(.level-0) .text {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+  padding: 0;
+  color: var(--mip-text);
+  font-size: 14px;
+  font-weight: 450;
+  line-height: 1.4;
+  overflow-wrap: break-word;
+}
+
+/* VitePress styles the active label with a deeper selector; match its depth so primary-ink wins. */
+.VPSidebar .VPSidebarItem.VPSidebarItem.is-active > .item > .link > .text {
+  color: var(--mip-primary-ink);
+  font-weight: 600;
+}
+
+/* Chips, step dots, logo tiles, and status badges generated by scripts/sidebar.mjs */
+.mip-count,
+.mip-chip {
+  flex: none;
+  margin-left: auto;
+  border: 1px solid var(--mip-border);
+  background: var(--mip-surface);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.mip-count {
+  padding: 0 7px;
+  border-radius: 999px;
+  color: var(--mip-faint-text);
+  font-size: 11.5px;
+  font-weight: 500;
+  line-height: 18px;
+}
+
+/* API versions are identifiers, so they stay in the mono face. */
+.mip-chip {
+  padding: 0 6px;
+  border-radius: var(--mip-radius-sm);
+  color: var(--mip-muted);
+  font-family: var(--vp-font-family-mono);
+  font-size: 11px;
+  line-height: 18px;
+}
+
+.VPSidebarItem.is-active > .item .mip-chip {
+  border-color: var(--mip-primary-border);
+  color: var(--mip-primary-ink);
+}
+
+.mip-step {
+  display: inline-grid;
+  flex: none;
+  place-items: center;
+  width: 20px;
+  height: 20px;
+  border: 1px solid var(--mip-border-strong);
+  border-radius: 50%;
+  background: var(--mip-surface);
+  color: var(--mip-muted);
+  font-size: 11px;
+  font-variant-numeric: tabular-nums;
+  font-weight: 600;
+  transition:
+    background-color var(--mip-duration-fast) var(--mip-ease),
+    color var(--mip-duration-fast) var(--mip-ease);
+}
+
+.VPSidebarItem.is-active > .item .mip-step {
+  border-color: var(--mip-primary);
+  background: var(--mip-primary);
+  color: var(--mip-on-primary);
+}
+
+.mip-logo {
+  display: inline-grid;
+  flex: none;
+  place-items: center;
+  width: 22px;
+  height: 22px;
+  border: 1px solid var(--mip-border);
+  border-radius: var(--mip-radius-sm);
+  background: var(--mip-surface);
+}
+
+.mip-logo svg {
+  width: 13px;
+  height: 13px;
+  fill: var(--mip-logo-color, var(--mip-ink));
+}
+
+/* Near-black marks would vanish on the dark theme, near-white ones on the light theme. */
+.dark .mip-logo[data-tone='dark'] svg,
+html:not(.dark) .mip-logo[data-tone='bright'] svg {
+  fill: var(--mip-ink);
+}
+
+.mip-logo--mono {
+  color: var(--mip-muted);
+  font-size: 11px;
+  font-weight: 700;
+}
+
+/* MarketplaceLogo.vue sizes: sm (default, sidebar), md (cards and rows), lg (marketplace hub). */
+.mip-logo--md {
+  width: 36px;
+  height: 36px;
+  border-radius: 9px;
+}
+
+.mip-logo--md svg {
+  width: 20px;
+  height: 20px;
+}
+
+.mip-logo--md.mip-logo--mono {
+  font-size: 15px;
+}
+
+.mip-logo--lg {
+  width: 56px;
+  height: 56px;
+  border-radius: 14px;
+  box-shadow: var(--mip-shadow-sm);
+}
+
+.mip-logo--lg svg {
+  width: 30px;
+  height: 30px;
+}
+
+.mip-logo--lg.mip-logo--mono {
+  font-size: 24px;
+}
+
+.mip-badge {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  height: 22px;
+  margin-left: auto;
+  padding: 0 8px;
+  border: 1px solid var(--mip-border);
+  border-radius: 999px;
+  background: var(--mip-surface);
+  color: var(--mip-muted);
+  font-size: 11.5px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.mip-badge--documented {
+  border-color: var(--mip-primary-border);
+  background: var(--mip-primary-soft);
+  color: var(--mip-primary-ink);
+}
+
+.mip-badge--tested {
+  border-color: var(--mip-success-border);
+  background: var(--mip-success-soft);
+  color: var(--mip-success);
+}
+
+.mip-badge--blocked {
+  border-color: var(--mip-warning-border);
+  background: var(--mip-warning-soft);
+  color: var(--mip-warning);
+}
+
+.mip-badge--deprecated {
+  border-color: var(--mip-danger-border);
+  background: var(--mip-danger-soft);
+  color: var(--mip-danger);
+}
+
+/* ---------- Right rail: outline and evidence card ---------- */
+
+.VPDocAsideOutline .outline-title {
+  color: var(--mip-ink);
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.VPDocAsideOutline .content {
+  padding-left: 0;
+  border-left: 0;
+}
+
+.VPDocAsideOutline .outline-marker {
+  display: none;
+}
+
+.VPDocOutlineItem.nested {
+  padding-left: 0;
+}
+
+.VPDocOutlineItem .outline-link {
+  padding: 5px 0 5px 12px;
+  border-left: 2px solid var(--mip-border);
+  color: var(--mip-muted);
+  font-size: 13.5px;
+  font-weight: 400;
+  line-height: 1.45;
+  transition:
+    border-color var(--mip-duration-fast) var(--mip-ease),
+    color var(--mip-duration-fast) var(--mip-ease);
+}
+
+.VPDocOutlineItem.nested .outline-link {
+  padding-left: 24px;
+}
+
+@media (hover: hover) {
+  .VPDocOutlineItem .outline-link:hover {
+    color: var(--mip-ink);
+  }
+}
+
+.VPDocOutlineItem .outline-link.active {
+  border-left-color: var(--mip-primary);
+  color: var(--mip-primary-ink);
+  font-weight: 500;
+}
+
+.mip-evidence {
+  margin-top: 20px;
+  padding: 14px;
+  border: 1px solid var(--mip-border);
+  border-radius: var(--mip-radius-lg);
+  background: var(--mip-surface-2);
+}
+
+.mip-evidence-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+
+.mip-evidence-title {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--mip-ink);
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.mip-evidence-text {
+  margin: 0 0 8px;
+  color: var(--mip-text);
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.mip-evidence-checked {
+  margin: 0;
+  color: var(--mip-muted);
+  font-size: 12.5px;
+}
+
+.mip-evidence-checked time {
+  color: var(--mip-ink);
+}
+
+/* Icon-only buttons: secondary actions with an accessible name and tooltip (spec 5.1a). */
+.mip-icon-button {
+  display: inline-grid;
+  flex: none;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  color: var(--mip-muted);
+  transition:
+    background-color var(--mip-duration-fast) var(--mip-ease),
+    border-color var(--mip-duration-fast) var(--mip-ease),
+    color var(--mip-duration-fast) var(--mip-ease);
+}
+
+.mip-icon-button--compact {
+  width: 30px;
+  height: 30px;
+}
+
+@media (hover: hover) {
+  .mip-icon-button:hover {
+    border-color: var(--mip-border);
+    background: var(--mip-surface);
+    color: var(--mip-ink);
+  }
+}
+
+/* Text buttons: one filled primary per view; icons follow the label. */
+
+.mip-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  height: 44px;
+  padding: 0 18px;
+  border: 1px solid var(--mip-border-strong);
+  border-radius: 10px;
+  background: var(--mip-surface);
+  color: var(--mip-ink);
+  font-size: 15px;
+  font-weight: 600;
+  text-decoration: none;
+  transition-duration: var(--mip-duration-fast);
+  transition-property: background-color, border-color, color, scale;
+  transition-timing-function: ease-out;
+}
+
+.mip-btn--sm {
+  gap: 6px;
+  height: 34px;
+  padding: 0 12px;
+  border-radius: 8px;
+  font-size: 13.5px;
+}
+
+.mip-btn--primary {
+  border-color: var(--mip-primary);
+  background: var(--mip-primary);
+  color: var(--mip-on-primary);
+}
+
+@media (hover: hover) {
+  .mip-btn:hover {
+    background: var(--mip-surface-2);
+  }
+
+  .mip-btn--primary:hover {
+    border-color: var(--mip-primary-ink);
+    background: var(--mip-primary-ink);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .mip-btn:active {
+    scale: 0.96;
+  }
+}
+
+/* ---------- Site footer (SiteFooter.vue, every page) ---------- */
+
+.mip-footer {
+  position: relative;
+  border-top: 1px solid var(--mip-chrome-line);
+  background: var(--mip-chrome);
+  color: var(--mip-chrome-muted);
+}
+
+@media (min-width: 960px) {
+  /* Pages with a sidebar: the fixed sidebar occupies the left edge, so the footer starts beside it. */
+  .VPContent.has-sidebar ~ .mip-footer {
+    padding-left: var(--vp-sidebar-width);
+  }
+}
+
+.mip-footer-inner {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 44px 32px 24px;
+}
+
+.mip-footer-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.5fr) repeat(3, minmax(0, 1fr));
+  gap: 32px;
+}
+
+.mip-footer-logo {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--mip-chrome-text);
+  font-size: 17px;
+  font-weight: 650;
+  letter-spacing: -0.015em;
+  text-decoration: none;
+}
+
+.mip-footer-logo img {
+  border-radius: 7px;
+}
+
+.mip-footer-brand p {
+  max-width: 36ch;
+  margin: 12px 0 0;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.mip-footer-heading {
+  margin-bottom: 10px;
+  color: var(--mip-chrome-text);
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.mip-footer-col a {
+  display: block;
+  padding: 4px 0;
+  color: var(--mip-chrome-muted);
+  font-size: 14px;
+  text-decoration: none;
+  transition: color var(--mip-duration-fast) var(--mip-ease);
+}
+
+@media (hover: hover) {
+  .mip-footer-col a:hover {
+    color: var(--mip-chrome-text);
+  }
+}
+
+.mip-footer-bar {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 8px 24px;
+  margin-top: 36px;
+  padding-top: 16px;
+  border-top: 1px solid var(--mip-chrome-line);
+  font-size: 13px;
+}
+
+@media (max-width: 767px) {
+  .mip-footer-inner {
+    padding: 36px 20px 20px;
+  }
+
+  .mip-footer-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 28px 20px;
+  }
+
+  .mip-footer-brand {
+    grid-column: 1 / -1;
+  }
+}
+
+/* ---------- Search palette (VPLocalSearchBox) ---------- */
+
+.VPLocalSearchBox .shell {
+  max-width: 640px;
+  border: 1px solid var(--mip-border);
+  border-radius: var(--mip-radius-lg);
+  box-shadow: var(--mip-shadow-lg);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .VPLocalSearchBox .shell {
+    animation: mip-palette-in var(--mip-duration) var(--mip-ease);
+  }
+}
+
+@keyframes mip-palette-in {
+  from {
+    opacity: 0;
+    scale: 0.98;
+  }
+}
+
+.VPLocalSearchBox .search-bar {
+  border: 1px solid var(--mip-border-strong);
+  border-radius: var(--mip-radius);
+}
+
+.VPLocalSearchBox .search-bar:focus-within {
+  border-color: var(--mip-primary);
+  box-shadow: 0 0 0 3px var(--mip-primary-soft);
+}
+
+.VPLocalSearchBox .result {
+  border-radius: var(--mip-radius);
+}
+
+.VPLocalSearchBox .result.selected .titles,
+.VPLocalSearchBox .result.selected .title {
+  color: var(--mip-primary-ink);
+}
+
+.VPLocalSearchBox .results {
+  overscroll-behavior: contain;
+}
+
+/* ---------- Mobile: local nav, nav screen, and drawer ---------- */
+
+.VPLocalNav {
+  border-bottom: 1px solid var(--mip-border);
+}
+
+.VPNavScreen .VPNavScreenMenuLink,
+.VPNavScreen .VPNavScreenMenuGroup {
+  border-bottom-color: var(--mip-border);
+}
+
+.VPNavScreen,
+.VPSidebar {
+  overscroll-behavior: contain;
+}
+
+@media (max-width: 959px) {
+  .VPSidebar {
+    box-shadow: var(--mip-shadow-lg);
+  }
+}

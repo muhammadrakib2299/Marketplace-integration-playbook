@@ -5,33 +5,17 @@ import { tmpdir } from 'node:os'
 import { dirname, join } from 'node:path'
 import { stringify } from 'yaml'
 import {
+  buildCapabilities,
   buildGuides,
   buildMarketplaces,
   countCoverage,
   findMissingRoutes,
   loadCatalogData,
+  logoTone,
+  readFrontmatter,
   repositoryRoot,
 } from '../scripts/catalog-data.mjs'
-
-// A complete catalog record shaped like the entries in catalog/marketplaces.yaml.
-const marketplaceRecord = (overrides = {}) => ({
-  id: 'ebay-sell-api',
-  name: 'eBay Sell APIs',
-  category: 'marketplace',
-  regions: ['United States'],
-  api_surfaces: [{ name: 'Inventory API', version: 'v1', docs_url: 'https://developer.ebay.com/develop/api/sell' }],
-  access_model: 'seller-account',
-  status: 'research',
-  evidence: 'unverified',
-  source_urls: ['https://developer.ebay.com/'],
-  last_verified: null,
-  guide: '../marketplaces/ebay/README.md',
-  summary: 'Synthetic record used only by tests.',
-  tags: ['Listings'],
-  scope: 'Test scope',
-  notes: 'Synthetic fixture.',
-  ...overrides,
-})
+import { marketplaceRecord, ottoRecord } from './catalog-fixtures.mjs'
 
 test('repository root resolves to the checkout that holds the catalog', () => {
   assert.ok(
@@ -78,8 +62,6 @@ const guideCatalog = (guides) => ({
   ],
   guides,
 })
-const ottoRecord = (overrides = {}) =>
-  marketplaceRecord({ id: 'otto-api', name: 'OTTO Market API', guide: '../marketplaces/otto/README.md', ...overrides })
 
 function withTempRoot(files, run) {
   const root = mkdtempSync(join(tmpdir(), 'playbook-catalog-'))
@@ -177,7 +159,122 @@ test('coverage counts API pages and workflows across marketplaces, skipping inde
     },
     (root) => countCoverage(root),
   )
-  assert.deepEqual(coverage, { apiReferencePages: 3, workflowGuides: 1 })
+  assert.deepEqual(coverage, {
+    apiReferencePages: 3,
+    workflowGuides: 1,
+    byMarketplace: {
+      ebay: { apiReferencePages: 2, workflowGuides: 1 },
+      otto: { apiReferencePages: 1, workflowGuides: 0 },
+    },
+  })
+})
+
+test('catalog API surfaces keep their official documentation links', () => {
+  const [ebay] = buildMarketplaces({ marketplaces: [marketplaceRecord()] })
+  assert.deepEqual(ebay.apiSurfaces, [
+    { name: 'Inventory API', version: 'v1', docsUrl: 'https://developer.ebay.com/develop/api/sell' },
+  ])
+  assert.deepEqual(ebay.sourceUrls, ['https://developer.ebay.com/'])
+})
+
+test("a marketplace's official docs home is optional and must be an https URL", () => {
+  const [ebay, otto] = buildMarketplaces({
+    marketplaces: [marketplaceRecord({ docs_home: 'https://developer.ebay.com/develop' }), ottoRecord()],
+  })
+  assert.equal(ebay.docsHome, 'https://developer.ebay.com/develop')
+  assert.equal(otto.docsHome, null)
+  assert.throws(
+    () => buildMarketplaces({ marketplaces: [marketplaceRecord({ docs_home: 'developer.ebay.com/develop' })] }),
+    /ebay-sell-api.*docs_home/,
+  )
+})
+
+test('a capability counts as documented only when the marketplace has a guide on that topic', () => {
+  const marketplaces = buildMarketplaces({ marketplaces: [marketplaceRecord(), ottoRecord()] })
+  const { topics, guides } = buildGuides(
+    guideCatalog([
+      guideRecord(),
+      guideRecord({ id: 'otto-orders', marketplace: 'otto-api', topic: 'orders', href: '/marketplaces/otto/guides/orders' }),
+    ]),
+    marketplaces,
+  )
+  const capabilities = buildCapabilities(marketplaces, guides, topics)
+  assert.deepEqual(
+    capabilities['ebay-sell-api'].map((capability) => [capability.id, capability.guides.map((guide) => guide.href)]),
+    [['access', ['/marketplaces/ebay/guides/seller-access']], ['orders', []]],
+  )
+  assert.deepEqual(
+    capabilities['otto-api'].map((capability) => [capability.id, capability.guides.length]),
+    [['access', 0], ['orders', 1]],
+  )
+})
+
+test('a catalog logo slug resolves to its Simple Icons mark', () => {
+  const [ebay] = buildMarketplaces({ marketplaces: [marketplaceRecord({ logo: 'tiktok' })] })
+  assert.equal(ebay.logo.title, 'TikTok')
+  assert.match(ebay.logo.path, /^M/)
+  assert.match(ebay.logo.hex, /^[0-9A-F]{6}$/)
+})
+
+test('an unknown logo slug is rejected with the catalog id', () => {
+  assert.throws(
+    () => buildMarketplaces({ marketplaces: [marketplaceRecord({ logo: 'not-a-brand' })] }),
+    /ebay-sell-api.*logo "not-a-brand"/,
+  )
+})
+
+test('a marketplace without a logo keeps the monogram', () => {
+  const [ebay] = buildMarketplaces({ marketplaces: [marketplaceRecord()] })
+  assert.equal(ebay.logo, null)
+  assert.equal(ebay.mark, 'e')
+})
+
+test('logo tone flags near-black and near-white brand colours', () => {
+  assert.equal(logoTone('000000'), 'dark')
+  assert.equal(logoTone('FFFFFF'), 'bright')
+  assert.equal(logoTone('FF9900'), 'mid')
+})
+
+test('build sequence entries need a label and a link', () => {
+  assert.throws(
+    () =>
+      buildMarketplaces({
+        marketplaces: [marketplaceRecord({ build_sequence: [{ href: '/marketplaces/ebay/guides/seller-access' }] })],
+      }),
+    /ebay-sell-api.*build_sequence/,
+  )
+})
+
+test('loading the catalog fails when a sidebar page links to a missing page', () => {
+  assert.throws(
+    () =>
+      withTempRoot(
+        {
+          'marketplaces/ebay/README.md': '# eBay\n',
+          'catalog/marketplaces.yaml': stringify({
+            marketplaces: [marketplaceRecord({ pages: [{ label: 'Orders', href: '/marketplaces/ebay/apis/missing' }] })],
+          }),
+          'catalog/guides.yaml': stringify(guideCatalog([])),
+        },
+        (root) => loadCatalogData(root),
+      ),
+    /\/marketplaces\/ebay\/apis\/missing/,
+  )
+})
+
+test('frontmatter is read from the page a route points to', () => {
+  const frontmatter = withTempRoot(
+    { 'marketplaces/ebay/apis/orders.md': '---\nversion: 2026-01-01\nchecked: 2026-11-06\n---\n\n# Orders\n' },
+    (root) => readFrontmatter(root, '/marketplaces/ebay/apis/orders'),
+  )
+  assert.equal(frontmatter.version, '2026-01-01')
+})
+
+test('a page without frontmatter yields an empty object', () => {
+  const frontmatter = withTempRoot({ 'marketplaces/ebay/apis/feeds.md': '# Feeds\n\nNo metadata.\n' }, (root) =>
+    readFrontmatter(root, '/marketplaces/ebay/apis/feeds'),
+  )
+  assert.deepEqual(frontmatter, {})
 })
 
 test('every documented marketplace in the catalog has at least one explorer guide', () => {

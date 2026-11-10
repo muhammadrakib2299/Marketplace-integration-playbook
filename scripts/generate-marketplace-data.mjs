@@ -3,9 +3,9 @@ import { join } from 'node:path'
 import { loadCatalogData, repositoryRoot } from './catalog-data.mjs'
 
 const outputDir = join(repositoryRoot, '.vitepress', 'theme', 'generated')
-const { marketplaces, topics, guides, coverage } = loadCatalogData(repositoryRoot)
+const { marketplaces, topics, guides, capabilities, coverage } = loadCatalogData(repositoryRoot)
 
-const exports = Object.entries({ marketplaces, topics, guides, coverage })
+const exports = Object.entries({ marketplaces, topics, guides, capabilities, coverage })
   .map(([name, value]) => `export const ${name} = ${JSON.stringify(value, null, 2)}\n`)
   .join('\n')
 
