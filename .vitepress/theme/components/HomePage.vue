@@ -2,8 +2,8 @@
 import { computed } from 'vue'
 import { withBase } from 'vitepress'
 import { formatDisplayDate } from '../../../scripts/format-date.mjs'
-import { statusName } from '../../../scripts/labels.mjs'
-import { coverage, guides, marketplaces } from '../generated/catalog.mjs'
+import { noun, statusName } from '../../../scripts/labels.mjs'
+import { coverage, marketplaces } from '../generated/catalog.mjs'
 import MarketplaceLogo from './MarketplaceLogo.vue'
 import WorkflowDemo from './WorkflowDemo.vue'
 
@@ -34,11 +34,12 @@ const featured = computed(() =>
   [...catalog].sort((a, b) => String(b.lastVerified ?? '').localeCompare(String(a.lastVerified ?? ''))).slice(0, 6),
 )
 
+// Each published page is counted once, by its folder (apis/, workflows/, guides/).
 const stats = [
-  { value: catalog.length, label: catalog.length === 1 ? 'marketplace' : 'marketplaces' },
-  { value: coverage.apiReferencePages, label: 'API reference pages' },
-  { value: coverage.workflowGuides, label: 'workflow guides' },
-  { value: guides.length, label: 'integration guides' },
+  { value: catalog.length, label: noun(catalog.length, 'marketplace') },
+  { value: coverage.apiReferencePages, label: noun(coverage.apiReferencePages, 'API reference page') },
+  { value: coverage.workflowGuides, label: noun(coverage.workflowGuides, 'workflow guide') },
+  { value: coverage.integrationGuides, label: noun(coverage.integrationGuides, 'integration guide') },
 ]
 
 const path = [

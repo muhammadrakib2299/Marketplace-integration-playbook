@@ -264,8 +264,9 @@ export function buildCapabilities(marketplaces, guides, topics) {
   )
 }
 
-// Counts the published pages behind the homepage coverage figures. Folders
-// starting with "_" (the template) and section index pages are not counted.
+// Counts the published pages behind the homepage coverage figures: each page is counted once,
+// by its folder (apis/, workflows/, guides/). Folders starting with "_" (the template) and
+// section index pages are not counted.
 export function countCoverage(root = repositoryRoot) {
   const marketplacesDir = join(root, 'marketplaces')
   const pagesIn = (dir) =>
@@ -279,6 +280,7 @@ export function countCoverage(root = repositoryRoot) {
         {
           apiReferencePages: pagesIn(join(marketplacesDir, folder.name, 'apis')),
           workflowGuides: pagesIn(join(marketplacesDir, folder.name, 'workflows')),
+          integrationGuides: pagesIn(join(marketplacesDir, folder.name, 'guides')),
         },
       ]),
   )
@@ -286,6 +288,7 @@ export function countCoverage(root = repositoryRoot) {
   return {
     apiReferencePages: counts.reduce((total, count) => total + count.apiReferencePages, 0),
     workflowGuides: counts.reduce((total, count) => total + count.workflowGuides, 0),
+    integrationGuides: counts.reduce((total, count) => total + count.integrationGuides, 0),
     byMarketplace,
   }
 }

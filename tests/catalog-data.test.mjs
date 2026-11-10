@@ -144,7 +144,7 @@ test('loading the catalog fails when an explorer guide links to a missing page',
   )
 })
 
-test('coverage counts API pages and workflows across marketplaces, skipping index pages and the template', () => {
+test('coverage counts API pages, workflows, and integration guides once each, skipping index pages and the template', () => {
   const coverage = withTempRoot(
     {
       'marketplaces/ebay/apis/index.md': '# APIs\n',
@@ -161,9 +161,10 @@ test('coverage counts API pages and workflows across marketplaces, skipping inde
   assert.deepEqual(coverage, {
     apiReferencePages: 3,
     workflowGuides: 1,
+    integrationGuides: 1,
     byMarketplace: {
-      ebay: { apiReferencePages: 2, workflowGuides: 1 },
-      otto: { apiReferencePages: 1, workflowGuides: 0 },
+      ebay: { apiReferencePages: 2, workflowGuides: 1, integrationGuides: 0 },
+      otto: { apiReferencePages: 1, workflowGuides: 0, integrationGuides: 1 },
     },
   })
 })
