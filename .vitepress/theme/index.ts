@@ -9,6 +9,7 @@ import UiIcon from './components/UiIcon.vue'
 import './custom.css'
 import './styles/tokens.css'
 import './styles/base.css'
+import './styles/shell.css'
 
 export default {
   extends: DefaultTheme,

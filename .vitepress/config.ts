@@ -42,6 +42,7 @@ export default defineConfigWithTheme<DefaultTheme.Config & { buildDate: string }
   rewrites: {
     'marketplaces/:marketplace/README.md': 'marketplaces/:marketplace/index.md',
   },
+  head: [['link', { rel: 'icon', type: 'image/svg+xml', href: '/brand-mark.svg' }]],
   markdown: {
     // Code blocks use dark panels in both themes, as in the mockup.
     theme: { light: 'github-dark', dark: 'github-dark' },
