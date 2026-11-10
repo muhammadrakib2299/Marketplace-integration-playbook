@@ -32,6 +32,16 @@
   padding-left: 24px;
 }
 
+/* On wide screens the content column and the right rail stay together and centre as one group beside
+   the sidebar (spec section 7). Without a cap VitePress stretches .content to fill the width, so the
+   1080px column centres alone and the rail drifts to the window edge (a 471px gap at 2560px).
+   1400px = column 1080 + content gutters 2 x 32 + rail 256. */
+@media (min-width: 1280px) {
+  .Layout .VPDoc.has-aside .container {
+    max-width: 1400px;
+  }
+}
+
 @media (min-width: 960px) {
   .Layout .VPDoc {
     padding-right: 24px;
