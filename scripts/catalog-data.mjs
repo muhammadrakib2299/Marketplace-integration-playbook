@@ -72,7 +72,6 @@ export function buildMarketplaces(catalog) {
       sourceUrls: record.source_urls,
       lastVerified: record.last_verified,
       mark: name.charAt(0).toLowerCase(),
-      markClass: `platform-mark-${slug}`,
       logo: resolveLogo(record),
       buildSequence: navigationList(record, 'build_sequence'),
       pages: navigationList(record, 'pages'),
@@ -181,7 +180,6 @@ export function buildGuides(guideCatalog, marketplaces) {
       tags: guide.tags,
       href: guide.href,
       mark: String(position).padStart(2, '0'),
-      markClass: 'platform-mark-guide',
     }
   })
 

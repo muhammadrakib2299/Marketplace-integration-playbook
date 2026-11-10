@@ -27,7 +27,6 @@ test('repository root resolves to the checkout that holds the catalog', () => {
 test('a marketplace badge is derived from its own catalog entry, not an Amazon/TikTok switch', () => {
   const [ebay] = buildMarketplaces({ marketplaces: [marketplaceRecord()] })
   assert.equal(ebay.mark, 'e')
-  assert.equal(ebay.markClass, 'platform-mark-ebay')
 })
 
 test('a catalog guide path becomes the marketplace site route', () => {

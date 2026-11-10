@@ -6,9 +6,7 @@ import '@fontsource/ibm-plex-mono/500.css'
 import Layout from './Layout.vue'
 import HomePage from './components/HomePage.vue'
 import MarketplaceDirectory from './components/MarketplaceDirectory.vue'
-import UiIcon from './components/UiIcon.vue'
-// Order matters: legacy component styles first, then the design system layers override them.
-import './custom.css'
+// Design-system layers, in cascade order: tokens, base, shell, article, then page components.
 import './styles/tokens.css'
 import './styles/base.css'
 import './styles/shell.css'
@@ -22,6 +20,5 @@ export default {
   enhanceApp({ app }) {
     app.component('HomePage', HomePage)
     app.component('MarketplaceDirectory', MarketplaceDirectory)
-    app.component('UiIcon', UiIcon)
   },
 }

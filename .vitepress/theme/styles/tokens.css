@@ -6,6 +6,8 @@
  * --mip-primary is the accent (signal teal); the name is kept so existing rules keep working.
  */
 :root {
+  /* Native controls (selects, scrollbars, search clear buttons) follow the theme. */
+  color-scheme: light;
   --mip-bg: #FFFFFF;
   --mip-surface: #FFFFFF;
   --mip-surface-2: #F3F6F9;
@@ -66,6 +68,7 @@
 }
 
 .dark {
+  color-scheme: dark;
   --mip-bg: #0B1626;
   --mip-surface: #0F1E31;
   --mip-surface-2: #132539;
