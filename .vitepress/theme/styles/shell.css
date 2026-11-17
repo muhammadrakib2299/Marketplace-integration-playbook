@@ -1,6 +1,6 @@
 /*
- * Shell layer (Harbor direction): navy top bar and footer, mist sidebar, right rail, search
- * palette, and mobile drawer. Selectors target VitePress 1.6.4 default-theme classes (pinned in
+ * Shell layer (Clean signal direction): light top bar and footer with hairlines, sidebar on the
+ * page background, right rail, search palette, and mobile drawer. Selectors target VitePress 1.6.4 default-theme classes (pinned in
  * package.json); recheck them when upgrading VitePress.
  */
 
@@ -9,12 +9,16 @@
   /* Full-width app shell: VitePress centres the layout above 1440px; 100vw keeps the sidebar flush left
      and lets the content and right rail centre in the remaining space. */
   --vp-layout-max-width: 100vw;
+  /* A leaner bar: 56px instead of VitePress's 64px leaves more of the first screen to content. */
+  --vp-nav-height: 56px;
+  /* 16px narrower than VitePress's 272px, so a 1366px laptop gives that width to the article. */
+  --vp-sidebar-width: 256px;
   --vp-nav-bg-color: var(--mip-chrome);
   --vp-nav-logo-height: 30px;
   --vp-nav-screen-bg-color: var(--mip-surface);
-  --vp-sidebar-bg-color: var(--mip-surface-2);
+  --vp-sidebar-bg-color: var(--mip-bg);
   --vp-local-nav-bg-color: var(--mip-surface);
-  --vp-backdrop-bg-color: rgba(8, 19, 34, 0.5);
+  --vp-backdrop-bg-color: rgba(11, 14, 21, 0.45);
   --vp-local-search-bg: var(--mip-surface);
   --vp-local-search-result-bg: var(--mip-surface);
   --vp-local-search-result-border: var(--mip-border);
@@ -27,9 +31,27 @@
 /* ---------- Top bar ---------- */
 
 .VPNav .VPNavBar {
-  /* VitePress makes the bar transparent at the top of some pages; the Harbor chrome stays solid. */
-  background-color: var(--mip-chrome) !important;
+  /* VitePress makes the bar transparent at the top of some pages; ours always shows, slightly
+     translucent so content scrolling under it stays legible as a blur. */
+  background-color: color-mix(in srgb, var(--mip-chrome) 86%, transparent) !important;
   border-bottom: 1px solid var(--mip-chrome-line);
+  -webkit-backdrop-filter: saturate(160%) blur(12px);
+  backdrop-filter: saturate(160%) blur(12px);
+}
+
+/* Solid where the blur is unsupported or the reader asks for less transparency. */
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .VPNav .VPNavBar {
+    background-color: var(--mip-chrome) !important;
+  }
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  .VPNav .VPNavBar {
+    background-color: var(--mip-chrome) !important;
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
 }
 
 .VPNav .VPNavBar .divider {
@@ -66,7 +88,7 @@
   }
 }
 
-/* Nav links and dropdown buttons on the navy bar */
+/* Nav links and dropdown buttons in the top bar */
 .VPNav .VPNavBarMenuLink,
 .VPNav .VPNavBarMenuGroup .button {
   height: 36px;
@@ -96,8 +118,8 @@
 
 .VPNav .VPNavBarMenuLink.active,
 .VPNav .VPNavBarMenuGroup.active .button {
-  background-color: color-mix(in srgb, var(--mip-primary) 28%, var(--mip-chrome));
-  color: var(--mip-chrome-text);
+  background-color: var(--mip-primary-soft);
+  color: var(--mip-primary-ink);
 }
 
 .VPNav .VPFlyout .menu {
@@ -144,7 +166,7 @@
   }
 }
 
-/* Vertical separators between nav groups, recoloured for the navy bar. */
+/* Vertical separators between nav groups, in the chrome hairline colour. */
 .VPNav .VPNavBar .VPNavBarAppearance::before,
 .VPNav .VPNavBar .VPNavBarSocialLinks::before {
   background-color: var(--mip-chrome-line);
@@ -154,7 +176,7 @@
   background-color: var(--mip-chrome-text);
 }
 
-/* Search trigger styled as a field on the navy bar. */
+/* Search trigger styled as a field in the top bar. */
 @media (min-width: 768px) {
   /* min-width: 0 lets the field shrink below its placeholder's width, so the bar never pushes the
      page sideways at tablet widths (768-960 px); the placeholder ends in an ellipsis instead. */
@@ -180,11 +202,11 @@
     width: 100%;
     min-width: 0;
     max-width: 560px;
-    height: 40px;
+    height: 36px;
     margin: 0;
-    padding: 0 10px 0 13px;
+    padding: 0 8px 0 12px;
     border: 1px solid var(--mip-chrome-line);
-    border-radius: 9px;
+    border-radius: 8px;
     background: var(--mip-chrome-2);
     transition: border-color var(--mip-duration-fast) var(--mip-ease);
   }
@@ -575,12 +597,20 @@ html:not(.dark) .mip-logo[data-tone='bright'] .mip-logo-glyph {
   font-weight: 500;
 }
 
+/* The one decorative use of cobalt: the evidence card is what sets this handbook apart (every claim
+   is tied to an official source), so it carries a cobalt rule down its leading edge, like a
+   verification mark, and a cobalt shield. Everything else keeps cobalt for actions and links. */
 .mip-evidence {
   margin-top: 20px;
-  padding: 14px;
+  padding: 14px 14px 14px 17px;
   border: 1px solid var(--mip-border);
   border-radius: var(--mip-radius-lg);
-  background: var(--mip-surface-2);
+  background: var(--mip-surface);
+  box-shadow: inset 3px 0 0 var(--mip-primary);
+}
+
+.mip-evidence-title svg {
+  color: var(--mip-primary);
 }
 
 .mip-evidence-head {
