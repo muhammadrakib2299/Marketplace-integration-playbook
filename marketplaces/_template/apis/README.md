@@ -23,7 +23,7 @@ Do not treat endpoints, HTTP methods, API groups, resources, webhook event types
 
 Describe which API group supplies data another group requires, which group emits events, and which one performs the write. Include the integration's internal systems and direction of data movement. Separate provider-defined dependencies from recommended architecture. Use `TBD` where a flow has not been confirmed.
 
-```mermaid
+```mermaid How this marketplace’s APIs interact
 flowchart LR
   Provider[Marketplace APIs] -->|documents events and data| Adapter[Integration adapter]
   Adapter -->|normalized records| Core[Order / catalog / inventory system]

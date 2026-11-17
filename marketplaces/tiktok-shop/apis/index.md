@@ -29,7 +29,7 @@ The API reference is not a substitute for a reliable integration design. Keep au
 
 ## Core integration flow
 
-```mermaid
+```mermaid The core TikTok Shop integration flow
 flowchart LR
   A[Register app and scopes] --> B[Seller / creator / partner authorizes]
   B --> C[Exchange auth_code for tokens]
