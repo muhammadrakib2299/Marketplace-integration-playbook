@@ -19,6 +19,7 @@
     "@redocly/cli": "2.75.0",
     "animejs": "4.5.0",
     "lucide-vue-next": "1.0.0",
+    "mermaid": "12.3.0",
     "simple-icons": "16.37.0",
     "vitepress": "1.6.4",
     "yaml": "^2.8.1"

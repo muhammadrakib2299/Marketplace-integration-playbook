@@ -10,6 +10,8 @@ The [GitHub Actions workflow](https://github.com/muhammadrakib2299/Marketplace-i
 
 `lychee` checks links in Markdown files, including relative links within the repository. It uses bounded concurrency, retries, and timeouts to reduce load on external documentation hosts. A broken or unreachable link fails the workflow so a contributor can review it. External sites can occasionally rate-limit or block automated requests; inspect the failing URL and logs before changing documentation. Do not broadly treat `403` or other errors as success just to make CI green. If an official source consistently blocks automated checks, document that limitation and add a narrow ignore rule only after manual verification.
 
+Links to files on GitHub (`https://github.com/<owner>/<repo>/blob/<ref>/<path>`, such as Amazon's model files and this repository's own configuration) are checked through `raw.githubusercontent.com` with lychee's `--remap` option. GitHub answers automated requests for the HTML blob pages from Actions runners with intermittent `503` responses, which failed the check on links that resolve in a browser. The raw endpoint still returns `404` for a missing file or branch, so a broken link fails the workflow, and lychee's report names the original `github.com` URL. The links in the documentation stay as `github.com` URLs.
+
 The README's workflow-status badge is narrowly excluded in the [`.lycheeignore` file](https://github.com/muhammadrakib2299/Marketplace-integration-playbook/blob/main/.lycheeignore) because GitHub can return 404 before the workflow has completed its first run or while a new workflow is still being introduced. This exception is limited to that generated badge URL; marketplace source links remain checked.
 
 ## Security and maintenance
