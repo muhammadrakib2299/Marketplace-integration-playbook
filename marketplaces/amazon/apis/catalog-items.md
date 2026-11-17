@@ -78,7 +78,7 @@ Amazon notes the rate-limit header is best-effort and may be absent. Its [usage-
 
 ## Connected workflow
 
-```mermaid
+```mermaid Where Catalog Items sits in the listing workflow
 sequenceDiagram
   participant Client as WMS / catalog-matching service
   participant LWA as Login with Amazon

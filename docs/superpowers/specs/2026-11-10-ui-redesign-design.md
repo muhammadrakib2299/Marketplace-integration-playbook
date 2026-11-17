@@ -249,3 +249,14 @@ Adds to section 7: the trail is a breadcrumb landmark, and the header links the 
 - **Layout:** on wide screens the content column and right rail stay together (the container is capped at 1400 px), and no page scrolls sideways at any width from 320 px.
 - **Accessibility:** focus rings keep at least 3:1 contrast on every surface, including the navy chrome; icon-only controls have 36 px hit areas; links on tinted panels use `--mip-primary-ink`.
 - **Catalog validation:** dates are YYYY-MM-DD or null, catalog URLs are https, ids and folders are unique, and status uses the documented vocabulary.
+
+## 9. Phase 4 (started 2026-11-17): Mermaid diagrams
+
+The first phase 4 item shipped: `mermaid` fences render as diagrams instead of raw source on the Amazon API map, the Amazon Catalog Items page, and the TikTok Shop API map. It follows decision 4 (a lazy-loaded client component). Section 5.5 still lists the remaining phase 4 work.
+
+- **Markdown rule:** `scripts/markdown-mermaid.mjs` turns a `mermaid` fence into `<MermaidDiagram>`, base64-encoding the source because legal mermaid contains `"`, `-->`, and `{{ }}`, which an HTML attribute and Vue interpolation would each mangle. Text after the language (```` ```mermaid How the APIs connect ````) becomes the diagram's accessible name. Unit-tested.
+- **Loading:** the component is an async component, and it imports `mermaid` on mount, so a page without a diagram downloads neither (the homepage stays at 283 KB of JavaScript). A diagram page adds mermaid's core, 163 KB gzipped.
+- **Layout engine:** the component pins `layout: 'dagre'`. Without it, mermaid fetched its 1.5 MB ELK engine beside every diagram, though every fence here is a default-layout flowchart.
+- **Size:** diagrams keep their natural size and scroll inside their panel, like wide tables. Shrinking a wide flowchart to the column made its labels unreadable. The panel is focusable, so the scroll works from the keyboard, and no page scrolls sideways at 390 or 1280 px.
+- **Theme:** node and line colours come from the live design tokens and are redrawn when the reader switches theme.
+- **Fallback:** the source is always in the page, in a collapsed "Diagram source" disclosure, which works without JavaScript. If a diagram fails to parse, the error is shown under it. The title is not repeated as a caption, because each fence already sits under a heading that names it.

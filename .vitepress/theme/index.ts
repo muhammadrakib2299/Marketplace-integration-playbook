@@ -21,5 +21,8 @@ export default {
     // not ride in the shared theme bundle every page downloads.
     app.component('HomePage', defineAsyncComponent(() => import('./components/HomePage.vue')))
     app.component('MarketplaceDirectory', defineAsyncComponent(() => import('./components/MarketplaceDirectory.vue')))
+    // The diagram component in turn imports mermaid on mount, so neither rides along with a
+    // page that has no ```mermaid fence.
+    app.component('MermaidDiagram', defineAsyncComponent(() => import('./components/MermaidDiagram.vue')))
   },
 }

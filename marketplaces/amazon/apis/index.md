@@ -57,7 +57,7 @@ For new order work, review Amazon's [Orders API migration guide](https://develop
 
 ## The APIs are connected like this
 
-```mermaid
+```mermaid How the Amazon SP-API surfaces connect
 flowchart LR
   S[Seller grants app access] --> M[Resolve seller and marketplaces]
   M --> R[Reports: baseline snapshot per marketplace]

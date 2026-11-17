@@ -40,7 +40,7 @@ List relevant operations, not every operation in the provider's catalog. Link th
 
 Describe upstream data sources, downstream consumers, identifiers shared across API groups, and ownership of state. Mark provider-mandated sequencing separately from this playbook's recommended architecture.
 
-```mermaid
+```mermaid How this API connects to other API groups
 sequenceDiagram
   participant App as Integration service
   participant API as [API group]

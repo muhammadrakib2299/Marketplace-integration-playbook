@@ -514,3 +514,81 @@
   background: var(--mip-danger-soft);
   color: var(--mip-danger);
 }
+
+/* Mermaid diagrams (.vitepress/theme/components/MermaidDiagram.vue). The figure is a light
+   surface panel, not a dark code panel: the diagram is a drawing, and mermaid colours its
+   nodes from the light design tokens. */
+.vp-doc .mip-diagram {
+  margin: 24px 0;
+}
+
+/* A wide flowchart scrolls inside its panel rather than widening the page, the same treatment
+   wide tables get. The panel is focusable so the scroll is reachable from the keyboard. */
+.mip-diagram__figure {
+  padding: 20px 16px;
+  overflow-x: auto;
+  border: 1px solid var(--mip-border);
+  border-radius: var(--mip-radius);
+  background: var(--mip-surface-2);
+  text-align: center;
+}
+
+.mip-diagram__figure:focus-visible {
+  outline: 2px solid var(--mip-focus);
+  outline-offset: 2px;
+}
+
+/* The SVG keeps the width mermaid gave it; the panel scrolls when that exceeds the column. */
+.mip-diagram__figure svg {
+  max-width: none;
+}
+
+.mip-diagram__source {
+  margin-top: 8px;
+}
+
+.mip-diagram__source > summary {
+  display: inline-flex;
+  align-items: center;
+  min-height: 36px; /* The 36 px target the accessibility review settled for small controls. */
+  padding: 0 4px;
+  border-radius: var(--mip-radius-sm);
+  color: var(--mip-muted);
+  cursor: pointer;
+  font-size: 12.5px;
+}
+
+.mip-diagram__source > summary:hover {
+  color: var(--mip-primary-ink);
+}
+
+.mip-diagram__source > summary:focus-visible {
+  outline: 2px solid var(--mip-focus);
+  outline-offset: 2px;
+}
+
+.vp-doc .mip-diagram__source pre {
+  margin: 0;
+  padding: 16px 20px;
+  overflow-x: auto;
+  border-radius: var(--mip-radius);
+  background: var(--mip-code-bg);
+  color: var(--mip-chrome-text);
+  font-family: var(--vp-font-family-mono);
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.vp-doc .mip-diagram__source code {
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  font-size: inherit;
+}
+
+.vp-doc .mip-diagram__failure {
+  margin: 8px 0 0;
+  color: var(--mip-danger);
+  font-size: 12.5px;
+}
