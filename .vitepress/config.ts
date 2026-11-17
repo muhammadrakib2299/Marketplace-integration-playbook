@@ -1,5 +1,6 @@
 import { defineConfigWithTheme, type DefaultTheme } from 'vitepress'
 import { findMissingRoutes, loadCatalogData, readFrontmatter, repositoryRoot } from '../scripts/catalog-data.mjs'
+import { renderMermaidFence } from '../scripts/markdown-mermaid.mjs'
 import { renderMethodCode } from '../scripts/markdown-methods.mjs'
 import { pageContext } from '../scripts/page-context.mjs'
 import { footerMarketplaces, themeRoutes } from '../scripts/site-links.mjs'
@@ -67,6 +68,11 @@ export default defineConfigWithTheme<
       // Wrap tables so wide ones scroll inside a rounded frame instead of widening the page.
       md.renderer.rules.table_open = () => '<div class="mip-table"><table>\n'
       md.renderer.rules.table_close = () => '</table></div>\n'
+      // ```mermaid fences become the diagram component; other fences keep Shiki highlighting.
+      const defaultFence = md.renderer.rules.fence!
+      md.renderer.rules.fence = (tokens, idx, options, env, self) =>
+        renderMermaidFence(tokens[idx].info, tokens[idx].content) ??
+        defaultFence(tokens, idx, options, env, self)
       // `GET /path` inline code becomes a method badge followed by the path.
       const defaultCodeInline = md.renderer.rules.code_inline!
       md.renderer.rules.code_inline = (tokens, idx, options, env, self) =>
