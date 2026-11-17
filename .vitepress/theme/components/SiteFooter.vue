@@ -3,7 +3,7 @@ import { computed } from 'vue'
 import { useData, withBase } from 'vitepress'
 import { formatDisplayDate } from '../../../scripts/format-date.mjs'
 
-const repositoryUrl = 'https://github.com/muhammadrakib2299/Marketplace-integration-playbook'
+const repositoryUrl = 'https://github.com/muhammadrakib2299/marketplace-integration-playbook'
 const { theme } = useData()
 
 // "Built 10 Nov 2026" in UTC, so the server render and the browser agree.

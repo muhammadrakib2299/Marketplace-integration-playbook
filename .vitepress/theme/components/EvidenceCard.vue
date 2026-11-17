@@ -4,7 +4,7 @@ import { useData } from 'vitepress'
 import { ShieldCheck, SquarePen } from 'lucide-vue-next'
 import { formatDisplayDate, formatIsoDate } from '../../../scripts/format-date.mjs'
 
-const repositoryUrl = 'https://github.com/muhammadrakib2299/Marketplace-integration-playbook'
+const repositoryUrl = 'https://github.com/muhammadrakib2299/marketplace-integration-playbook'
 const { frontmatter, page } = useData()
 
 // Only pages that declare evidence in frontmatter get a card; nothing is inferred.
