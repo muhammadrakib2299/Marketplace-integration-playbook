@@ -773,6 +773,9 @@
 /* Coverage matrix: reuses the .mip-table frame; the marketplace column stays put while topics scroll. */
 .mip-directory .mip-matrix th,
 .mip-directory .mip-matrix td {
+  /* 9px, not the tables' 12px: eight columns then fit the 780px article column (and 766px on a
+     1366px laptop) instead of scrolling for the last few pixels. */
+  padding-inline: 9px;
   text-align: center;
   vertical-align: middle;
 }

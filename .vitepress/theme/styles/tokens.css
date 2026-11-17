@@ -1,70 +1,72 @@
 /*
- * Design tokens: the "Harbor" direction chosen by the owner on 2026-11-10
- * (navy chrome around a white reading column, signal-teal accent, IBM Plex type).
+ * Design tokens: the "Clean signal" direction (owner, 2026-11-17: "make it modern and clean"),
+ * replacing Harbor's navy chrome and teal. White chrome with hairline borders, graphite type,
+ * one cobalt accent, IBM Plex type. Status colours appear only where they carry status.
  * Colours are 6-digit hex literals so tests/design-tokens.test.mjs can check WCAG AA contrast.
  * --mip-faint is decorative only (borders, icons); text uses --mip-faint-text.
- * --mip-primary is the accent (signal teal); the name is kept so existing rules keep working.
+ * --mip-primary is the accent (cobalt); the name is kept so existing rules keep working.
  */
 :root {
   /* Native controls (selects, scrollbars, search clear buttons) follow the theme. */
   color-scheme: light;
   --mip-bg: #FFFFFF;
   --mip-surface: #FFFFFF;
-  --mip-surface-2: #F3F6F9;
-  --mip-surface-3: #E8EEF3;
-  --mip-border: #DCE3EA;
-  --mip-border-strong: #C5D0DB;
+  --mip-surface-2: #F7F8FA;
+  --mip-surface-3: #EEF0F4;
+  --mip-border: #E4E7EC;
+  --mip-border-strong: #CDD2DA;
 
-  --mip-ink: #102033;
-  --mip-text: #24364A;
-  --mip-muted: #556677;
-  --mip-faint: #8A9AAB;
-  --mip-faint-text: #5F7183;
+  --mip-ink: #10141F;
+  --mip-text: #333B4A;
+  --mip-muted: #5B6474;
+  --mip-faint: #A0A8B5;
+  --mip-faint-text: #626B7B;
 
-  --mip-primary: #0B7A83;
-  --mip-primary-ink: #075E66;
-  --mip-primary-soft: #E3F4F4;
-  --mip-primary-border: #A9D8DA;
+  --mip-primary: #2E48EE;
+  --mip-primary-ink: #1F33C2;
+  --mip-primary-soft: #EEF1FE;
+  --mip-primary-border: #C6CFFC;
   --mip-on-primary: #FFFFFF;
 
-  /* Focus rings: teal on light surfaces, light teal on the navy chrome (both at least 3:1). */
-  --mip-focus: #0B7A83;
-  --mip-focus-chrome: #6FD3DA;
+  /* Focus rings: cobalt everywhere, now that the chrome is light too (at least 3:1 on each surface). */
+  --mip-focus: #2E48EE;
+  --mip-focus-chrome: #2E48EE;
 
-  /* Navy chrome: top bar and footer. */
-  --mip-chrome: #0F2742;
-  --mip-chrome-2: #17324F;
-  --mip-chrome-line: #1F3A5A;
-  --mip-chrome-text: #E6EEF6;
-  --mip-chrome-muted: #A9BBCD;
+  /* Chrome: top bar and footer. White with a hairline, so the page reads as one surface. */
+  --mip-chrome: #FFFFFF;
+  --mip-chrome-2: #F7F8FA;
+  --mip-chrome-line: #E4E7EC;
+  --mip-chrome-text: #10141F;
+  --mip-chrome-muted: #5B6474;
 
-  /* Code panels stay dark in both themes. */
-  --mip-code-bg: #0B1A2B;
-  --mip-code-head: #10243A;
-  --mip-code-line: #1C3550;
+  /* Code panels stay dark in both themes: neutral graphite, not navy. */
+  --mip-code-bg: #12151D;
+  --mip-code-head: #181C26;
+  --mip-code-line: #262B37;
 
-  --mip-success: #0F7B5F;
-  --mip-success-soft: #E3F5EE;
-  --mip-success-border: #9FD9C2;
-  --mip-warning: #A65C09;
-  --mip-warning-soft: #FBF1DF;
-  --mip-warning-border: #F0CF95;
-  --mip-danger: #C0303A;
-  --mip-danger-soft: #FBE7E9;
-  --mip-danger-border: #F0B3B9;
-  --mip-info: #2F6FAD;
-  --mip-info-soft: #E7F0FA;
-  --mip-info-border: #B5D0EC;
-  --mip-violet: #6B4FD8;
-  --mip-violet-soft: #EEEAFB;
-  --mip-violet-border: #CCC1F3;
+  --mip-success: #0E7A4E;
+  --mip-success-soft: #E9F7F0;
+  --mip-success-border: #A9DFC3;
+  --mip-warning: #955A00;
+  --mip-warning-soft: #FDF5E6;
+  --mip-warning-border: #F1D39B;
+  --mip-danger: #C1272F;
+  --mip-danger-soft: #FDEDEE;
+  --mip-danger-border: #F3B7BB;
+  /* Info is sky, not blue, so it never reads as the cobalt accent. */
+  --mip-info: #0A6E96;
+  --mip-info-soft: #E7F4FA;
+  --mip-info-border: #ABD7EA;
+  --mip-violet: #6A3FD2;
+  --mip-violet-soft: #F2EDFE;
+  --mip-violet-border: #D2C4FA;
 
   --mip-radius-sm: 6px;
-  --mip-radius: 10px;
-  --mip-radius-lg: 14px;
-  --mip-shadow-sm: 0 1px 2px rgba(16, 32, 51, 0.06);
-  --mip-shadow: 0 4px 16px rgba(16, 32, 51, 0.08);
-  --mip-shadow-lg: 0 16px 40px rgba(16, 32, 51, 0.14);
+  --mip-radius: 8px;
+  --mip-radius-lg: 12px;
+  --mip-shadow-sm: 0 1px 2px rgba(16, 20, 31, 0.05);
+  --mip-shadow: 0 4px 14px rgba(16, 20, 31, 0.06);
+  --mip-shadow-lg: 0 16px 40px rgba(16, 20, 31, 0.12);
 
   --mip-ease: cubic-bezier(0.2, 0.7, 0.2, 1);
   --mip-duration-fast: 150ms;
@@ -73,53 +75,58 @@
 
 .dark {
   color-scheme: dark;
-  --mip-bg: #0B1626;
-  --mip-surface: #0F1E31;
-  --mip-surface-2: #132539;
-  --mip-surface-3: #1A2F47;
-  --mip-border: #1F3550;
-  --mip-border-strong: #2B4563;
+  --mip-bg: #0B0E15;
+  --mip-surface: #10141D;
+  --mip-surface-2: #151A25;
+  --mip-surface-3: #1C2230;
+  --mip-border: #232A38;
+  --mip-border-strong: #313A4B;
 
-  --mip-ink: #EEF4F9;
-  --mip-text: #C9D6E3;
-  --mip-muted: #93A7BC;
-  --mip-faint: #5E7690;
-  --mip-faint-text: #8EA2B7;
+  --mip-ink: #F2F4F8;
+  --mip-text: #C5CCD8;
+  --mip-muted: #939CAD;
+  --mip-faint: #5A6375;
+  --mip-faint-text: #8B94A5;
 
-  --mip-primary: #4FC7CF;
-  --mip-primary-ink: #7FD9DF;
-  --mip-primary-soft: #0E3036;
-  --mip-primary-border: #1D5A61;
-  --mip-on-primary: #062126;
+  --mip-primary: #8D9CFF;
+  --mip-primary-ink: #B0BBFF;
+  --mip-primary-soft: #171D45;
+  --mip-primary-border: #303C8C;
+  --mip-on-primary: #0A0E2B;
 
-  --mip-focus: #4FC7CF;
-  --mip-focus-chrome: #6FD3DA;
+  --mip-focus: #8D9CFF;
+  --mip-focus-chrome: #8D9CFF;
 
-  --mip-chrome: #081322;
-  --mip-chrome-2: #0F2036;
-  --mip-chrome-line: #1A2D45;
-  --mip-chrome-text: #E6EEF6;
-  --mip-chrome-muted: #A9BBCD;
+  --mip-chrome: #0B0E15;
+  --mip-chrome-2: #151A25;
+  --mip-chrome-line: #232A38;
+  --mip-chrome-text: #F2F4F8;
+  --mip-chrome-muted: #A2AABA;
 
-  --mip-success: #4FD1A5;
-  --mip-success-soft: #0F2B23;
-  --mip-success-border: #1E5240;
-  --mip-warning: #F2B35B;
-  --mip-warning-soft: #2E2110;
-  --mip-warning-border: #5C4420;
-  --mip-danger: #F58A91;
-  --mip-danger-soft: #331418;
-  --mip-danger-border: #5E2229;
-  --mip-info: #7EB4F0;
-  --mip-info-soft: #132235;
-  --mip-info-border: #234363;
-  --mip-violet: #B29CFF;
-  --mip-violet-soft: #1F1A3A;
-  --mip-violet-border: #3A2F6E;
+  /* Lifted above the dark surfaces, so a code panel or chip still reads as one on a dark card. */
+  --mip-code-bg: #1A1F2B;
+  --mip-code-head: #202633;
+  --mip-code-line: #2C3343;
+
+  --mip-success: #4CD29C;
+  --mip-success-soft: #0F2A21;
+  --mip-success-border: #1E5541;
+  --mip-warning: #F0B455;
+  --mip-warning-soft: #2D2210;
+  --mip-warning-border: #5B4420;
+  --mip-danger: #F48B92;
+  --mip-danger-soft: #321519;
+  --mip-danger-border: #5F242B;
+  --mip-info: #6CC4EA;
+  --mip-info-soft: #0F2430;
+  --mip-info-border: #1E4A5E;
+  --mip-violet: #B49BFF;
+  --mip-violet-soft: #1E1838;
+  --mip-violet-border: #3B2F70;
 
   --mip-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
-  --mip-shadow: 0 6px 18px rgba(0, 0, 0, 0.45);
-  --mip-shadow-lg: 0 18px 48px rgba(0, 0, 0, 0.6);
+  --mip-shadow: 0 6px 18px rgba(0, 0, 0, 0.4);
+  --mip-shadow-lg: 0 18px 48px rgba(0, 0, 0, 0.55);
 }
 
 /* VitePress default-theme variables, pointed at the tokens so built-in components inherit them. */

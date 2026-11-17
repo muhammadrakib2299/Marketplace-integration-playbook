@@ -62,6 +62,9 @@ async function draw() {
   const run = ++sequence
   const id = `mip-mermaid-${instance}-${run}`
   try {
+    // Mermaid sizes each node from the text it measures. Measured before IBM Plex has loaded, the
+    // fallback font's metrics win and the last line of a wrapped label is clipped by its box.
+    await document.fonts.ready
     if (!mermaid) mermaid = (await import('mermaid')).default
     mermaid.initialize({
       startOnLoad: false,
@@ -73,6 +76,10 @@ async function draw() {
       layout: 'dagre',
       theme: 'base',
       themeVariables: themeVariables(),
+      // SVG text labels, set at the top level where mermaid 12 reads it (flowchart.htmlLabels is
+      // ignored). HTML labels sit inside .vp-doc, so the article's `p { line-height: 1.7 }` reached
+      // them after mermaid had sized each box at its own line height, and clipped the last line.
+      htmlLabels: false,
       // useMaxWidth would shrink a wide flowchart to the column and make its labels
       // unreadable. The diagram keeps its natural size and the panel scrolls instead, the
       // same treatment wide tables get (.mip-table), so no page scrolls sideways.
