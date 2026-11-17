@@ -222,7 +222,7 @@
 - [ ] **Step 1: Implement the components.**
   - Run `npm install lucide-vue-next@1.0.0`.
   - `BuildPill` renders "Docs build · {buildDate}" with a status dot, in mono and tabular numerals, and is hidden below 1180 px.
-  - `EvidenceCard` (root element class `mip-evidence`) renders only when `frontmatter.evidence_status` or `frontmatter.checked` exists. It shows an "Evidence" title, the `evidence_status` text, and "Checked {formatIsoDate(checked)}". The edit action is an icon-only button (`SquarePen`, `aria-label="Edit this page on GitHub"`, `title` set to the same) linking to `https://github.com/muhammadrakib2299/Marketplace-integration-playbook/edit/main/{relativePath}`.
+  - `EvidenceCard` (root element class `mip-evidence`) renders only when `frontmatter.evidence_status` or `frontmatter.checked` exists. It shows an "Evidence" title, the `evidence_status` text, and "Checked {formatIsoDate(checked)}". The edit action is an icon-only button (`SquarePen`, `aria-label="Edit this page on GitHub"`, `title` set to the same) linking to `https://github.com/muhammadrakib2299/marketplace-integration-playbook/edit/main/{relativePath}`.
 - [ ] **Step 2: Verify.** Run `npm run docs:build`. Expected: pass. `.vitepress/dist/marketplaces/amazon/apis/orders.html` contains `Checked 2026-11-06`, and `.vitepress/dist/marketplaces/tiktok-shop/apis/products.html` does not contain `mip-evidence`.
 - [ ] **Step 3: Commit.** Run `git add .vitepress/theme/Layout.vue .vitepress/theme/components/BuildPill.vue .vitepress/theme/components/EvidenceCard.vue .vitepress/theme/components/TrademarkNote.vue .vitepress/theme/index.ts package.json package-lock.json` and commit with `feat: add shell slots for build date, evidence card, and trademark note`.
 

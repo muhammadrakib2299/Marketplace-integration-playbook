@@ -147,7 +147,7 @@ marketplaces:
         href: /marketplaces/tiktok-shop/apis/returns-refunds
       - label: Events and reliability
         href: /marketplaces/tiktok-shop/apis/events
-      - label: Get Authorized Category Assets · 202405
+      - label: Get Authorized Category Assets
         href: /marketplaces/tiktok-shop/apis/authorized-category-assets
       - label: Changelog
         href: /marketplaces/tiktok-shop/changelog

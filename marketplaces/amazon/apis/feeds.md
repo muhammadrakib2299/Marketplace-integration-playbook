@@ -1,4 +1,10 @@
-# Amazon SP-API Feeds API v2021-06-30
+---
+title: Amazon Feeds API dossier
+api: Feeds API
+version: 2021-06-30
+checked: 2026-11-06
+evidence_status: Operation contracts verified against the Amazon-published OpenAPI model and workflows against Amazon's use-case guide; no tests run
+---
 
 **Evidence status:** Official sources reviewed 2026-11-06. Operation contracts below are verified against the Amazon-published OpenAPI model; workflow and role descriptions are checked against Amazon's use-case guide. **Tests:** None run; this is a reference dossier, not executable code.
 

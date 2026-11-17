@@ -1,4 +1,10 @@
-# Get Authorized Category Assets · 202405
+---
+title: TikTok Shop Get Authorized Category Assets
+api: Get Authorized Category Assets
+version: '202405'
+checked: 2026-11-09
+evidence_status: Official documentation review only; no request sent
+---
 
 **Coverage:** official-reference review only. No request was sent. This page summarizes the [TikTok Shop Partner Center reference](https://partner.tiktokshop.com/docv2/page/get-authorized-category-assets-202405), checked 2026-11-09.
 

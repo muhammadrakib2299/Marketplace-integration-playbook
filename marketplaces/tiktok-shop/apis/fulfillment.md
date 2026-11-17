@@ -1,3 +1,8 @@
+---
+checked: 2026-11-10
+evidence_status: Review of each API family's official overview only; no API call performed
+---
+
 # Fulfillment, logistics, and finance APIs
 
 This page groups three TTS API families that follow an accepted order: fulfillment, logistics, and finance. Each section is a review of the official overview only.
