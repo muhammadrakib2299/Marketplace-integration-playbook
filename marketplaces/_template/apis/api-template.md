@@ -1,4 +1,10 @@
-# [API group name] ([version])
+---
+title: "[Marketplace name] [API group name]"
+api: "[API surface name, exactly as in this marketplace's catalog api_surfaces]"
+version: "[version, if the provider versions this API; otherwise delete this line]"
+checked: YYYY-MM-DD
+evidence_status: "[what was reviewed or tested, and what was not]"
+---
 
 | Field | Value |
 |---|---|
@@ -9,7 +15,7 @@
 | Evidence status | [Official / Tested / Unverified] |
 | Last checked | YYYY-MM-DD |
 
-For an operation-level dossier, replace this H1 with dossier frontmatter (`title`, `api`, `version`, `checked`, `evidence_status`), as described under "API dossier pages" in CONTRIBUTING.md.
+The frontmatter above turns on the dossier header and evidence card, so the page has no Markdown H1 of its own; see "API dossier pages" in CONTRIBUTING.md. A page that covers several API groups keeps an H1 instead and declares only `checked` and `evidence_status`.
 
 This is an original summary, not a copy of the provider's reference. Do not publish restricted docs, credentials, customer data, or payloads copied without redistribution permission.
 

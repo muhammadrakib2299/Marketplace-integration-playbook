@@ -1,4 +1,10 @@
-# Amazon Catalog Items API (v2022-04-01)
+---
+title: Amazon Catalog Items API
+api: Catalog Items API
+version: 2022-04-01
+checked: 2026-11-05
+evidence_status: Official documentation and versioned model reviewed; code examples are illustrative and have not been tested against a live seller account
+---
 
 | Field | Value |
 |---|---|

@@ -1,6 +1,6 @@
 # Marketplace Integration Playbook
 
-[![Documentation quality](https://github.com/muhammadrakib2299/Marketplace-integration-playbook/actions/workflows/docs-quality.yml/badge.svg)](https://github.com/muhammadrakib2299/Marketplace-integration-playbook/actions/workflows/docs-quality.yml)
+[![Documentation quality](https://github.com/muhammadrakib2299/marketplace-integration-playbook/actions/workflows/docs-quality.yml/badge.svg)](https://github.com/muhammadrakib2299/marketplace-integration-playbook/actions/workflows/docs-quality.yml)
 
 ![Abstract illustration of marketplace channels connecting through an integration hub to warehouse and data systems](public/marketplace-integration-cover.png)
 

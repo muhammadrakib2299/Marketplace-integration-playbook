@@ -6,7 +6,7 @@ import { pageContext } from '../scripts/page-context.mjs'
 import { footerMarketplaces, themeRoutes } from '../scripts/site-links.mjs'
 import { buildSidebar } from '../scripts/sidebar.mjs'
 
-const repositoryUrl = 'https://github.com/muhammadrakib2299/Marketplace-integration-playbook'
+const repositoryUrl = 'https://github.com/muhammadrakib2299/marketplace-integration-playbook'
 
 // Engineering docs, shared by the top nav and the /docs/ sidebar.
 const docs = [

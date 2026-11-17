@@ -1,4 +1,9 @@
-# Order API
+---
+title: TikTok Shop Order API
+api: Order API
+checked: 2026-11-10
+evidence_status: Official reference review only; no order data retrieved and no shop account tested
+---
 
 **Coverage:** official-reference review only. No order data was retrieved and no shop account was tested. Use the live [Order API overview](https://partner.tiktokshop.com/docv2/page/order-api-overview) and operation references for current fields, scopes, versions, and market behavior.
 

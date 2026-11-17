@@ -1,4 +1,9 @@
-# Return & Refund API
+---
+title: TikTok Shop Return & Refund API
+api: Return & Refund API
+checked: 2026-11-10
+evidence_status: Official reference review only; no return, refund, exchange, or cancellation action performed
+---
 
 **Coverage:** official-reference review only. No return, refund, exchange, or cancellation action was performed.
 

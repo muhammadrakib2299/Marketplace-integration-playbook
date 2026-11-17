@@ -12,4 +12,4 @@ Every marketplace in the catalog, with its access model, regions, coverage, and 
 
 Counts come from the catalog and the published pages. API surfaces are the surfaces recorded in `catalog/marketplaces.yaml`. Reference pages are the pages in a marketplace's `apis/` folder, not counting its index page. A topic counts as covered when `catalog/guides.yaml` lists a guide on it for that marketplace.
 
-To request or contribute another marketplace guide, see the repository's [contribution instructions](https://github.com/muhammadrakib2299/Marketplace-integration-playbook/blob/main/CONTRIBUTING.md) and [README](https://github.com/muhammadrakib2299/Marketplace-integration-playbook#add-a-marketplace).
+To request or contribute another marketplace guide, see the repository's [contribution instructions](https://github.com/muhammadrakib2299/marketplace-integration-playbook/blob/main/CONTRIBUTING.md) and [README](https://github.com/muhammadrakib2299/marketplace-integration-playbook#add-a-marketplace).

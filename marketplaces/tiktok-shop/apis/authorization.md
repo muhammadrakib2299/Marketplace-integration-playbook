@@ -1,4 +1,9 @@
-# Authorization API and token lifecycle
+---
+title: TikTok Shop Authorization API and token lifecycle
+api: Authorization API
+checked: 2026-11-10
+evidence_status: Official reference review only; no app registration, authorization, token exchange, or API call performed
+---
 
 **Coverage:** official-reference review only. No app registration, authorization, token exchange, or API call was performed. The live [Authorization overview](https://partner.tiktokshop.com/docv2/page/678e3a3292b0f40314a92d75) remains authoritative for current fields and versions.
 
