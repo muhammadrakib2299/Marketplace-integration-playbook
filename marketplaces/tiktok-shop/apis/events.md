@@ -1,4 +1,9 @@
-# Events API and operational reliability
+---
+title: TikTok Shop Events API and operational reliability
+api: Events API
+checked: 2026-11-10
+evidence_status: Official reference review only; no webhook subscription or delivery test performed
+---
 
 **Coverage:** official-reference review only. No webhook subscription or delivery test was performed.
 

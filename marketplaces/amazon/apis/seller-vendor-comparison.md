@@ -1,3 +1,8 @@
+---
+checked: 2026-11-06
+evidence_status: Amazon's SP-API Models index snapshot compared with Amazon's seller and vendor use-case directories; labels do not grant API access
+---
+
 # Amazon SP-API: seller vs. vendor directory comparison
 
 > Directory basis: Amazon's SP-API Models index snapshot reviewed 2026-11-06, compared with Amazon's seller and vendor use-case directories. These labels describe the audience/use-case emphasis supported by those sources; they do not grant API access or prove an API is exclusive to one party type. Verify the current model, operation, role, application authorization, seller/vendor program, region, and marketplace before implementation.

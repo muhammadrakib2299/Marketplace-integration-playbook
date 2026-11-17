@@ -1,4 +1,10 @@
-# Amazon SP-API FBA Inventory API v1
+---
+title: Amazon FBA Inventory API dossier
+api: FBA Inventory API
+version: v1
+checked: 2026-11-06
+evidence_status: Amazon-published OpenAPI model, FBA Inventory API page, and API reference checked; no tests run
+---
 
 **Evidence status:** Checked 2026-11-06 against the Amazon-published OpenAPI model, FBA Inventory API page, and current API reference. The model contains four operation IDs, including three explicitly sandbox-only operations. **Tests:** None run; this is a reference dossier, not executable code. [1] [2] [4]
 

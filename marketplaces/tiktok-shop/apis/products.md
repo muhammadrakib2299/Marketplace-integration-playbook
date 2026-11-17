@@ -1,4 +1,9 @@
-# Products API
+---
+title: TikTok Shop Products API
+api: Products API
+checked: 2026-11-10
+evidence_status: Official reference review only; no product created, edited, reviewed, or deleted
+---
 
 **Coverage:** official-reference review only. No product was created, edited, reviewed, or deleted. Use the live [Products API overview](https://partner.tiktokshop.com/docv2/page/products-api-overview) and endpoint reference for current versions, schemas, limits, and scopes.
 
