@@ -260,3 +260,16 @@ The first phase 4 item shipped: `mermaid` fences render as diagrams instead of r
 - **Size:** diagrams keep their natural size and scroll inside their panel, like wide tables. Shrinking a wide flowchart to the column made its labels unreadable. The panel is focusable, so the scroll works from the keyboard, and no page scrolls sideways at 390 or 1280 px.
 - **Theme:** node and line colours come from the live design tokens and are redrawn when the reader switches theme.
 - **Fallback:** the source is always in the page, in a collapsed "Diagram source" disclosure, which works without JavaScript. If a diagram fails to parse, the error is shown under it. The title is not repeated as a caption, because each fence already sits under a heading that names it.
+
+## 10. Revision 2026-11-17: Clean signal direction
+
+The owner found the Harbor palette "looks so poor" and asked for a site that is "modern and clean", handing over the visual decisions. This revision supersedes section 7's palette, chrome, and type sizes. The token names, IBM Plex, the evidence vocabulary, and section 8.6's rules stand.
+
+- **Palette:** white page and chrome, porcelain `#F7F8FA` for quiet surfaces, hairline `#E4E7EC` borders, graphite ink `#10141F`, and one accent, cobalt `#2E48EE` (6.4:1 on white). Status colours carry status only; info is sky `#0A6E96`, so it never reads as the accent. Dark mode is graphite `#0B0E15`, not navy, with a periwinkle accent `#8D9CFF`. Every text pair still passes WCAG AA in both themes (`tests/design-tokens.test.mjs`).
+- **Chrome:** the top bar and footer are white with a hairline instead of navy, so the page reads as one surface. The top bar is 56 px, not 64 px, and is slightly translucent with a blur. It turns solid where blur is unsupported or the reader asks for reduced transparency. The sidebar shares the page background, separated by a hairline, and is 256 px wide.
+- **Signature:** the evidence card is the one decorative use of cobalt, with a rule down its leading edge and a cobalt shield. Provenance is what sets this handbook apart. Everywhere else, cobalt marks actions, links, and the current location.
+- **Type:** body text 16/1.7 (was 15/1.65). Headings are 34, 23, 18, and 15.5 px, with tighter tracking as they grow and more space above than below.
+- **One edge:** prose, tables, code, and diagrams share one 780 px column. The separate 80ch prose cap (720 px) is gone, so no block ends short of another. Wide tables and diagrams scroll inside their own frames. With slimmer gutters, a 1366 px laptop gives the article 766 px (was 726).
+- **Diagrams:** labels are SVG text (mermaid's top-level `htmlLabels: false`). HTML labels inherited the article's `p` line height after mermaid had sized each box, which clipped the last line of a wrapped label. Diagrams wait for the web fonts before measuring.
+- **Coverage matrix:** its cells use 9 px side padding instead of the tables' 12 px, so its eight columns still fit the narrower column at 1366, 1440, and 1920 px instead of scrolling.
+- **Not changed:** components, content, and navigation.
