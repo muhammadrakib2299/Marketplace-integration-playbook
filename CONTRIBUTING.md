@@ -31,9 +31,26 @@ evidence_status: Official reference and versioned model reviewed; no sandbox or 
 ```
 
 - `title` and `api` together turn on the dossier header, which renders `title` as the page's H1. Do not also start the page with a `# Heading`; the site hides a leading Markdown H1 on dossiers so a page never shows two.
-- `api` must match an `api_surfaces[].name` in the marketplace's catalog entry for the header to link that surface's official reference (`docs_url`).
-- `version` and `checked` appear as chips in the header; `checked` and `evidence_status` also fill the evidence card in the right rail.
+- Start `title` with the marketplace's name ("Amazon Orders API dossier", "TikTok Shop Order API"), so a browser tab or search result says which marketplace the API belongs to.
+- `api` must match an `api_surfaces[].name` in the marketplace's catalog entry for the header to link that surface's official reference (`docs_url`). When the API is not its own catalog surface, the header shows no official-reference button; link the official page in the text instead, and do not add a catalog surface only to get the button.
+- `version` and `checked` appear as chips in the header; `checked` and `evidence_status` also fill the evidence card in the right rail. Only use values the page or the marketplace's changelog already states; `checked` is when the content was reviewed, not when the frontmatter was added.
+- A page that covers several APIs (a comparison, or a page grouping API families) keeps its own Markdown H1 and declares only `checked` and `evidence_status`. It gets the evidence card without a single-API header.
 - Pages without this frontmatter keep their own Markdown H1 and get no dossier header.
+
+## Diagrams
+
+A fenced `mermaid` block renders as a diagram. Follow the language with a short title that restates the heading above the diagram. Screen readers announce it as the diagram's name; it is not shown on the page:
+
+````markdown
+```mermaid How the APIs connect
+flowchart LR
+  A[Seller grants access] --> B[Resolve marketplaces]
+```
+````
+
+- Use flowcharts and sequence diagrams in their default layouts. A wide diagram keeps its size and scrolls inside its panel.
+- The source stays available under "Diagram source", which works without JavaScript and opens by itself if the diagram fails to parse.
+- Check the page in `npm run docs:dev` after adding or changing a diagram. A syntax error shows the error on the page, but does not fail the build.
 
 ## New-entry checklist
 
